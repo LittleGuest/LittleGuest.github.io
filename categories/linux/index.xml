@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/categories/linux/</link>
+    <description>Recent content in Linux on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 01 Dec 2020 09:32:14 +0000</lastBuildDate><atom:link href="https://littleguest.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Raspberry 初体验</title>
+      <link>https://littleguest.github.io/posts/raspberry-first-experience/</link>
+      <pubDate>Tue, 01 Dec 2020 09:32:14 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/raspberry-first-experience/</guid>
+      <description>Raspberrypi 初体验 在linux系统上如何连接没有屏幕的树莓派    准备或制作树莓派的镜像；   如何制作？  首先到官网下载一个适合自己的镜像，我选择的是下面这个镜像；  使用BalenaEtcher烧录Raspberrypi镜像，烧录完成后，会有两个分区boot和rootfs；      在boot下创建wpa_supplicant.conf文件，内容如下；   country=CN ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev update_config=1 network={ ssid=&amp;quot;&amp;quot; psk=&amp;quot;&amp;quot; priority = 1 } 说明：  ssid: 网络的ssid； psk： 密码； priority: 连接优先级，数字越大优先级越高（不可以是负数）； scan_ssid：连接隐藏WiFi时需要指定该值为1；    在boot下创建不带扩展名的ssh文件；    启动树莓派，稍等几分钟；    使用arp-scan列出局域网内的主机；  sudo arp-scan -interface wlp3s0 -localnet   使用ssh登录到树莓派，树莓派默认账号为pi，默认密码为raspberry;     到此为止，我们已经连上树莓派了
+  那么如何能看到树莓派的桌面呢？     下载VNC Server到树莓派；    安装并启动VNC Server;     下载VNC Viewer并运行；    输入刚才启动VNC Server生成的192.</description>
+    </item>
+    
+  </channel>
+</rss>

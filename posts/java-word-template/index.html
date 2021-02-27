@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Java根据Word模板生成Word文件 - Wed, Jan 27, 2021</h1>
+    </div>
+    <p class="lead">如何在 Java 中根据 Word 模板生成 Word 文件</p>
+    <p>在开发过程中，避免不了会生成各种 Excel 或者 Word 文件，为了简化我们的工作（有更多的时间摸鱼）或者根据项目的需要，我们有时候需要根据定义好的统一的模板创建一类文件。
+那么如何在 Java 中根据模板生成文件呢？</p>
+<p>当然，有很多种方法可以实现，但是今天的主角是 <a href="http://deepoove.com/poi-tl/">Poi-tl</a></p>
+<blockquote>
+<p>在文档的任何地方做任何事情（Do Anything Anywhere）是poi-tl的星辰大海。</p>
+</blockquote>
+<p>该库的文档已经写的很详细了，这里就不去讲如何使用了，废话不多说，直接上代码。</p>
+<p><strong>环境</strong></p>
+<ul>
+<li>jdk11</li>
+<li>gradle</li>
+<li>linux</li>
+</ul>
+<p><strong>引依赖</strong></p>
+<blockquote>
+<p>compile group: &lsquo;com.deepoove&rsquo;, name: &lsquo;poi-tl&rsquo;, version: &lsquo;1.9.1&rsquo;</p>
+</blockquote>
+<blockquote>
+<p>implementation &lsquo;org.springframework:spring-expression:5.3.3&rsquo;</p>
+</blockquote>
+<p>首先，定义两个类 <code>TestReport</code> 和 <code>CheckItems</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Data</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestReport</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> String reportNo<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> Date reportDate<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> String projectName<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">private</span> List<span style="color:#f92672">&lt;</span>CheckItems<span style="color:#f92672">&gt;</span> checkItems<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">private</span> Object testerSign<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> Date testDate<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Data</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CheckItems</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> String itemNo<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> String checkPosition<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> String checkResult<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> Integer level<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>定义好模板</p>
+<p><img src="poitl.png" alt=""></p>
+<p>最后编写 main 函数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+    TestReport dto <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TestReport<span style="color:#f92672">();</span>
+    dto<span style="color:#f92672">.</span><span style="color:#a6e22e">setReportNo</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;996&#34;</span><span style="color:#f92672">);</span>
+    dto<span style="color:#f92672">.</span><span style="color:#a6e22e">setReportDate</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Date<span style="color:#f92672">());</span>
+    dto<span style="color:#f92672">.</span><span style="color:#a6e22e">setProjectName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;测试用的检测项目名称&#34;</span><span style="color:#f92672">);</span>
+
+    List<span style="color:#f92672">&lt;</span>CheckItems<span style="color:#f92672">&gt;</span> checkItems <span style="color:#f92672">=</span> CollUtil<span style="color:#f92672">.</span><span style="color:#a6e22e">newArrayList</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 1<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;=</span> 3<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+        CheckItems checkItem <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> CheckItems<span style="color:#f92672">();</span>
+        checkItem<span style="color:#f92672">.</span><span style="color:#a6e22e">setItemNo</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;100&#34;</span> <span style="color:#f92672">+</span> <span style="color:#f92672">(</span>i <span style="color:#f92672">-</span> 1<span style="color:#f92672">));</span>
+        checkItem<span style="color:#f92672">.</span><span style="color:#a6e22e">setCheckPosition</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;检测部位&#34;</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">);</span>
+        checkItem<span style="color:#f92672">.</span><span style="color:#a6e22e">setCheckResult</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;合格&#34;</span><span style="color:#f92672">);</span>
+        checkItem<span style="color:#f92672">.</span><span style="color:#a6e22e">setLevel</span><span style="color:#f92672">(</span>i<span style="color:#f92672">);</span>
+
+        checkItems<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>checkItem<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    dto<span style="color:#f92672">.</span><span style="color:#a6e22e">setCheckItems</span><span style="color:#f92672">(</span>checkItems<span style="color:#f92672">);</span>
+
+    ClassPathResource testerSign <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ClassPathResource<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;static/5ff7adb306f04.png&#34;</span><span style="color:#f92672">);</span>
+    dto<span style="color:#f92672">.</span><span style="color:#a6e22e">setTesterSign</span><span style="color:#f92672">(</span>Pictures<span style="color:#f92672">.</span><span style="color:#a6e22e">ofStream</span><span style="color:#f92672">(</span>testerSign<span style="color:#f92672">.</span><span style="color:#a6e22e">getInputStream</span><span style="color:#f92672">(),</span> PictureType<span style="color:#f92672">.</span><span style="color:#a6e22e">PNG</span><span style="color:#f92672">).</span><span style="color:#a6e22e">size</span><span style="color:#f92672">(</span>50<span style="color:#f92672">,</span> 75<span style="color:#f92672">).</span><span style="color:#a6e22e">create</span><span style="color:#f92672">());</span>
+    dto<span style="color:#f92672">.</span><span style="color:#a6e22e">setTestDate</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Date<span style="color:#f92672">());</span>
+
+    ConfigureBuilder configureBuilder <span style="color:#f92672">=</span> Configure<span style="color:#f92672">.</span><span style="color:#a6e22e">builder</span><span style="color:#f92672">();</span>
+    configureBuilder<span style="color:#f92672">.</span><span style="color:#a6e22e">useSpringEL</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+
+    ClassPathResource templateFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ClassPathResource<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;templates/poi-tl.docx&#34;</span><span style="color:#f92672">);</span>
+    XWPFTemplate template <span style="color:#f92672">=</span> XWPFTemplate<span style="color:#f92672">.</span><span style="color:#a6e22e">compile</span><span style="color:#f92672">(</span>templateFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getInputStream</span><span style="color:#f92672">(),</span> configureBuilder<span style="color:#f92672">.</span><span style="color:#a6e22e">build</span><span style="color:#f92672">());</span>
+    template<span style="color:#f92672">.</span><span style="color:#a6e22e">render</span><span style="color:#f92672">(</span>dto<span style="color:#f92672">);</span>
+
+    template<span style="color:#f92672">.</span><span style="color:#a6e22e">writeAndClose</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> FileOutputStream<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;poi-tl.docx&#34;</span><span style="color:#f92672">));</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>输出的文件结果</p>
+<p><img src="result.png" alt=""></p>
+<p>这个案例我觉得可以应付大部分需求了，也提供了一种使用嵌套表格的操作来渲染多个复杂表格的实现；</p>
+<p>接下来就是摸鱼时间~~~</p>
+
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

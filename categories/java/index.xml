@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/categories/java/</link>
+    <description>Recent content in Java on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 27 Jan 2021 21:55:40 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>FastJson 使用 toJSONString 时字段序列化问题</title>
+      <link>https://littleguest.github.io/posts/java-fastjson-serialize/</link>
+      <pubDate>Wed, 27 Jan 2021 21:55:40 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/java-fastjson-serialize/</guid>
+      <description>首先来看看代码
+Map&amp;lt;String, Object&amp;gt; map = new HashMap&amp;lt;&amp;gt;(2); map.put(&amp;#34;reportNo&amp;#34;, null); map.put(&amp;#34;reportDate&amp;#34;, new Date()); System.out.println(JSON.toJSONString(map)); 输出结果为
+{&amp;#34;reportDate&amp;#34;:1611756215215} 为什么会出现这种情况呢？
+通过分析源码得知
+if (value == null) { if (!SerializerFeature.isEnabled(out.features, features, SerializerFeature.WriteMapNullValue)) { continue; } } 当值为 null 时，默认是不会被序列化的，但是我们有时候是需要的，那么如何解决呢？
+解决方法
+通过刚才的源码得知，可以指定 SerializerFeature.WriteMapNullValue 来序列化为 null 的值。
+Map&amp;lt;String, Object&amp;gt; map = new HashMap&amp;lt;&amp;gt;(2); map.put(&amp;#34;reportNo&amp;#34;, null); map.put(&amp;#34;reportDate&amp;#34;, new Date()); System.out.println(JSON.toJSONString(map, SerializerFeature.WriteMapNullValue)); 输出结果为
+{&amp;#34;reportDate&amp;#34;:1611757294826,&amp;#34;reportNo&amp;#34;:null} </description>
+    </item>
+    
+    <item>
+      <title>Java根据Word模板生成Word文件</title>
+      <link>https://littleguest.github.io/posts/java-word-template/</link>
+      <pubDate>Wed, 27 Jan 2021 17:27:14 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/java-word-template/</guid>
+      <description>在开发过程中，避免不了会生成各种 Excel 或者 Word 文件，为了简化我们的工作（有更多的时间摸鱼）或者根据项目的需要，我们有时候需要根据定义好的统一的模板创建一类文件。 那么如何在 Java 中根据模板生成文件呢？
+当然，有很多种方法可以实现，但是今天的主角是 Poi-tl
+ 在文档的任何地方做任何事情（Do Anything Anywhere）是poi-tl的星辰大海。
+ 该库的文档已经写的很详细了，这里就不去讲如何使用了，废话不多说，直接上代码。
+环境
+ jdk11 gradle linux  引依赖
+ compile group: &amp;lsquo;com.deepoove&amp;rsquo;, name: &amp;lsquo;poi-tl&amp;rsquo;, version: &amp;lsquo;1.9.1&amp;rsquo;
+  implementation &amp;lsquo;org.springframework:spring-expression:5.3.3&amp;rsquo;
+ 首先，定义两个类 TestReport 和 CheckItems
+@Data public class TestReport { private String reportNo; private Date reportDate; private String projectName; private List&amp;lt;CheckItems&amp;gt; checkItems; private Object testerSign; private Date testDate; } @Data public class CheckItems { private String itemNo; private String checkPosition; private String checkResult; private Integer level; } 定义好模板</description>
+    </item>
+    
+    <item>
+      <title>Java-记一次Stream去重操作</title>
+      <link>https://littleguest.github.io/posts/java-stream-distinct/</link>
+      <pubDate>Fri, 08 Jan 2021 23:48:47 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/java-stream-distinct/</guid>
+      <description>记一次Java Stream 去重操作 为了重现当时的错误，我会尽量保持一致，只是类名和类的属性不一样而已，现定义如下两个类
+public class BaseEntity implements Serializable { private Long id; public BaseEntity() { } public Long getId() { return id; } public void setId(Long id) { this.id = id; } } @Data public class Entity extends BaseEntity { private Long id; private String field; } Entity 是继承 BaseEntity ，并且 BaseEntity 是实现了 Serializable 这个接口
+接下来编写测试代码
+public static void main(String[] args) { List&amp;lt;Entity&amp;gt; entities = new ArrayList&amp;lt;&amp;gt;(); for (int i = 0; i &amp;lt; 5; i++) { Entity entity = new Entity(); entity.</description>
+    </item>
+    
+  </channel>
+</rss>

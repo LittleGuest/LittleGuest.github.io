@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust变量 on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/tags/rust%E5%8F%98%E9%87%8F/</link>
+    <description>Recent content in Rust变量 on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 22 Aug 2020 16:33:05 +0000</lastBuildDate><atom:link href="https://littleguest.github.io/tags/rust%E5%8F%98%E9%87%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust之旅-变量和可变性</title>
+      <link>https://littleguest.github.io/posts/rust-tour-variable/</link>
+      <pubDate>Sat, 22 Aug 2020 16:33:05 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-variable/</guid>
+      <description>变量 声明变量使用 let 关键字，变量是默认不可变的；
+可变变量 在变量前加mut关键字，使其可变；
+常量 声明常量使用const关键字，并且必须指定类型，常量不能使用mut（Rust 常量的命名规范是使用下划线分隔的大写字母单词，并且可以在数字字面值中插入下划线来提升可读性）；
+Shadowing const MAX_SIZE: i32 = 10; fn main() { let an_integer = 1u32; let a_boolean = true; let unit = (); // 将 `an_integer` 复制到 `copied_integer`  let copied_integer = an_integer; println!(&amp;#34;An integer: {:?}&amp;#34;, copied_integer); println!(&amp;#34;A boolean: {:?}&amp;#34;, a_boolean); println!(&amp;#34;Meet the unit value: {:?}&amp;#34;, unit); // 编译器会对未使用的变量绑定产生警告；可以给变量名加上下划线前缀来消除警告。  let _unused_variable = 3u32; let _noisy_unused_variable = 2u32; // 改正 ^ 在变量名前加上下划线以消除警告  println!</description>
+    </item>
+    
+  </channel>
+</rss>

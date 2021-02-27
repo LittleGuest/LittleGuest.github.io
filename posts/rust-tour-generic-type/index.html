@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Rust之旅-泛型 - Tue, Jan 12, 2021</h1>
+    </div>
+    <p class="lead">Rust之旅-泛型</p>
+    <h1 id="rust如何使用泛型">Rust如何使用泛型</h1>
+<p><strong>在函数定义中使用泛型</strong></p>
+<p>比如我们定义一个求slice中的最大值的函数，传入的参数是一个元素类型为 <code>T</code> 的slice，返回值也是 <code>T</code>；
+如果要在函数体内使用泛型参数，那么必须要在函数签名中声明泛型名称。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">largest</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span>(list: <span style="color:#66d9ef">&amp;</span>[T]) -&gt; <span style="color:#a6e22e">T</span> {
+</code></pre></div><p><strong>结构体定义中的泛型</strong></p>
+<p>必须在结构体名称后面的尖括号中声明泛型参数的名称</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// 一个泛型参数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Point</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+    x: <span style="color:#a6e22e">T</span>,
+    y: <span style="color:#a6e22e">T</span>,
+}
+
+<span style="color:#75715e">// 多个泛型参数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Point2</span><span style="color:#f92672">&lt;</span>T, U<span style="color:#f92672">&gt;</span> {
+    x: <span style="color:#a6e22e">T</span>,
+    y: <span style="color:#a6e22e">U</span>,
+}
+</code></pre></div><p><strong>枚举定义中的泛型</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">// 一个泛型参数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">enum</span> Option<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+    None,
+    Some(T),
+}
+
+<span style="color:#75715e">// 多个泛型参数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">enum</span> Result<span style="color:#f92672">&lt;</span>T, E<span style="color:#f92672">&gt;</span> {
+    Ok(T),
+    Err(E),
+}
+</code></pre></div><p><strong>方法定义中的泛型</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Point</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+    x: <span style="color:#a6e22e">T</span>,
+    y: <span style="color:#a6e22e">T</span>,
+}
+
+<span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> Point<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> {
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">x</span>(<span style="color:#f92672">&amp;</span>self) -&gt; <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">T</span> {
+        <span style="color:#f92672">&amp;</span>self.x
+    }
+}
+</code></pre></div><p>结构体定义中的泛型类型参数并不总是与结构体方法签名中使用的泛型是同一类型。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Point</span><span style="color:#f92672">&lt;</span>T, U<span style="color:#f92672">&gt;</span> {
+    x: <span style="color:#a6e22e">T</span>,
+    y: <span style="color:#a6e22e">U</span>,
+}
+
+<span style="color:#66d9ef">impl</span><span style="color:#f92672">&lt;</span>T, U<span style="color:#f92672">&gt;</span> Point<span style="color:#f92672">&lt;</span>T, U<span style="color:#f92672">&gt;</span> {
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">mixup</span><span style="color:#f92672">&lt;</span>V, W<span style="color:#f92672">&gt;</span>(self, other: <span style="color:#a6e22e">Point</span><span style="color:#f92672">&lt;</span>V, W<span style="color:#f92672">&gt;</span>) -&gt; <span style="color:#a6e22e">Point</span><span style="color:#f92672">&lt;</span>T, W<span style="color:#f92672">&gt;</span> {
+        Point {
+            x: <span style="color:#a6e22e">self</span>.x,
+            y: <span style="color:#a6e22e">other</span>.y,
+        }
+    }
+}
+</code></pre></div><p>Rust 通过在编译时进行泛型代码的 <code>单态化（monomorphization）</code> 来保证效率。单态化是一个通过填充编译时使用的具体类型，将通用代码转换为特定代码的过程。</p>
+
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

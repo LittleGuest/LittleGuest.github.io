@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Rust之旅-测试 - Mon, Jan 25, 2021</h1>
+    </div>
+    <p class="lead">如何在 Rust 中编写测试</p>
+    <h2 id="如何在-rust-中编写测试">如何在 Rust 中编写测试</h2>
+<p>当我们创建一个 lib 项目时，cargo 会帮我们创建一个test模块和一个测试函数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">#[cfg(test)]</span>
+<span style="color:#66d9ef">mod</span> tests {
+    <span style="color:#75715e">#[test]</span>
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">it_works</span>() {
+        assert_eq<span style="color:#f92672">!</span>(<span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">4</span>);
+    }
+}
+</code></pre></div><p><code>#[test]</code> 用于标记一个 <code>fn 函数</code> 为一个测试函数；<code>#[cfg(test)]</code> 表示只有在运行 <code>cargo test</code> 命令时执行；
+当我们运行 <code>cargo test</code> 命令后，会得到一些信息；</p>
+<pre><code class="language-log" data-lang="log">    Finished test [unoptimized + debuginfo] target(s) in 0.00s
+    Running target/debug/deps/rust_tour_test-13122ed7b69a820b
+
+running 1 test
+test tests::it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+Doc-tests rust-tour-test
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+</code></pre><p>可以看出，运行 <code>cargo test</code> 时，会运行普通测试函数，还会运行文档中的测试函数；</p>
+<p>。。。</p>
+<h2 id="单元测试">单元测试</h2>
+<p>单元测试的目的是在与其他部分隔离的环境中测试每一个单元的代码，以便于快速而准确的某个单元的代码功能是否符合预期。单元测试与他们要测试的代码共同存放在位于 <code>src</code> 目录下相同的文件中。规范是在每个文件中创建包含测试函数的 <code>tests</code> 模块，并使用 <code>cfg(test)</code> 标注模块；</p>
+<h2 id="集成测试">集成测试</h2>
+<p>在 Rust 中，集成测试对于你需要测试的库来说完全是外部的。同其他使用库的代码一样使用库文件，也就是说它们只能调用一部分库中的 <code>公有 API</code> 。集成测试的目的是测试库的多个部分能否一起正常工作。一些单独能正确运行的代码单元集成在一起也可能会出现问题，所以集成测试的覆盖率也是很重要的。为了创建集成测试，需要在项目根目录创建一个 tests 目录，与 <code>src</code> 同级。Cargo 知道如何去寻找这个目录中的集成测试文件。接着可以随意在这个目录中创建任意多的测试文件，Cargo 会将每一个文件当作单独的 <code>crate</code> 来编译；</p>
+<p>example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">rust_test
+  - src
+      - lib.rs
+  - tests
+      - common
+          - mod.rs
+      - test_add.rs
+</code></pre></div><p><strong>src/lib.rs</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">#[cfg(test)]</span>
+<span style="color:#66d9ef">mod</span> tests {
+    <span style="color:#75715e">#[test]</span>
+    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">it_works</span>() {
+        assert_eq<span style="color:#f92672">!</span>(<span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">4</span>);
+    }
+}
+
+<span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">add</span>() -&gt; <span style="color:#66d9ef">i32</span> {
+    <span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>
+}
+</code></pre></div><p><strong>tests/test_add.rs</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> rust_test::add;
+
+<span style="color:#66d9ef">mod</span> common;
+
+<span style="color:#75715e">#[test]</span>
+<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">test</span>() {
+    assert_eq<span style="color:#f92672">!</span>(<span style="color:#ae81ff">666</span>, common::test_common());
+    assert_eq<span style="color:#f92672">!</span>(<span style="color:#ae81ff">4</span>, add());
+}
+</code></pre></div><p><strong>tests/common/mod.rs</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">test_common</span>() -&gt; <span style="color:#66d9ef">i32</span> {
+    <span style="color:#ae81ff">666</span>
+}
+</code></pre></div>
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

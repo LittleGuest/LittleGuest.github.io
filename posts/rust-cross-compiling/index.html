@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Rust交叉编译 - Sat, Feb 27, 2021</h1>
+    </div>
+    <p class="lead">交叉编译</p>
+    <p><strong>本机系统为 <code>Linux</code></strong></p>
+<p>查看Rust支持的系统和架构</p>
+<p>参考 <a href="https://wiki.archlinux.org/index.php/Rust">https://wiki.archlinux.org/index.php/Rust</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ rustup target list
+<span style="color:#75715e"># 或者</span>
+$ rustc --print target-list
+</code></pre></div><h2 id="windows">Windows</h2>
+<ul>
+<li>
+<p>aarch64-pc-windows-msvc</p>
+</li>
+<li>
+<p>i586-pc-windows-msvc</p>
+</li>
+<li>
+<p>i686-pc-windows-gnu</p>
+</li>
+<li>
+<p>i686-pc-windows-msvc</p>
+</li>
+<li>
+<p>x86_64-pc-windows-gnu</p>
+<ol>
+<li></li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ rustup toolchain install stable-x86_64-pc-windows-gnu
+$ sudo apt install mingw-w64
+</code></pre></div><ol start="2">
+<li></li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#75715e"># vim ~/.cargo/config</span>
+[<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">x86_64</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">pc</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">windows</span><span style="color:#960050;background-color:#1e0010">-</span><span style="color:#a6e22e">gnu</span>]
+<span style="color:#a6e22e">linker</span> = <span style="color:#e6db74">&#34;/usr/bin/x86_64-w64-mingw32-gcc&#34;</span>
+<span style="color:#a6e22e">ar</span> = <span style="color:#e6db74">&#34;/usr/bin/x86_64-w64-mingw32-ar&#34;</span>
+</code></pre></div><ol start="3">
+<li></li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ cargo build --release --target x86_64-pc-windows-gnu
+</code></pre></div></li>
+<li>
+<p>x86_64-pc-windows-msvc</p>
+</li>
+</ul>
+<h2 id="linux">Linux</h2>
+<h2 id="mac">Mac</h2>
+
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

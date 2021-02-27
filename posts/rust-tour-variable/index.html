@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Rust之旅-变量和可变性 - Sat, Aug 22, 2020</h1>
+    </div>
+    <p class="lead">Rust之旅-变量和可变性</p>
+    <h2 id="变量">变量</h2>
+<p>声明变量使用 <code>let</code> 关键字，变量是<strong>默认不可变的</strong>；</p>
+<h2 id="可变变量">可变变量</h2>
+<p>在变量前加<code>mut</code>关键字，使其可变；</p>
+<h2 id="常量">常量</h2>
+<p>声明常量使用<code>const</code>关键字，并且必须指定类型，常量不能使用<code>mut</code>（Rust 常量的命名规范是使用下划线分隔的大写字母单词，并且可以在数字字面值中插入下划线来提升可读性）；</p>
+<h2 id="shadowing">Shadowing</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">const</span> MAX_SIZE: <span style="color:#66d9ef">i32</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+
+<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#66d9ef">let</span> an_integer <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">u32</span>;
+    <span style="color:#66d9ef">let</span> a_boolean <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+    <span style="color:#66d9ef">let</span> unit <span style="color:#f92672">=</span> ();
+
+    <span style="color:#75715e">// 将 `an_integer` 复制到 `copied_integer`
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> copied_integer <span style="color:#f92672">=</span> an_integer;
+
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;An integer: {:?}&#34;</span>, copied_integer);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;A boolean: {:?}&#34;</span>, a_boolean);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;Meet the unit value: {:?}&#34;</span>, unit);
+
+    <span style="color:#75715e">// 编译器会对未使用的变量绑定产生警告；可以给变量名加上下划线前缀来消除警告。
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> _unused_variable <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span><span style="color:#66d9ef">u32</span>;
+
+    <span style="color:#66d9ef">let</span> _noisy_unused_variable <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span><span style="color:#66d9ef">u32</span>;
+    <span style="color:#75715e">// 改正 ^ 在变量名前加上下划线以消除警告
+</span><span style="color:#75715e"></span>
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;=== 可变变量 ===&#34;</span>);
+    <span style="color:#75715e">// 变量绑定默认是不可变的（immutable），但加上 mut 修饰语后变量就可以改变。
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> _immutable_binding <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> mutable_binding <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;Before mutation: {}&#34;</span>, mutable_binding);
+    <span style="color:#75715e">// 正确代码
+</span><span style="color:#75715e"></span>    mutable_binding <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>;
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;After mutation: {}&#34;</span>, mutable_binding);
+    <span style="color:#75715e">// 错误！
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// _immutable_binding += 1;
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 改正 ^ 将此行注释掉
+</span><span style="color:#75715e"></span>
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;=== scope and shadowing ===&#34;</span>);
+    <span style="color:#75715e">// 此绑定生存于 main 函数中
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> long_lived_binding <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+
+    <span style="color:#75715e">// 这是一个代码块，比 main 函数拥有更小的作用域
+</span><span style="color:#75715e"></span>    {
+        <span style="color:#75715e">// 此绑定只存在于本代码块
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> short_lived_binding <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+
+        println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;inner short: {}&#34;</span>, short_lived_binding);
+
+        <span style="color:#75715e">// 此绑定*掩蔽*了外面的绑定
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">let</span> long_lived_binding <span style="color:#f92672">=</span> <span style="color:#ae81ff">5_</span><span style="color:#66d9ef">f32</span>;
+
+        println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;inner long: {}&#34;</span>, long_lived_binding);
+    }
+    <span style="color:#75715e">// 代码块结束
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 报错！`short_lived_binding` 在此作用域上不存在
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// println!(&#34;outer short: {}&#34;, short_lived_binding);
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 改正 ^ 注释掉这行
+</span><span style="color:#75715e"></span>
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;outer long: {}&#34;</span>, long_lived_binding);
+
+    <span style="color:#75715e">// 此绑定同样*掩蔽*了前面的绑定
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> long_lived_binding <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;a&#39;</span>;
+
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;outer long: {}&#34;</span>, long_lived_binding);
+
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;declate before&#34;</span>);
+    <span style="color:#75715e">// 声明一个变量绑定
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> a_binding;
+    {
+        <span style="color:#66d9ef">let</span> x <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+
+        <span style="color:#75715e">// 初始化一个绑定
+</span><span style="color:#75715e"></span>        a_binding <span style="color:#f92672">=</span> x <span style="color:#f92672">*</span> x;
+    }
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;a binding: {}&#34;</span>, a_binding);
+    <span style="color:#66d9ef">let</span> another_binding;
+    <span style="color:#75715e">// 报错！使用了未初始化的绑定
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// println!(&#34;another binding: {}&#34;, another_binding);
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 改正 ^ 注释掉此行
+</span><span style="color:#75715e"></span>    another_binding <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;another binding: {}&#34;</span>, another_binding);
+}
+</code></pre></div>
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

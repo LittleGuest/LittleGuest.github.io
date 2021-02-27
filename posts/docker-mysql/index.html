@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Docker搭建MySQL - Tue, Feb 23, 2021</h1>
+    </div>
+    <p class="lead">如何使用Docker搭建MySQL服务</p>
+    <h2 id="如何使用docker搭建mysql服务">如何使用Docker搭建MySQL服务</h2>
+<p><strong>下载 MySQL 镜像</strong></p>
+<p>官方镜像的 MySQL 版本是8.x</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker search mysql
+docker pull mysql
+</code></pre></div><p><strong>启动容器</strong></p>
+<ul>
+<li>-d 在后台运行</li>
+<li>&ndash;name mysql 指定容器的名字为 mysql</li>
+<li>-p 映射容器ip:3306到主机ip:13306</li>
+<li>-e MYSQL_ROOT_PASSWORD=root 初始化root用户密码为root</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker run -d --name mysql -p 13306:3306 -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span>root mysql
+</code></pre></div><p>如果要将数据保存在主机上，这需要加上下面的参数</p>
+<ul>
+<li>-v 将容器中的文件挂载到主机</li>
+</ul>
+<pre><code>docker run -d --name mysql -p 13306:3306 -e MYSQL_ROOT_PASSWORD=root -v /home/mysql/cnf.d:/etc/my.cnf.d -v /home/mysql/data:/var/lib/mysql/data mysql
+</code></pre><p><strong>进入容器</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker exec -it mysql bash
+</code></pre></div><p><strong>进入 MySQL</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mysql -u root -p
+</code></pre></div><p>输入密码，能正常进入，就说明已经搭建好了。</p>
+<p><strong>连接 MySQL</strong></p>
+<p>这里注意使用 <code>Navicat15</code> 连接时，主机地址为 <code>localhost</code> 时，会出现如下错误：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">2002 - Can&#39;t connect to local MySQL server through socket &#39;/var/lib/mysql/mysql.sock&#39; (2 &#34;没有那个文件或目录&#34;)
+</code></pre></div><p><a href="https://stackoverflow.com/questions/4448467/cant-connect-to-local-mysql-server-through-socket-var-lib-mysql-mysql-sock">解决方案之一</a> 将 <code>localhost</code> 换成 <code>127.0.0.1</code></p>
+<p>而我使用 <code>DBeaver</code> 连接时，则没有出现这种情况。</p>
+
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

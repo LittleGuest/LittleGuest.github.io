@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust迭代器 on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/tags/rust%E8%BF%AD%E4%BB%A3%E5%99%A8/</link>
+    <description>Recent content in Rust迭代器 on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 02 Feb 2021 22:28:20 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/tags/rust%E8%BF%AD%E4%BB%A3%E5%99%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>关于Rust迭代器的一些骚操作</title>
+      <link>https://littleguest.github.io/posts/rust-iterator-group/</link>
+      <pubDate>Tue, 02 Feb 2021 22:28:20 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-iterator-group/</guid>
+      <description>首先，先在这里抛出 两个问题
+1. 如何将一个 List 转换为一个 HashMap
+2. 如何将两个 List 转换为一个 HashMap
+让我们来看看 在 Java 中是如何实现的。😄
+第一个问题
+@Data @AllArgsConstructor public class Person { private Long id; private String name; private String sex; public static void main(String[] args) { List&amp;lt;Person&amp;gt; persons = new ArrayList&amp;lt;&amp;gt;(); persons.add(new Person(1L, &amp;#34;张三&amp;#34;, &amp;#34;男&amp;#34;)); persons.add(new Person(2L, &amp;#34;李四&amp;#34;, &amp;#34;男&amp;#34;)); persons.add(new Person(3L, &amp;#34;王兰&amp;#34;, &amp;#34;女&amp;#34;)); // 根据性别进行分组  Map&amp;lt;String, List&amp;lt;Person&amp;gt;&amp;gt; sexMap = persons.stream().collect(Collectors.groupingBy(Person::getSex)); System.out.println(sexMap); // {女=[Person(id=3, name=王兰, sex=女)], 男=[Person(id=1, name=张三, sex=男), Person(id=2, name=李四, sex=男)]}  // 将人的姓名作为键，基本信息作为值  // 测试数据不考虑姓名相同的问题  Map&amp;lt;String, Person&amp;gt; personMap = persons.</description>
+    </item>
+    
+  </channel>
+</rss>

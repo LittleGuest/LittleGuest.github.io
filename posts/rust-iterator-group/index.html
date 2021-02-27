@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>关于Rust迭代器的一些骚操作 - Tue, Feb 2, 2021</h1>
+    </div>
+    <p class="lead">关于Rust迭代器的一些骚操作</p>
+    <p>首先，先在这里抛出 两个问题</p>
+<p><strong>1. 如何将一个 List 转换为一个 HashMap</strong></p>
+<p><strong>2. 如何将两个 List 转换为一个 HashMap</strong></p>
+<p>让我们来看看 在 <code>Java</code> 中是如何实现的。😄</p>
+<p>第一个问题</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Data</span>
+<span style="color:#a6e22e">@AllArgsConstructor</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> Long id<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> String name<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> String sex<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        List<span style="color:#f92672">&lt;</span>Person<span style="color:#f92672">&gt;</span> persons <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
+        persons<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Person<span style="color:#f92672">(</span>1L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;张三&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;男&#34;</span><span style="color:#f92672">));</span>
+        persons<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Person<span style="color:#f92672">(</span>2L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;李四&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;男&#34;</span><span style="color:#f92672">));</span>
+        persons<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Person<span style="color:#f92672">(</span>3L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;王兰&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;女&#34;</span><span style="color:#f92672">));</span>
+
+        <span style="color:#75715e">// 根据性别进行分组
+</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> List<span style="color:#f92672">&lt;</span>Person<span style="color:#f92672">&gt;&gt;</span> sexMap <span style="color:#f92672">=</span> persons<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">().</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">groupingBy</span><span style="color:#f92672">(</span>Person<span style="color:#f92672">::</span>getSex<span style="color:#f92672">));</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>sexMap<span style="color:#f92672">);</span>
+        <span style="color:#75715e">// {女=[Person(id=3, name=王兰, sex=女)], 男=[Person(id=1, name=张三, sex=男), Person(id=2, name=李四, sex=男)]}
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// 将人的姓名作为键，基本信息作为值
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 测试数据不考虑姓名相同的问题
+</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> Person<span style="color:#f92672">&gt;</span> personMap <span style="color:#f92672">=</span> persons<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">().</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">toMap</span><span style="color:#f92672">(</span>Person<span style="color:#f92672">::</span>getName<span style="color:#f92672">,</span> e <span style="color:#f92672">-&gt;</span> e<span style="color:#f92672">));</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>personMap<span style="color:#f92672">);</span>
+        <span style="color:#75715e">// {李四=Person(id=2, name=李四, sex=男), 张三=Person(id=1, name=张三, sex=男), 王兰=Person(id=3, name=王兰, sex=女)}
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>我觉得这个问题在开发过程中会经常遇到（手动狗头）</p>
+<p>第二个问题</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Data</span>
+<span style="color:#a6e22e">@AllArgsConstructor</span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Field</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> Long id<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> String name<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#a6e22e">@Data</span>
+<span style="color:#a6e22e">@AllArgsConstructor</span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">FieldData</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> Long id<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> Long fieldId<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> String value<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">FieldTest</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        List<span style="color:#f92672">&lt;</span>Field<span style="color:#f92672">&gt;</span> fields <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
+        fields<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Field<span style="color:#f92672">(</span>1L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;field_1&#34;</span><span style="color:#f92672">));</span>
+        fields<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Field<span style="color:#f92672">(</span>2L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;field_2&#34;</span><span style="color:#f92672">));</span>
+        fields<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Field<span style="color:#f92672">(</span>3L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;field_3&#34;</span><span style="color:#f92672">));</span>
+        fields<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Field<span style="color:#f92672">(</span>4L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;field_4&#34;</span><span style="color:#f92672">));</span>
+
+        List<span style="color:#f92672">&lt;</span>FieldData<span style="color:#f92672">&gt;</span> fieldDatas <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
+        fieldDatas<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> FieldData<span style="color:#f92672">(</span>5L<span style="color:#f92672">,</span> 1L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Stream 好用吗&#34;</span><span style="color:#f92672">));</span>
+        fieldDatas<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> FieldData<span style="color:#f92672">(</span>6L<span style="color:#f92672">,</span> 2L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Stream 好用&#34;</span><span style="color:#f92672">));</span>
+        fieldDatas<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> FieldData<span style="color:#f92672">(</span>7L<span style="color:#f92672">,</span> 3L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Stream 牛逼&#34;</span><span style="color:#f92672">));</span>
+
+        <span style="color:#75715e">// 说明：
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Field 的名称是唯一的
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Field 和 FieldData 是一对一的关系
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// 1、 经过多次转换
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 将 Field 的名称 和 Field 转换成 Map
+</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> Field<span style="color:#f92672">&gt;</span> fieldMap <span style="color:#f92672">=</span> fields<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">().</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">toMap</span><span style="color:#f92672">(</span>Field<span style="color:#f92672">::</span>getName<span style="color:#f92672">,</span> e <span style="color:#f92672">-&gt;</span> e<span style="color:#f92672">));</span>
+        <span style="color:#75715e">// FieldData 也转换为 Map
+</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>Long<span style="color:#f92672">,</span> FieldData<span style="color:#f92672">&gt;</span> fieldDataMap <span style="color:#f92672">=</span> fieldDatas<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">()</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">toMap</span><span style="color:#f92672">(</span>FieldData<span style="color:#f92672">::</span>getFieldId<span style="color:#f92672">,</span> e <span style="color:#f92672">-&gt;</span> e<span style="color:#f92672">));</span>
+        <span style="color:#75715e">// 我们想要得到的数据结构
+</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> FieldData<span style="color:#f92672">&gt;</span> fieldNameFieldDataMap <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;(</span>fieldMap<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">());</span>
+        <span style="color:#75715e">// 组装我们想要要的数据
+</span><span style="color:#75715e"></span>        fieldMap<span style="color:#f92672">.</span><span style="color:#a6e22e">forEach</span><span style="color:#f92672">((</span>k<span style="color:#f92672">,</span> v<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> fieldNameFieldDataMap<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>k<span style="color:#f92672">,</span> fieldDataMap<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>v<span style="color:#f92672">.</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">())));</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>fieldNameFieldDataMap<span style="color:#f92672">);</span>
+        <span style="color:#75715e">// {field_3=FieldData(id=7, fieldId=3, value=Stream 牛逼), field_4=null,
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// field_1=FieldData(id=5, fieldId=1, value=Stream 好用吗), field_2=FieldData(id=6,
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// fieldId=2, value=Stream 好用)}
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// 2、直接一步到胃
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// FIXME: 暂时只能做到这种，有没有更好的方法？
+</span><span style="color:#75715e"></span>        List<span style="color:#f92672">&lt;</span>Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> FieldData<span style="color:#f92672">&gt;&gt;</span> fieldNameFieldDataList <span style="color:#f92672">=</span> fields<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">()</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">flatMap</span><span style="color:#f92672">(</span>f <span style="color:#f92672">-&gt;</span> fieldDatas<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">().</span><span style="color:#a6e22e">filter</span><span style="color:#f92672">(</span>fd <span style="color:#f92672">-&gt;</span> fd<span style="color:#f92672">.</span><span style="color:#a6e22e">getFieldId</span><span style="color:#f92672">().</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>f<span style="color:#f92672">.</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">())).</span><span style="color:#a6e22e">map</span><span style="color:#f92672">(</span>fieldData <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span>
+                    Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> FieldData<span style="color:#f92672">&gt;</span> map <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;();</span>
+                    map<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>f<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">(),</span> fieldData<span style="color:#f92672">);</span>
+                    <span style="color:#66d9ef">return</span> map<span style="color:#f92672">;</span>
+                <span style="color:#f92672">})).</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">toList</span><span style="color:#f92672">());</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>fieldNameFieldDataList<span style="color:#f92672">);</span>
+        <span style="color:#75715e">// [{field_1=FieldData(id=5, fieldId=1, value=Stream 好用吗)},
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// {field_2=FieldData(id=6, fieldId=2, value=Stream 好用)},
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// {field_3=FieldData(id=7, fieldId=3, value=Stream 牛逼)}]
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// 再次转换
+</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> FieldData<span style="color:#f92672">&gt;</span> fieldNameFieldDataMap2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;(</span>fieldMap<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">());</span>
+        fieldNameFieldDataList<span style="color:#f92672">.</span><span style="color:#a6e22e">forEach</span><span style="color:#f92672">(</span>d <span style="color:#f92672">-&gt;</span> d<span style="color:#f92672">.</span><span style="color:#a6e22e">forEach</span><span style="color:#f92672">((</span>k<span style="color:#f92672">,</span> v<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> fieldNameFieldDataMap2<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>k<span style="color:#f92672">,</span> v<span style="color:#f92672">)));</span>
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>fieldNameFieldDataMap2<span style="color:#f92672">);</span>
+        <span style="color:#75715e">// {field_3=FieldData(id=7, fieldId=3, value=Stream 牛逼), field_1=FieldData(id=5,
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// fieldId=1, value=Stream 好用吗), field_2=FieldData(id=6, fieldId=2, value=Stream
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 好用)}
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>这样就解决了一开始提出的两个问题，当然，还有其他的方法，在这里就不列举了。</p>
+<p>回归正题，<strong>在 Rust 中是如何解决这两个问题的呢？</strong></p>
+<p>第一个问题</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> std::collections::HashMap;
+
+<span style="color:#75715e">#[derive(Debug)]</span>
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Person</span> {
+    id: <span style="color:#66d9ef">u64</span>,
+    name: String,
+    sex: String,
+}
+
+<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#66d9ef">let</span> persons <span style="color:#f92672">=</span> [
+        Person {
+            id: <span style="color:#ae81ff">1</span>,
+            name: <span style="color:#e6db74">&#34;张三&#34;</span>.to_string(),
+            sex: <span style="color:#e6db74">&#34;男&#34;</span>.to_string(),
+        },
+        Person {
+            id: <span style="color:#ae81ff">2</span>,
+            name: <span style="color:#e6db74">&#34;李四&#34;</span>.to_string(),
+            sex: <span style="color:#e6db74">&#34;男&#34;</span>.to_string(),
+        },
+        Person {
+            id: <span style="color:#ae81ff">3</span>,
+            name: <span style="color:#e6db74">&#34;王兰&#34;</span>.to_string(),
+            sex: <span style="color:#e6db74">&#34;女&#34;</span>.to_string(),
+        },
+    ];
+
+    <span style="color:#75715e">// 1、先将性别放进 HashMap 中，然后遍历 HashMap 和 persons 数组，将 persons 中满足 HashMap 键的 person 放到对应的键下面。
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 首先想到的就是这种方法
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> sex_map <span style="color:#f92672">=</span> persons
+        .iter()
+        .map(<span style="color:#f92672">|</span>p<span style="color:#f92672">|</span> (p.sex.clone(), Vec::new()))
+        .collect::<span style="color:#f92672">&lt;</span>HashMap<span style="color:#f92672">&lt;</span>_, _<span style="color:#f92672">&gt;&gt;</span>();
+    <span style="color:#66d9ef">for</span> snm <span style="color:#66d9ef">in</span> sex_map.iter_mut() {
+        persons.iter().for_each(<span style="color:#f92672">|</span>p<span style="color:#f92672">|</span> {
+            <span style="color:#66d9ef">if</span> p.sex.eq(snm.<span style="color:#ae81ff">0</span>) {
+                snm.<span style="color:#ae81ff">1.</span>push(p);
+            }
+        })
+    }
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{:?}&#34;</span>, sex_map);
+    <span style="color:#75715e">// {&#34;女&#34;: [Person { id: 3, name: &#34;王兰&#34;, sex: &#34;女&#34; }], &#34;男&#34;: [Person { id: 1, name: &#34;张三&#34;, sex: &#34;男&#34; }, Person { id: 2, name: &#34;李四&#34;, sex: &#34;男&#34; }]}
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 2、使用 fold
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> sex_map <span style="color:#f92672">=</span> persons.iter().fold(HashMap::with_capacity(<span style="color:#ae81ff">2</span>), <span style="color:#f92672">|</span><span style="color:#66d9ef">mut</span> m, p<span style="color:#f92672">|</span> {
+        m.insert(
+            p.sex.clone(),
+            persons
+                .iter()
+                .filter(<span style="color:#f92672">|</span>pp<span style="color:#f92672">|</span> pp.sex <span style="color:#f92672">==</span> p.sex)
+                .collect::<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span>_<span style="color:#f92672">&gt;&gt;</span>(),
+        );
+        m
+    });
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{:?}&#34;</span>, sex_map);
+    <span style="color:#75715e">// {&#34;女&#34;: [Person { id: 3, name: &#34;王兰&#34;, sex: &#34;女&#34; }], &#34;男&#34;: [Person { id: 1, name: &#34;张三&#34;, sex: &#34;男&#34; }, Person { id: 2, name: &#34;李四&#34;, sex: &#34;男&#34; }]}
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>第二个问题</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> std::collections::HashMap;
+
+<span style="color:#75715e">#[derive(Debug)]</span>
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Field</span> {
+    id: <span style="color:#66d9ef">u64</span>,
+    name: String,
+}
+
+<span style="color:#75715e">#[derive(Debug)]</span>
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">FieldData</span> {
+    id: <span style="color:#66d9ef">u64</span>,
+    field_id: <span style="color:#66d9ef">u64</span>,
+    value: String,
+}
+
+<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#66d9ef">let</span> fields <span style="color:#f92672">=</span> [
+        Field {
+            id: <span style="color:#ae81ff">1</span>,
+            name: <span style="color:#e6db74">&#34;field_1&#34;</span>.to_string(),
+        },
+        Field {
+            id: <span style="color:#ae81ff">2</span>,
+            name: <span style="color:#e6db74">&#34;field_2&#34;</span>.to_string(),
+        },
+        Field {
+            id: <span style="color:#ae81ff">3</span>,
+            name: <span style="color:#e6db74">&#34;field_3&#34;</span>.to_string(),
+        },
+        Field {
+            id: <span style="color:#ae81ff">4</span>,
+            name: <span style="color:#e6db74">&#34;field_4&#34;</span>.to_string(),
+        },
+    ];
+
+    <span style="color:#66d9ef">let</span> field_datas <span style="color:#f92672">=</span> [
+        FieldData {
+            id: <span style="color:#ae81ff">5</span>,
+            field_id: <span style="color:#ae81ff">1</span>,
+            value: <span style="color:#e6db74">&#34;Rust 牛逼!&#34;</span>.to_string(),
+        },
+        FieldData {
+            id: <span style="color:#ae81ff">6</span>,
+            field_id: <span style="color:#ae81ff">2</span>,
+            value: <span style="color:#e6db74">&#34;Rust 牛逼!!&#34;</span>.to_string(),
+        },
+        FieldData {
+            id: <span style="color:#ae81ff">7</span>,
+            field_id: <span style="color:#ae81ff">3</span>,
+            value: <span style="color:#e6db74">&#34;Rust 牛逼!!!&#34;</span>.to_string(),
+        },
+    ];
+
+    <span style="color:#75715e">// 说明：
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Field 的名称是唯一的
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Field 和 FieldData 是一对一的关系
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 1、
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> field_map <span style="color:#f92672">=</span> fields
+        .iter()
+        .fold(HashMap::with_capacity(fields.len()), <span style="color:#f92672">|</span><span style="color:#66d9ef">mut</span> a, b<span style="color:#f92672">|</span> {
+            a.insert(b.name.clone(), b);
+            a
+        });
+
+    <span style="color:#66d9ef">let</span> field_data_map <span style="color:#f92672">=</span>
+        field_datas
+            .iter()
+            .fold(HashMap::with_capacity(field_datas.len()), <span style="color:#f92672">|</span><span style="color:#66d9ef">mut</span> a, b<span style="color:#f92672">|</span> {
+                a.insert(b.field_id, b);
+                a
+            });
+    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> field_name_field_data_map <span style="color:#f92672">=</span> HashMap::with_capacity(fields.len());
+    field_map.iter().for_each(<span style="color:#f92672">|</span>(k, v)<span style="color:#f92672">|</span> {
+        field_name_field_data_map.insert(k.clone(), field_data_map.get(<span style="color:#f92672">&amp;</span>v.id));
+    });
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{:?}&#34;</span>, field_name_field_data_map);
+    <span style="color:#75715e">// {&#34;field_1&#34;: Some(FieldData { id: 5, field_id: 1, value: &#34;Rust 牛逼!&#34; }), &#34;field_2&#34;: Some(FieldData { id: 6, field_id: 2, value: &#34;Rust 牛逼!!&#34; }), &#34;field_3&#34;: Some(FieldData { id: 7, field_id: 3, value: &#34;Rust 牛逼!!!&#34; }), &#34;field_4&#34;: None}
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 2 、使用 fold 和 filter_map
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> field_name_field_data_map <span style="color:#f92672">=</span> fields.iter().fold(HashMap::new(), <span style="color:#f92672">|</span><span style="color:#66d9ef">mut</span> a, b<span style="color:#f92672">|</span> {
+        a.insert(
+            b.name.clone(),
+            field_datas
+                .iter()
+                .filter_map(<span style="color:#66d9ef">move</span> <span style="color:#f92672">|</span>fd<span style="color:#f92672">|</span> <span style="color:#66d9ef">if</span> fd.field_id <span style="color:#f92672">==</span> b.id { Some(fd) } <span style="color:#66d9ef">else</span> { None })
+                .next(),
+        );
+        a
+    });
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{:?}&#34;</span>, field_name_field_data_map);
+    <span style="color:#75715e">// {&#34;field_1&#34;: Some(FieldData { id: 5, field_id: 1, value: &#34;Rust 牛逼!&#34; }), &#34;field_3&#34;: Some(FieldData { id: 7, field_id: 3, value: &#34;Rust 牛逼!!!&#34; }), &#34;field_4&#34;: None, &#34;field_2&#34;: Some(FieldData { id: 6, field_id: 2, value: &#34;Rust 牛逼!!&#34; })}
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>虽然实现的方法不一定是最好的，但是还是实现了想要达到的效果。😆</p>
+<p>这里就起个抛个砖引个玉的效果。</p>
+<p>嗯~~，这里暂时不介绍 <code>fold</code> <code>filter_map</code> <code>filter</code> <code>for_each</code>等方法的使用，后面的文章可能会逐一介绍。</p>
+<p>如果想要更加熟练的使用这些方法，那还得勤加练习才行。</p>
+
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

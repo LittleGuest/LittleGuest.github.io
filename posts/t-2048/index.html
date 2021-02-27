@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>一款可以在终端玩的2048小游戏 - Fri, Feb 26, 2021</h1>
+    </div>
+    <p class="lead">一款可以在终端玩的2048小游戏</p>
+    <h2 id="使用-rust-实现-2048">使用 Rust 实现 2048</h2>
+<p>闲来无事，想着用 Rust 做一个练手的项目，碰巧，之前玩过2048，玩法比较简单，感觉还蛮有意思的。那我就在想我能不能用 Rust 实现呢？</p>
+<p>所以这个项目就诞生了。</p>
+<p><a href="https://github.com/LittleGuest/t-2048">项目地址</a></p>
+<p>首先来说玩法，玩家只需控制方向键移动数字方块，合并数字获得最高分就行了。其次，如果要用代码来实现的话，也不是很复杂。按我的思路来说，可以将整个看作是一个二维数组，其次不管是向上，向下，向左，向右移动数字方块，我们都可以将它看作是向左移动。</p>
+<p>举个栗子，现在有这样一个东东，我们尝试着先向左向右移动，</p>
+<pre><code>[0, 0, 0, 2]
+[4, 2, 0, 2]
+[0, 2, 2, 0]
+[0, 0, 0, 0]
+</code></pre><p>如果我们向左移动，将会得到这个</p>
+<pre><code>[2, 0, 0, 0]
+[4, 4, 0, 0]
+[4, 0, 0, 0]
+[0, 0, 0, 0]
+</code></pre><p>如果我们向右移动，将会得到这个</p>
+<pre><code>[0, 0, 0, 2]
+[0, 0, 4, 4]
+[0, 0, 0, 4]
+[0, 0, 0, 0]
+</code></pre><p>其实我们可以将向右移动看作是向左移动之后的翻转。接下来康康向上和向下移动，</p>
+<p>向上移动，得到如下结果：</p>
+<pre><code>[4, 4, 2, 4]
+[0, 0, 0, 0]
+[0, 0, 0, 0]
+[0, 0, 0, 0]
+</code></pre><p>而向下移动，得到的是：</p>
+<pre><code>[0, 0, 0, 0]
+[0, 0, 0, 0]
+[0, 0, 0, 0]
+[4, 4, 2, 4]
+</code></pre><p>我们同样可以将向下移动看作是向上移动之后的翻转。</p>
+<p>来来来，让我们仔细看看向上移动的过程。可以看作是下面</p>
+<pre><code>[0, 0, 0, 2]           [0, 4, 0, 0]           [4, 0, 0, 0]           [4, 4, 2, 4]
+[4, 2, 0, 2]    --&gt;    [0, 2, 2, 0]    --&gt;    [4, 0, 0, 0]    --&gt;    [0, 0, 0, 0]
+[0, 2, 2, 0]    --&gt;    [0, 0, 2, 0]    --&gt;    [2, 0, 0, 0]    --&gt;    [0, 0, 0, 0]
+[0, 0, 0, 0]           [2, 2, 0, 0]           [4, 0, 0, 0]           [0, 0, 0, 0]
+</code></pre><ol>
+<li>将二维数组进行 <code>矩阵转置</code> 操作</li>
+<li>向左合并</li>
+<li>再次将二维数组进行<code>矩阵转置</code> 操作</li>
+</ol>
+<p>所以我们可以将向上，向下，向左，向右移动看作是同一个操作。</p>
+<p>接下来看核心代码，其中 <code>PALACE_SIZE</code> 的值为 4</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#e6db74">/// 向左合并数字
+</span><span style="color:#e6db74"></span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">merge</span>(vs: <span style="color:#66d9ef">&amp;</span>[<span style="color:#66d9ef">u128</span>]) -&gt; Vec<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u128</span><span style="color:#f92672">&gt;</span> {
+    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> q <span style="color:#f92672">=</span> vs.iter().collect::<span style="color:#f92672">&lt;</span>VecDeque<span style="color:#f92672">&lt;</span>_<span style="color:#f92672">&gt;&gt;</span>();
+    <span style="color:#75715e">// 存放合并之后的值的队列
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> cvq <span style="color:#f92672">=</span> VecDeque::new();
+    <span style="color:#75715e">// 是否合并过
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> merged <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+    <span style="color:#66d9ef">while</span> <span style="color:#f92672">!</span>q.is_empty() {
+        <span style="color:#66d9ef">let</span> qv <span style="color:#f92672">=</span> q.pop_front().unwrap();
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">*</span>qv <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
+            <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> Some(cv) <span style="color:#f92672">=</span> cvq.back() {
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">*</span>cv <span style="color:#f92672">==</span> <span style="color:#f92672">*</span>qv <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>merged {
+                    cvq.pop_back();
+                    cvq.push_back(<span style="color:#f92672">*</span>qv <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>);
+                    merged <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+                } <span style="color:#66d9ef">else</span> {
+                    cvq.push_back(<span style="color:#f92672">*</span>qv);
+                    merged <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+                }
+            } <span style="color:#66d9ef">else</span> {
+                cvq.push_back(<span style="color:#f92672">*</span>qv);
+                merged <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+            }
+        }
+    }
+
+    <span style="color:#75715e">// 将剩余的补0
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> cvq.len() <span style="color:#f92672">&lt;</span> PALACE_SIZE {
+        (<span style="color:#ae81ff">0</span>..PALACE_SIZE <span style="color:#f92672">-</span> cvq.len()).for_each(<span style="color:#f92672">|</span>_<span style="color:#f92672">|</span> {
+            cvq.push_back(<span style="color:#ae81ff">0</span>);
+        });
+    }
+
+    cvq.into_iter().collect::<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span>_<span style="color:#f92672">&gt;&gt;</span>()
+}
+
+<span style="color:#e6db74">/// 移动
+</span><span style="color:#e6db74"></span><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">move_palaces</span>(palaces: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> Vec<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u128</span><span style="color:#f92672">&gt;&gt;</span>, me: <span style="color:#a6e22e">MoveDirection</span>) {
+    <span style="color:#66d9ef">match</span> me {
+        <span style="color:#75715e">// 向上移动
+</span><span style="color:#75715e"></span>        MoveDirection::Up <span style="color:#f92672">=&gt;</span> {
+            <span style="color:#66d9ef">for</span> x <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">0</span>..PALACE_SIZE {
+                <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> o <span style="color:#f92672">=</span> Vec::new();
+                <span style="color:#66d9ef">for</span> y <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">0</span>..PALACE_SIZE {
+                    o.push(palaces[y][x]);
+                }
+                merge(<span style="color:#f92672">&amp;</span>o)
+                    .iter()
+                    .enumerate()
+                    .for_each(<span style="color:#f92672">|</span>(y, yv)<span style="color:#f92672">|</span> {
+                        palaces[y][x] <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>yv;
+                    });
+            }
+        }
+        <span style="color:#75715e">// 向下移动
+</span><span style="color:#75715e"></span>        MoveDirection::Down <span style="color:#f92672">=&gt;</span> {
+            <span style="color:#66d9ef">for</span> x <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">0</span>..PALACE_SIZE {
+                <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> o <span style="color:#f92672">=</span> Vec::new();
+                <span style="color:#66d9ef">for</span> y <span style="color:#66d9ef">in</span> <span style="color:#ae81ff">0</span>..PALACE_SIZE {
+                    o.push(palaces[PALACE_SIZE <span style="color:#f92672">-</span> y <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>][x]);
+                }
+                merge(<span style="color:#f92672">&amp;</span>o.into_iter().collect::<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span>_<span style="color:#f92672">&gt;&gt;</span>())
+                    .iter()
+                    .enumerate()
+                    .for_each(<span style="color:#f92672">|</span>(y, yv)<span style="color:#f92672">|</span> {
+                        palaces[PALACE_SIZE <span style="color:#f92672">-</span> y <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>][x] <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>yv;
+                    });
+            }
+        }
+        <span style="color:#75715e">// 向左移动
+</span><span style="color:#75715e"></span>        MoveDirection::Left <span style="color:#f92672">=&gt;</span> {
+            (<span style="color:#ae81ff">0</span>..PALACE_SIZE).for_each(<span style="color:#f92672">|</span>i<span style="color:#f92672">|</span> {
+                palaces[i] <span style="color:#f92672">=</span> merge(<span style="color:#f92672">&amp;</span>palaces[i]);
+            });
+        }
+        <span style="color:#75715e">// 向右移动
+</span><span style="color:#75715e"></span>        MoveDirection::Right <span style="color:#f92672">=&gt;</span> {
+            (<span style="color:#ae81ff">0</span>..PALACE_SIZE).for_each(<span style="color:#f92672">|</span>i<span style="color:#f92672">|</span> {
+                palaces[i] <span style="color:#f92672">=</span> merge(
+                    <span style="color:#f92672">&amp;</span>palaces[i].iter().rev().cloned().collect::<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span>_<span style="color:#f92672">&gt;&gt;</span>(),
+                )
+                .iter()
+                .rev()
+                .cloned()
+                .collect::<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span>_<span style="color:#f92672">&gt;&gt;</span>();
+            });
+        }
+    }
+    <span style="color:#75715e">// 在空位置生成数字方块
+</span><span style="color:#75715e"></span>    empty_position_gen(palaces);
+}
+</code></pre></div><p>这些就是该游戏的核心了。</p>
+
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust错误处理 on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/tags/rust%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/</link>
+    <description>Recent content in Rust错误处理 on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 12 Jan 2021 21:33:07 +0000</lastBuildDate><atom:link href="https://littleguest.github.io/tags/rust%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust之旅-错误处理</title>
+      <link>https://littleguest.github.io/posts/rust-tour-error-handle/</link>
+      <pubDate>Tue, 12 Jan 2021 21:33:07 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-error-handle/</guid>
+      <description>Rust中的错误处理 在 Java 中处理异常一般有以下几种方式：
+ 使用 try-catch 捕获异常 通过 throw 的方式向上抛异常 在web中全局拦截异常  当然还有其他方式处理异常，这里就不一一列举了。
+好了，回归正题，
+那么在 Rust 中是怎么处理错误的呢？
+来讲怎么处理错误之前，我们首先需要了解标准库中的 std::result::Result 这个枚举
+#[must_use = &amp;#34;this `Result` may be an `Err` variant, which should be handled&amp;#34;] pub enum Result&amp;lt;T, E&amp;gt; { Ok(T), Err(E), } 它是用来返回错误和传播错误的，Ok(T) 代表成功并且包含一个成功值, Err(E) 代表错误并且包含一个错误值， #[must_use] 属性表示返回值 Result 需要被处理，否则编译器会给出警告；
+  最简单粗暴的方式就是直接 unwrap
+ unwrap 如果出现错误，直接 panic，一般不推荐使用；  assert_eq!(Ok::&amp;lt;u32, &amp;amp;str&amp;gt;(1).unwrap(), 1); Err::&amp;lt;u32, &amp;amp;str&amp;gt;(&amp;#34;error&amp;#34;).unwrap(); // panic  unwrap_or 如果出现错误，返回给出的值；  assert_eq!</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust数据类型 on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/tags/rust%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</link>
+    <description>Recent content in Rust数据类型 on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 23 Aug 2020 10:37:10 +0000</lastBuildDate><atom:link href="https://littleguest.github.io/tags/rust%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust之旅-数据类型</title>
+      <link>https://littleguest.github.io/posts/rust-tour-data-types/</link>
+      <pubDate>Sun, 23 Aug 2020 10:37:10 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-data-types/</guid>
+      <description>整型    长度 有符号 无符号     8-bit i8 u8   16-bit i16 u16   32-bit i32 u32   64-bit i64 u64   128-bit i128 u128   arch isize usize    浮点型 f32，f64
+布尔类型 bool
+字符类型 使用单引号指定
+元组类型 数组类型 元组长度固定，使用包含在圆括号中的逗号分隔的值列表来创建一个元组。元组中的每一个位置都有一个类型，而且这些不同值的类型也不必是相同的。
+use std::fmt; use std::mem; #[derive(Debug)] struct Matrix(f32, f32, f32, f32); fn main(){ // 变量可以给出类型说明。  let logical: bool = true; let a_float: f64 = 1.</description>
+    </item>
+    
+  </channel>
+</rss>

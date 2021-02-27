@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust泛型 on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/tags/rust%E6%B3%9B%E5%9E%8B/</link>
+    <description>Recent content in Rust泛型 on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 12 Jan 2021 21:41:32 +0000</lastBuildDate><atom:link href="https://littleguest.github.io/tags/rust%E6%B3%9B%E5%9E%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust之旅-泛型</title>
+      <link>https://littleguest.github.io/posts/rust-tour-generic-type/</link>
+      <pubDate>Tue, 12 Jan 2021 21:41:32 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-generic-type/</guid>
+      <description>Rust如何使用泛型 在函数定义中使用泛型
+比如我们定义一个求slice中的最大值的函数，传入的参数是一个元素类型为 T 的slice，返回值也是 T； 如果要在函数体内使用泛型参数，那么必须要在函数签名中声明泛型名称。
+fn largest&amp;lt;T&amp;gt;(list: &amp;amp;[T]) -&amp;gt; T { 结构体定义中的泛型
+必须在结构体名称后面的尖括号中声明泛型参数的名称
+// 一个泛型参数 struct Point&amp;lt;T&amp;gt; { x: T, y: T, } // 多个泛型参数 struct Point2&amp;lt;T, U&amp;gt; { x: T, y: U, } 枚举定义中的泛型
+// 一个泛型参数 pub enum Option&amp;lt;T&amp;gt; { None, Some(T), } // 多个泛型参数 pub enum Result&amp;lt;T, E&amp;gt; { Ok(T), Err(E), } 方法定义中的泛型
+struct Point&amp;lt;T&amp;gt; { x: T, y: T, } impl&amp;lt;T&amp;gt; Point&amp;lt;T&amp;gt; { fn x(&amp;amp;self) -&amp;gt; &amp;amp;T { &amp;amp;self.</description>
+    </item>
+    
+  </channel>
+</rss>

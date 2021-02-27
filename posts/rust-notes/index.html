@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Rust-杂记 - Sun, Dec 27, 2020</h1>
+    </div>
+    <p class="lead">Rust-杂记</p>
+    <ol>
+<li>
+<p><code>&amp;</code> 表示是一个引用，它允许多出代码访问同一处数据，而无需在内存中多次拷贝；</p>
+</li>
+<li>
+<p>关联函数是针对类型实现的；</p>
+</li>
+<li>
+<p><a href="https://semver.org/">语义化版本</a>；</p>
+</li>
+<li>
+<p>变量是默认不可改变的，但通过加 <code>mut</code> 来使其改变；</p>
+</li>
+<li>
+<p>常量总是不变的；</p>
+</li>
+<li>
+<p>Rust 有四种基本的标量类型：整型，浮点型，布尔类型和字符类型；</p>
+<ul>
+<li>整型：有符号（[$-2^(n-1)$:$2^(n-1) - 1$]），无符号（[0:$2^n - 1$]）
+<table>
+<thead>
+<tr>
+<th>长度</th>
+<th>有符号</th>
+<th>无符号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8-bit</td>
+<td><code>i8</code></td>
+<td><code>u8</code></td>
+</tr>
+<tr>
+<td>16-bit</td>
+<td><code>i16</code></td>
+<td><code>u16</code></td>
+</tr>
+<tr>
+<td>32-bit</td>
+<td><code>i32</code>（默认）</td>
+<td><code>u32</code></td>
+</tr>
+<tr>
+<td>64-bit</td>
+<td><code>i64</code></td>
+<td><code>u64</code></td>
+</tr>
+<tr>
+<td>128-bit</td>
+<td><code>i128</code></td>
+<td><code>u128</code></td>
+</tr>
+<tr>
+<td>arch</td>
+<td><code>isize</code></td>
+<td><code>usize</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>浮点型：<code>f32</code>，<code>f64</code>（默认）</li>
+<li>布尔类型：<code>true</code>，<code>false</code></li>
+<li>字符类型： <code>char</code></li>
+</ul>
+</li>
+<li>
+<p>所有权规则</p>
+<ol>
+<li>Rust中的每一个值都有一个被称其为 <code>所有者</code> （owner）的变量;</li>
+<li>值在任一时刻有且只有一个所有者；</li>
+<li>当所有者（变量）离开作用域，这个值将被丢弃；</li>
+</ol>
+<ul>
+<li>变量和数据交互的方式：<code>move</code>，<code>clone</code>；</li>
+<li>Rust永远不会自动创建数据的“深拷贝”；</li>
+<li>Rust不允许自身或其任何部分实现了 <code>Drop</code> trait的类型使用 <code>Copy</code>  trait，以下是一些 <code>Copy</code> 的类型：
+<ul>
+<li>所有整数类型；</li>
+<li>布尔类型；</li>
+<li>所有浮点类型；</li>
+<li>字符类型；</li>
+<li>元组，当且仅当其包含的类型都是 <code>Copy</code> 的时候；</li>
+</ul>
+</li>
+<li><code>&amp;</code> 表示引用，它允许使用值但不获取其所有权；</li>
+<li>将获取引用作为函数参数称为 <code>借用</code>（borrowing）；</li>
+<li>默认不允许修改引用的值；</li>
+<li>引用的规则：
+<ul>
+<li>在任意给定时间，要么只能有一个可变引用，要么只能有多个不可变引用；</li>
+<li>引用必须总是有效的；</li>
+</ul>
+</li>
+<li>产生数据竞争的方式：
+<ul>
+<li>两个或更多指针同时访问统一数据；</li>
+<li>至少有一个指针被用来写入数据；</li>
+<li>没有同步数据访问的机制；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Rust有一个叫自动引用和解引用的功能。方法调用是Rust中少数几个拥有这种行为的地方；如：当使用 object.something() 调用方法时，Rust 会自动为 object 添加 <code>&amp;</code>、<code>&amp;mut</code> 或 <code>*</code> 以便使 object 与方法签名匹配；</p>
+</li>
+<li>
+<p>模块系统：</p>
+<ol>
+<li>包（Packages）：Cargo的一个功能，它允许你构建、测试和分享crate；</li>
+<li>Crates：一个模块的树形结构，它形成了库和二进制项目；</li>
+<li>模块（Modules） 和use：它允许你控制作用域和路径的私有性；</li>
+<li>路径（path）：一个命名例如结构体、函数或模块等项的方式；</li>
+</ol>
+<ul>
+<li>一个包中至多只能包含一个crate（library crate）；包中可以包含任意多个二进制crate（binary crate）；包中至少包含一个crate，无论是库的还是二进制的；</li>
+<li>路径的两种形式：
+<ul>
+<li><strong>绝对路径</strong>：从crate根开始，以crate名或者字面着crate开头；</li>
+<li><strong>相对路径</strong>：从当前模块开始，以 <strong>self</strong>、<strong>super</strong>或当前模块的标识符开头；</li>
+</ul>
+</li>
+<li>Rust 中默认所有项（函数、方法、结构体、枚举、模块和常量）都是私有的。父模块中的项不能使用子模块中的私有项，但是子模块中的项可以使用他们父模块中的项；</li>
+</ul>
+</li>
+<li>
+<p>Rust的核心语言中只有一种字符串类型：<code>str</code>，字符串slice，它通常以被借用的形式出现，<code>&amp;str</code>；称作 <code>String</code> 的类型是由标准库提供的，而没有写进核心语言部分，它是可增长的、可变的、有所有权的、UTF-8 编码的字符串类型。当 Rustacean 们谈到 Rust 的 “字符串”时，它们通常指的是 <code>String</code> 和字符串 slice <code>&amp;str</code> 类型，而不仅仅是其中之一；</p>
+</li>
+<li>
+<p><code>&amp;String</code> 可以被强转为 <code>&amp;str</code> ；</p>
+</li>
+<li>
+<p><code>Rust</code> 通过在编译时进行泛型代码的 <strong>单态化</strong>（monomorphization）来保证效率。单态化是一个通过填充编译时使用的具体类型，将通用代码转换为特定代码的过程；</p>
+</li>
+<li>
+<p><strong>孤儿规则</strong>（orphan rule）：只有当 trait 或者要实现 trait 的类型位于 crate 的本地作用域时，才能为该类型实现 trait；</p>
+</li>
+<li>
+<p><code>Trait Bound</code> 语法：<code>impl Trait</code> 语法适用于直观的例子，它不过是一个较长形式的语法糖；</p>
+</li>
+<li>
+<p><code>Rust</code> 中的每一个引用都有其 <strong>生命周期</strong>（lifetime），也就是引用保持有效的作用域；</p>
+</li>
+<li>
+<p>Rust 编译器有一个 <strong>借用检查器</strong>（borrow checker），它比较作用域来确保所有的借用都是有效的；</p>
+</li>
+<li>
+<p>被编码进 Rust 引用分析的模式被称为 <strong>生命周期省略规则</strong>（lifetime elision rules）。这并不是需要程序员遵守的规则；这些规则是一系列特定的场景，此时编译器会考虑，如果代码符合这些场景，就无需明确指定生命周期；</p>
+</li>
+<li>
+<p>函数或方法的参数的生命周期被称为 <strong>输入生命周期</strong>（input lifetimes），而返回值的生命周期被称为 <strong>输出生命周期</strong>（output lifetimes）；</p>
+</li>
+<li>
+<p>编译器采用三条规则来判断引用何时不需要明确的注解。第一条规则适用于输入生命周期，后两条规则适用于输出生命周期。如果编译器检查完这三条规则后仍然存在没有计算出生命周期的引用，编译器将会停止并生成错误。这些规则适用于 <code>fn</code> 定义，以及 <code>impl</code> 块：</p>
+<ol>
+<li>第一条规则是每一个是引用的参数都有它自己的生命周期参数。换句话说就是，有一个引用参数的函数有一个生命周期参数：<code>fn foo&lt;'a&gt;(x: &amp;'a i32)</code>，有两个引用参数的函数有两个不同的生命周期参数，<code>fn foo&lt;'a, 'b&gt;(x: &amp;'a i32, y: &amp;'b i32)</code>，依此类推；</li>
+<li>第二条规则是如果只有一个输入生命周期参数，那么它被赋予所有输出生命周期参数：<code>fn foo&lt;'a&gt;(x: &amp;'a i32) -&gt; &amp;'a i32</code>；</li>
+<li>第三条规则是如果方法有多个输入生命周期参数并且其中一个参数是 <code>&amp;self</code> 或 <code>&amp;mut self</code>，说明是个对象的方法(method), 那么所有输出生命周期参数被赋予 <code>self</code> 的生命周期。第三条规则使得方法更容易读写，因为只需更少的符号；</li>
+</ol>
+</li>
+<li>
+<p><strong>静态生命周期</strong>：<code>'static</code>，其生命周期能够存活于整个程序期间。因此所有的字符串字面值都是 <code>'static</code> 的；</p>
+</li>
+<li>
+<p>测试驱动开发（Test Driven Development, TDD）遵循如下步骤：</p>
+<ol>
+<li>编写一个失败的测试，并运行它以确保它失败的原因是你所期望的。</li>
+<li>编写或修改足够的代码来使新的测试通过。</li>
+<li>重构刚刚增加或修改的代码，并确保测试仍然能通过。</li>
+<li>从步骤 1 开始重复！</li>
+</ol>
+</li>
+<li>
+<p>所有的闭包都实现了 trait <code>Fn</code>、<code>FnMut</code> 或 <code>FnOnce</code>中的一个：</p>
+<ul>
+<li><code>FnOnce</code> 消费从周围作用域捕获的变量，闭包周围的作用域被称为其 环境，environment。为了消费捕获到的变量，闭包必须获取其所有权并在定义闭包时将其移动进闭包。其名称的 <code>Once</code> 部分代表了闭包不能多次获取相同变量的所有权的事实，所以它只能被调用一次；</li>
+<li><code>FnMut</code> 获取可变的借用值所以可以改变其环境；</li>
+<li><code>Fn</code> 从其环境获取不可变的借用值；、</li>
+</ul>
+</li>
+<li>
+<p>由于所有闭包都可以被调用至少一次，所以所有闭包都实现了 <code>FnOnce</code>。那些并没有移动被捕获变量的所有权到闭包中的闭包也实现了 <code>FnMut</code>，而不需要对被捕获的变量进行可变访问的闭包则也实现了 <code>Fn</code>；</p>
+</li>
+<li>
+<p>如果希望强制闭包获取其使用的环境值的所有权，可以在参数列表前使用 <code>move</code> 关键字。（这个技巧在将闭包传递给新线程以便将数据移动到新线程中时最为实用）；</p>
+</li>
+<li>
+<p>在 Rust 中，迭代器是 <strong>惰性的</strong>（lazy），这意味着在调用方法使用迭代器之前它都不会有效果；</p>
+</li>
+<li>
+<p>迭代器是 Rust <strong>的零成本抽象</strong>（zero-cost abstractions）之一，它意味着抽象并不会引入运行时开销；</p>
+</li>
+<li>
+<p><strong>指针</strong>（pointer）是一个包含内存地址的变量的通用概念。这个地址引用，或“指向”（points at）一些其他数据；<strong>智能指针</strong>（smart pointers）是一类数据结构，他们的表现类似指针，但是也拥有额外的元数据和功能；在 Rust 中，普通引用和智能指针的一个额外的区别是引用一类只借用数据的指针；相反，在大部分情况下，智能指针 <strong>拥有</strong> 他们指向的数据；</p>
+</li>
+<li>
+<p>只能指针通常使用结构体实现。智能指针区别于常规结构体的显著特征在于其实现了 <code>Deref</code> 和 <code>Drop</code> trait；</p>
+</li>
+<li>
+<p>Rust 在发现类型和 trait 实现满足三种情况时会进行解引用强制多态：</p>
+<ul>
+<li>当 <code>T: Deref&lt;Target=U&gt;</code> 时从 <code>&amp;T</code> 到 <code>&amp;U</code>；</li>
+<li>当 <code>T: DerefMut&lt;Target=U&gt;</code> 时从 <code>&amp;mut T</code> 到 <code>&amp;mut U</code>；</li>
+<li>当 <code>T: Deref&lt;Target=U&gt;</code> 时从 <code>&amp;mut T</code> 到 <code>&amp;U</code>；</li>
+</ul>
+</li>
+<li>
+<p>Rust 也会将可变引用强转为不可变引用。但是反之是 不可能 的：不可变引用永远也不能强转为可变引用；</p>
+</li>
+<li>
+<p><strong>并发编程</strong>（Concurrent programming）：代表程序的不同部分相互独立的执行；<strong>并行编程</strong>parallel programming）：代表程序不同部分同时执行</p>
+</li>
+<li>
+<p>Rust 标准库只提供了 1:1 线程模型实现。</p>
+</li>
+<li>
+<p><code>move</code> 闭包经常与 <code>std::thread::spawn</code> 一起使用，允许在一个线程中使用另外一个线程的数据；</p>
+</li>
+<li>
+<p>Rust 中一个实现消息传递并发的主要工具是 <strong>通道</strong>（channel），由发送者（transmitter）和接收者（receiver）组成，当发送者或接收者任一被丢弃时可以认为通道被关闭了；</p>
+</li>
+<li>
+<p><code>std::sync::mpsc</code> 是 <strong>多个生产者，单个消费者（multiple producer, single consumer）</strong>；</p>
+</li>
+<li>
+<p>互斥器一次只允许一个线程访问数据；</p>
+</li>
+</ol>
+
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

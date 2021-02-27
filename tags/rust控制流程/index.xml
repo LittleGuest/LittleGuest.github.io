@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust控制流程 on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/tags/rust%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/</link>
+    <description>Recent content in Rust控制流程 on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 23 Aug 2020 11:14:48 +0000</lastBuildDate><atom:link href="https://littleguest.github.io/tags/rust%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust之旅-控制流程</title>
+      <link>https://littleguest.github.io/posts/rust-tour-control-flow/</link>
+      <pubDate>Sun, 23 Aug 2020 11:14:48 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-control-flow/</guid>
+      <description>if 表达式 fn main() { let number = 3; if number &amp;lt; 5 { println!(&amp;#34;condition was true&amp;#34;); } else { println!(&amp;#34;condition was false&amp;#34;); } } 使用 else if 处理多重条件 let number = 6; if number % 4 == 0 { println!(&amp;#34;number is divisible by 4&amp;#34;); } else if number % 3 == 0 { println!(&amp;#34;number is divisible by 3&amp;#34;); } else if number % 2 == 0 { println!(&amp;#34;number is divisible by 2&amp;#34;); } else { println!</description>
+    </item>
+    
+  </channel>
+</rss>

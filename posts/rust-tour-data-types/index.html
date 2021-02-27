@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Rust之旅-数据类型 - Sun, Aug 23, 2020</h1>
+    </div>
+    <p class="lead">Rust之旅-数据类型</p>
+    <h2 id="整型">整型</h2>
+<table>
+<thead>
+<tr>
+<th>长度</th>
+<th>有符号</th>
+<th>无符号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8-bit</td>
+<td>i8</td>
+<td>u8</td>
+</tr>
+<tr>
+<td>16-bit</td>
+<td>i16</td>
+<td>u16</td>
+</tr>
+<tr>
+<td>32-bit</td>
+<td>i32</td>
+<td>u32</td>
+</tr>
+<tr>
+<td>64-bit</td>
+<td>i64</td>
+<td>u64</td>
+</tr>
+<tr>
+<td>128-bit</td>
+<td>i128</td>
+<td>u128</td>
+</tr>
+<tr>
+<td>arch</td>
+<td>isize</td>
+<td>usize</td>
+</tr>
+</tbody>
+</table>
+<h2 id="浮点型">浮点型</h2>
+<p>f32，f64</p>
+<h2 id="布尔类型">布尔类型</h2>
+<p>bool</p>
+<h2 id="字符类型">字符类型</h2>
+<p>使用单引号指定</p>
+<h2 id="元组类型">元组类型</h2>
+<h2 id="数组类型">数组类型</h2>
+<p>元组长度固定，使用包含在圆括号中的逗号分隔的值列表来创建一个元组。元组中的每一个位置都有一个类型，而且这些不同值的类型也不必是相同的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> std::fmt;
+<span style="color:#66d9ef">use</span> std::mem;
+
+<span style="color:#75715e">#[derive(Debug)]</span>
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Matrix</span>(<span style="color:#66d9ef">f32</span>, <span style="color:#66d9ef">f32</span>, <span style="color:#66d9ef">f32</span>, <span style="color:#66d9ef">f32</span>);
+
+<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>(){
+     <span style="color:#75715e">// 变量可以给出类型说明。
+</span><span style="color:#75715e"></span>     <span style="color:#66d9ef">let</span> logical: <span style="color:#66d9ef">bool</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+
+     <span style="color:#66d9ef">let</span> a_float: <span style="color:#66d9ef">f64</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>;  <span style="color:#75715e">// 常规说明
+</span><span style="color:#75715e"></span>     <span style="color:#66d9ef">let</span> an_integer   <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span><span style="color:#66d9ef">i32</span>; <span style="color:#75715e">// 后缀说明
+</span><span style="color:#75715e"></span>
+     <span style="color:#75715e">// 否则会按默认方式决定类型。
+</span><span style="color:#75715e"></span>     <span style="color:#66d9ef">let</span> default_float   <span style="color:#f92672">=</span> <span style="color:#ae81ff">3.0</span>; <span style="color:#75715e">// `f64`
+</span><span style="color:#75715e"></span>     <span style="color:#66d9ef">let</span> default_integer <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>;   <span style="color:#75715e">// `i32`
+</span><span style="color:#75715e"></span>
+     <span style="color:#75715e">// 类型也可根据上下文自动推断。
+</span><span style="color:#75715e"></span>     <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> inferred_type <span style="color:#f92672">=</span> <span style="color:#ae81ff">12</span>; <span style="color:#75715e">// 根据下一行的赋值推断为 i64 类型
+</span><span style="color:#75715e"></span>     inferred_type <span style="color:#f92672">=</span> <span style="color:#ae81ff">4294967296</span><span style="color:#66d9ef">i64</span>;
+
+     <span style="color:#75715e">// 可变的（mutable）变量，其值可以改变。
+</span><span style="color:#75715e"></span>     <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> mutable <span style="color:#f92672">=</span> <span style="color:#ae81ff">12</span>; <span style="color:#75715e">// Mutable `i32`
+</span><span style="color:#75715e"></span>     mutable <span style="color:#f92672">=</span> <span style="color:#ae81ff">21</span>;
+
+     <span style="color:#75715e">// 报错！变量的类型并不能改变。
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//  mutable = true;
+</span><span style="color:#75715e"></span>
+     <span style="color:#75715e">// 但可以用掩蔽（shadow）来覆盖前面的变量。
+</span><span style="color:#75715e"></span>     <span style="color:#66d9ef">let</span> mutable <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+
+
+      <span style="color:#75715e">// 整数相加
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;1 + 2 = {}&#34;</span>, <span style="color:#ae81ff">1</span><span style="color:#66d9ef">u32</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>);
+
+    <span style="color:#75715e">// 整数相减
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;1 - 2 = {}&#34;</span>, <span style="color:#ae81ff">1</span><span style="color:#66d9ef">i32</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span>);
+    <span style="color:#75715e">// 试一试 ^ 尝试将 `1i32` 改为 `1u32`，体会为什么类型声明这么重要
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 短路求值的布尔逻辑
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;true AND false is {}&#34;</span>, <span style="color:#66d9ef">true</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">false</span>);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;true OR false is {}&#34;</span>, <span style="color:#66d9ef">true</span> <span style="color:#f92672">||</span> <span style="color:#66d9ef">false</span>);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;NOT true is {}&#34;</span>, <span style="color:#f92672">!</span><span style="color:#66d9ef">true</span>);
+
+    <span style="color:#75715e">// 位运算
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;0011 AND 0101 is {:04b}&#34;</span>, <span style="color:#ae81ff">0b0011</span><span style="color:#66d9ef">u32</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0b0101</span>);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;0011 OR 0101 is {:04b}&#34;</span>, <span style="color:#ae81ff">0b0011</span><span style="color:#66d9ef">u32</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">0b0101</span>);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;0011 XOR 0101 is {:04b}&#34;</span>, <span style="color:#ae81ff">0b0011</span><span style="color:#66d9ef">u32</span> <span style="color:#f92672">^</span> <span style="color:#ae81ff">0b0101</span>);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;1 &lt;&lt; 5 is {}&#34;</span>, <span style="color:#ae81ff">1</span><span style="color:#66d9ef">u32</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">5</span>);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;0x80 &gt;&gt; 2 is 0x{:x}&#34;</span>, <span style="color:#ae81ff">0x80</span><span style="color:#66d9ef">u32</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">2</span>);
+
+    <span style="color:#75715e">// 使用下划线改善数字的可读性！
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;One million is written as {}&#34;</span>, <span style="color:#ae81ff">1_000_000</span><span style="color:#66d9ef">u32</span>);
+
+
+
+    <span style="color:#75715e">// 包含各种不同类型的元组
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> long_tuple <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span><span style="color:#66d9ef">u8</span>, <span style="color:#ae81ff">2</span><span style="color:#66d9ef">u16</span>, <span style="color:#ae81ff">3</span><span style="color:#66d9ef">u32</span>, <span style="color:#ae81ff">4</span><span style="color:#66d9ef">u64</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#66d9ef">i8</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span><span style="color:#66d9ef">i16</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">3</span><span style="color:#66d9ef">i32</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">4</span><span style="color:#66d9ef">i64</span>,<span style="color:#ae81ff">0.1</span><span style="color:#66d9ef">f32</span>, <span style="color:#ae81ff">0.2</span><span style="color:#66d9ef">f64</span>,<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#66d9ef">true</span>);
+
+    <span style="color:#75715e">// 通过元组的下标来访问具体的值
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;long tuple first value: {}&#34;</span>, long_tuple.<span style="color:#ae81ff">0</span>);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;long tuple second value: {}&#34;</span>, long_tuple.<span style="color:#ae81ff">1</span>);
+
+    <span style="color:#75715e">// 元组也可以充当元组的元素
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> tuple_of_tuples <span style="color:#f92672">=</span> ((<span style="color:#ae81ff">1</span><span style="color:#66d9ef">u8</span>, <span style="color:#ae81ff">2</span><span style="color:#66d9ef">u16</span>, <span style="color:#ae81ff">2</span><span style="color:#66d9ef">u32</span>), (<span style="color:#ae81ff">4</span><span style="color:#66d9ef">u64</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#66d9ef">i8</span>), <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span><span style="color:#66d9ef">i16</span>);
+
+    <span style="color:#75715e">// 元组可以打印
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;tuple of tuples: {:?}&#34;</span>, tuple_of_tuples);
+
+    <span style="color:#75715e">// 但很长的元组无法打印
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// let too_long_tuple = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13);
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// println!(&#34;too long tuple: {:?}&#34;, too_long_tuple);
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 试一试 ^ 取消上面两行的注释，阅读编译器给出的错误信息。
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">let</span> pair <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span>, <span style="color:#66d9ef">true</span>);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;pair is {:?}&#34;</span>, pair);
+
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;the reversed pair is {:?}&#34;</span>, reverse(pair));
+
+    <span style="color:#75715e">// 创建单元素元组需要一个额外的逗号，这是为了和被括号包含的字面量作区分。
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;one element tuple: {:?}&#34;</span>, (<span style="color:#ae81ff">5</span><span style="color:#66d9ef">u32</span>,));
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;just an integer: {:?}&#34;</span>, (<span style="color:#ae81ff">5</span><span style="color:#66d9ef">u32</span>));
+
+    <span style="color:#75715e">// 元组可以被解构（deconstruct），从而将值绑定给变量
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> tuple <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;hello&#34;</span>, <span style="color:#ae81ff">4.5</span>, <span style="color:#66d9ef">true</span>);
+
+    <span style="color:#66d9ef">let</span> (a, b, c, d) <span style="color:#f92672">=</span> tuple;
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{:?}, {:?}, {:?}, {:?}&#34;</span>, a, b, c, d);
+
+    <span style="color:#66d9ef">let</span> matrix <span style="color:#f92672">=</span> Matrix(<span style="color:#ae81ff">1.1</span>, <span style="color:#ae81ff">1.2</span>, <span style="color:#ae81ff">2.1</span>, <span style="color:#ae81ff">2.2</span>);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{:?}&#34;</span>, matrix);
+
+    <span style="color:#66d9ef">impl</span> fmt::Display <span style="color:#66d9ef">for</span> Matrix{
+        <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">fmt</span>(<span style="color:#f92672">&amp;</span>self,f: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> fmt::Formatter)-&gt;<span style="color:#a6e22e">fmt</span>::Result{
+            write<span style="color:#f92672">!</span>(f, <span style="color:#e6db74">&#34;({} {})\n({} {})&#34;</span>, self.<span style="color:#ae81ff">0</span>, self.<span style="color:#ae81ff">1</span>,self.<span style="color:#ae81ff">2</span>,self.<span style="color:#ae81ff">3</span>)
+        }
+    }
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{}&#34;</span>, matrix);
+
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{}&#34;</span>, transpose(matrix));
+
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;数组和切片&#34;</span>);
+     <span style="color:#75715e">// 定长数组（类型标记是多余的）
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> xs: [<span style="color:#66d9ef">i32</span>; <span style="color:#ae81ff">5</span>] <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>];
+    <span style="color:#75715e">// 所有元素可以初始化成相同的值
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> ys: [<span style="color:#66d9ef">i32</span>; <span style="color:#ae81ff">500</span>] <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>; <span style="color:#ae81ff">500</span>];
+    <span style="color:#75715e">// 下标从 0 开始
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;first element of the array: {}&#34;</span>, xs[<span style="color:#ae81ff">0</span>]);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;second element of the array: {}&#34;</span>, xs[<span style="color:#ae81ff">1</span>]);
+    <span style="color:#75715e">// `len` 返回数组的大小
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;array size: {}&#34;</span>, xs.len());
+
+    <span style="color:#75715e">// 数组是在栈中分配的
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;array occupies {} bytes&#34;</span>, mem::size_of_val(<span style="color:#f92672">&amp;</span>xs));
+
+    <span style="color:#75715e">// 数组可以自动被借用成为 slice
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;borrow the whole array as a slice&#34;</span>);
+    analyze_slice(<span style="color:#f92672">&amp;</span>xs);
+
+    <span style="color:#75715e">// slice 可以指向数组的一部分
+</span><span style="color:#75715e"></span>    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;borrow a section of the array as a slice&#34;</span>);
+    analyze_slice(<span style="color:#f92672">&amp;</span>ys[<span style="color:#ae81ff">1</span> .. <span style="color:#ae81ff">4</span>]);
+
+    <span style="color:#75715e">// 越界的下标会引发致命错误（panic）
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// println!(&#34;{}&#34;, xs[5]);
+</span><span style="color:#75715e"></span>
+}
+
+<span style="color:#75715e">// 元组可以充当函数的参数和返回值
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">reverse</span>(pair: (<span style="color:#66d9ef">i32</span>, <span style="color:#66d9ef">bool</span>)) -&gt; (<span style="color:#66d9ef">bool</span>, <span style="color:#66d9ef">i32</span>) {
+    <span style="color:#75715e">// 可以使用 `let` 把一个元组的成员绑定到一些变量
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> (integer, boolean) <span style="color:#f92672">=</span> pair;
+
+    (boolean, integer)
+}
+
+<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">transpose</span>(matrix: <span style="color:#a6e22e">Matrix</span>)-&gt;<span style="color:#a6e22e">Matrix</span>{
+    Matrix(matrix.<span style="color:#ae81ff">0</span>,matrix.<span style="color:#ae81ff">2</span>,matrix.<span style="color:#ae81ff">1</span>,matrix.<span style="color:#ae81ff">3</span>)
+}
+
+<span style="color:#75715e">// 此函数借用一个 slice
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">analyze_slice</span>(slice: <span style="color:#66d9ef">&amp;</span>[<span style="color:#66d9ef">i32</span>]) {
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;first element of the slice: {}&#34;</span>, slice[<span style="color:#ae81ff">0</span>]);
+    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;the slice has {} elements&#34;</span>, slice.len());
+}
+</code></pre></div>
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

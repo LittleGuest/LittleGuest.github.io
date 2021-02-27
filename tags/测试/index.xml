@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>测试 on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/tags/%E6%B5%8B%E8%AF%95/</link>
+    <description>Recent content in 测试 on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 25 Jan 2021 22:30:11 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/tags/%E6%B5%8B%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust之旅-测试</title>
+      <link>https://littleguest.github.io/posts/rust-tour-test/</link>
+      <pubDate>Mon, 25 Jan 2021 22:30:11 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-test/</guid>
+      <description>如何在 Rust 中编写测试 当我们创建一个 lib 项目时，cargo 会帮我们创建一个test模块和一个测试函数
+#[cfg(test)] mod tests { #[test] fn it_works() { assert_eq!(2 + 2, 4); } } #[test] 用于标记一个 fn 函数 为一个测试函数；#[cfg(test)] 表示只有在运行 cargo test 命令时执行； 当我们运行 cargo test 命令后，会得到一些信息；
+Finished test [unoptimized + debuginfo] target(s) in 0.00s Running target/debug/deps/rust_tour_test-13122ed7b69a820b running 1 test test tests::it_works ... ok test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out Doc-tests rust-tour-test running 0 tests test result: ok.</description>
+    </item>
+    
+  </channel>
+</rss>

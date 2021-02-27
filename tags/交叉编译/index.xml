@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>交叉编译 on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/</link>
+    <description>Recent content in 交叉编译 on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 27 Feb 2021 00:35:29 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust交叉编译</title>
+      <link>https://littleguest.github.io/posts/rust-cross-compiling/</link>
+      <pubDate>Sat, 27 Feb 2021 00:35:29 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-cross-compiling/</guid>
+      <description>本机系统为 Linux
+查看Rust支持的系统和架构
+参考 https://wiki.archlinux.org/index.php/Rust
+$ rustup target list # 或者 $ rustc --print target-list Windows   aarch64-pc-windows-msvc
+  i586-pc-windows-msvc
+  i686-pc-windows-gnu
+  i686-pc-windows-msvc
+  x86_64-pc-windows-gnu
+   $ rustup toolchain install stable-x86_64-pc-windows-gnu $ sudo apt install mingw-w64   # vim ~/.cargo/config [target.x86_64-pc-windows-gnu] linker = &amp;#34;/usr/bin/x86_64-w64-mingw32-gcc&amp;#34; ar = &amp;#34;/usr/bin/x86_64-w64-mingw32-ar&amp;#34;   $ cargo build --release --target x86_64-pc-windows-gnu   x86_64-pc-windows-msvc
+  Linux Mac </description>
+    </item>
+    
+    <item>
+      <title>Rust-交叉编译-树莓派</title>
+      <link>https://littleguest.github.io/posts/rust-cross-compiling-raspberrypi/</link>
+      <pubDate>Tue, 08 Dec 2020 09:51:12 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-cross-compiling-raspberrypi/</guid>
+      <description>Rust交叉编译问题 cargo build --release --target armv7-unknown-linux-musleabihf 下面是错误日志
+error: failed to run custom build command for `openssl-sys v0.9.58` Caused by: process didn&#39;t exit successfully: `~/workspace/raspi_ip_email/target/release/build/openssl-sys-86e8fa49856e4dc9/build-script-main` (exit code: 101) --- stdout cargo:rustc-cfg=const_fn cargo:rerun-if-env-changed=ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_LIB_DIR ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_LIB_DIR unset cargo:rerun-if-env-changed=OPENSSL_LIB_DIR OPENSSL_LIB_DIR unset cargo:rerun-if-env-changed=ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_INCLUDE_DIR ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_INCLUDE_DIR unset cargo:rerun-if-env-changed=OPENSSL_INCLUDE_DIR OPENSSL_INCLUDE_DIR unset cargo:rerun-if-env-changed=ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_DIR ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_DIR unset cargo:rerun-if-env-changed=OPENSSL_DIR OPENSSL_DIR unset cargo:rerun-if-env-changed=OPENSSL_NO_PKG_CONFIG cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_armv7-unknown-linux-musleabihf cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_armv7_unknown_linux_musleabihf cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_ALLOW_CROSS cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS cargo:rerun-if-env-changed=PKG_CONFIG_armv7-unknown-linux-musleabihf cargo:rerun-if-env-changed=PKG_CONFIG_armv7_unknown_linux_musleabihf cargo:rerun-if-env-changed=TARGET_PKG_CONFIG cargo:rerun-if-env-changed=PKG_CONFIG cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_armv7-unknown-linux-musleabihf cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_armv7_unknown_linux_musleabihf cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_SYSROOT_DIR cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR run pkg_config fail: &amp;quot;pkg-config has not been configured to support cross-compilation.</description>
+    </item>
+    
+  </channel>
+</rss>

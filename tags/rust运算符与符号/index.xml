@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust运算符与符号 on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/tags/rust%E8%BF%90%E7%AE%97%E7%AC%A6%E4%B8%8E%E7%AC%A6%E5%8F%B7/</link>
+    <description>Recent content in Rust运算符与符号 on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 22 Aug 2020 16:22:10 +0000</lastBuildDate><atom:link href="https://littleguest.github.io/tags/rust%E8%BF%90%E7%AE%97%E7%AC%A6%E4%B8%8E%E7%AC%A6%E5%8F%B7/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust之旅-运算符与符号</title>
+      <link>https://littleguest.github.io/posts/rust-tour-operators-symbols/</link>
+      <pubDate>Sat, 22 Aug 2020 16:22:10 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-operators-symbols/</guid>
+      <description>运算符    运算符 示例 解释 是否可重载     ! ident!(...), ident!{...}, ident![...] 宏展开    ! !expr 按位非或逻辑非 Not   != var != expr 不等比较 PartialEq   % expr % expr 算术取模 Rem   %= var %= expr 算术取模与赋值 RemAssign   &amp;amp; &amp;amp;expr, &amp;amp;mut expr 借用    &amp;amp; &amp;amp;type, &amp;amp;mut type, &amp;amp;&#39;a type, &amp;amp;&#39;a mut type 借用指针类型    &amp;amp; expr &amp;amp; expr 按位与 BitAnd   &amp;amp;= var &amp;amp;= expr 按位与及赋值 BitAndAssign   &amp;amp;&amp;amp; expr &amp;amp;&amp;amp; expr 逻辑与    * expr * expr 算术乘法 Mul   *= var *= expr 算术乘法与赋值 MulAssign   * *expr 解引用    * *const type, *mut type 裸指针    + trait + trait, &#39;a + trait 复合类型限制    + expr + expr 算术加法 Add   += var += expr 算术加法与赋值 AddAssign   , expr, expr 参数以及元素分隔符    - - expr 算术取负 Neg   - expr - expr 算术减法 Sub   -= var -= expr 算术减法与赋值 SubAssign   -&amp;gt; fn(.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Rust之旅-关键字 - Fri, Aug 21, 2020</h1>
+    </div>
+    <p class="lead">Rust之旅-关键字</p>
+    <h2 id="rust-关键字">Rust 关键字</h2>
+<h3 id="正在使用的关键字">正在使用的关键字</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">关键字</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>as</code></td>
+<td style="text-align:left">强制类型转换，消除特定包含项的 trait 的歧义，或者对 <code>use</code> 和 <code>extern crate</code> 语句中的项重命名</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>async</code></td>
+<td style="text-align:left">返回一个 Future 而不是阻塞当前线程</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>await</code></td>
+<td style="text-align:left">suspend execution until the result of a <code>Future</code> is ready</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>break</code></td>
+<td style="text-align:left">立刻退出循环</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>const</code></td>
+<td style="text-align:left">定义常量或不变裸指针（constant raw pointer）</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>continue</code></td>
+<td style="text-align:left">继续进入下一次循环迭代</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>crate</code></td>
+<td style="text-align:left">链接（link）一个外部 <strong>crate</strong> 或一个代表宏定义的 <strong>crate</strong> 的宏变量</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>dyn</code></td>
+<td style="text-align:left">动态分发 trait 对象</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>else</code></td>
+<td style="text-align:left">作为 <code>if</code> 和 <code>if let</code> 控制流结构的 fallback</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>enum</code></td>
+<td style="text-align:left">定义一个枚举</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>extern</code></td>
+<td style="text-align:left">链接一个外部 <strong>crate</strong> 、函数或变量</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>false</code></td>
+<td style="text-align:left">布尔字面值 <code>false</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>fn</code></td>
+<td style="text-align:left">定义一个函数或 <strong>函数指针类型</strong> (<em>function pointer type</em>)</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>for</code></td>
+<td style="text-align:left">遍历一个迭代器或实现一个 trait 或者指定一个更高级的生命周期</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>if</code></td>
+<td style="text-align:left">基于条件表达式的结果分支</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>impl</code></td>
+<td style="text-align:left">实现自有或 trait 功能</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>in</code></td>
+<td style="text-align:left"><code>for</code> 循环语法的一部分</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>let</code></td>
+<td style="text-align:left">绑定一个变量</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>loop</code></td>
+<td style="text-align:left">无条件循环</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>match</code></td>
+<td style="text-align:left">模式匹配</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>mod</code></td>
+<td style="text-align:left">定义一个模块</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>move</code></td>
+<td style="text-align:left">使闭包获取其所捕获项的所有权</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>mut</code></td>
+<td style="text-align:left">表示引用、裸指针或模式绑定的可变性</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>pub</code></td>
+<td style="text-align:left">表示结构体字段、<code>impl</code> 块或模块的公有可见性</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>ref</code></td>
+<td style="text-align:left">通过引用绑定</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>return</code></td>
+<td style="text-align:left">从函数中返回</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>Self</code></td>
+<td style="text-align:left">实现 trait 的类型的类型别名</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>self</code></td>
+<td style="text-align:left">表示方法本身或当前模块</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>static</code></td>
+<td style="text-align:left">表示全局变量或在整个程序执行期间保持其生命周期</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>struct</code></td>
+<td style="text-align:left">定义一个结构体</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>super</code></td>
+<td style="text-align:left">表示当前模块的父模块</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>trait</code></td>
+<td style="text-align:left">定义一个 trait</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>true</code></td>
+<td style="text-align:left">布尔字面值 <code>true</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>type</code></td>
+<td style="text-align:left">定义一个类型别名或关联类型</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>union</code></td>
+<td style="text-align:left">define a union and is only a keyword when used in a union declaration</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>unsafe</code></td>
+<td style="text-align:left">表示不安全的代码、函数、trait 或实现</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>use</code></td>
+<td style="text-align:left">引入外部空间的符号</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>where</code></td>
+<td style="text-align:left">表示一个约束类型的从句</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>while</code></td>
+<td style="text-align:left">基于一个表达式的结果判断是否进行循环</td>
+</tr>
+</tbody>
+</table>
+<h3 id="保留做将来使用的关键字">保留做将来使用的关键字</h3>
+<ul>
+<li>abstract</li>
+<li>become</li>
+<li>box</li>
+<li>do</li>
+<li>final</li>
+<li>macro</li>
+<li>override</li>
+<li>priv</li>
+<li>try</li>
+<li>typeof</li>
+<li>unsized</li>
+<li>virtual</li>
+<li>yield</li>
+</ul>
+<p>以上关键字不能被用作标识符（除了“原始标识符”），这包括函数、变量、参数、结构体字段、模块、crate、常量、宏、静态值、属性、类型、trait 或生命周期 的名字。</p>
+<h3 id="原始标识符">原始标识符</h3>
+<p>原始标识符（Raw identifiers）允许你使用通常不能使用的关键字，其带有 r# 前缀。</p>
+
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

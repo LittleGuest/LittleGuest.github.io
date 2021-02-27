@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MySQL on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/categories/mysql/</link>
+    <description>Recent content in MySQL on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 23 Feb 2021 14:58:02 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/categories/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用Docker部署主从MySQL</title>
+      <link>https://littleguest.github.io/posts/docker-mysql-master-slave/</link>
+      <pubDate>Tue, 23 Feb 2021 14:58:02 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/docker-mysql-master-slave/</guid>
+      <description>MySQL 主从复制 下载 MySQL 镜像
+官方镜像的 MySQL 版本是8.x
+docker pull mysql 创建 MySQL 主从容器
+主
+docker run -d --name mysql-master -p 13306:3306 -e MYSQL_ROOT_PASSWORD=root mysql 从
+docker run -d --name mysql-slave -p 13307:3306 -e MYSQL_ROOT_PASSWORD=root mysql 分别用工具连接，测试能正常使用。
+配置
+  主库配置
+# 进入主库容器 $ docker exec -it mysql-master bash # 编辑MySQL配置 $ vim /etc/mysql/my.cnf 添加如下内容
+[mysqld] server-id = 1 log-bin = mysql-bin # 退出容器并重启容器 $ docker restart mysql-master 再次进入容器，在主库中创建数据同步用户 slave ，授予改用户 REPLICATION SLAVE 和 REPLICATION CLIENT 权限，用户在主从库之间同步数据。</description>
+    </item>
+    
+  </channel>
+</rss>

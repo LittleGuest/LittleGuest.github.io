@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust游戏 on gopher9527&#39;s Blog</title>
+    <link>https://littleguest.github.io/tags/rust%E6%B8%B8%E6%88%8F/</link>
+    <description>Recent content in Rust游戏 on gopher9527&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 26 Feb 2021 23:29:59 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/tags/rust%E6%B8%B8%E6%88%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>一款可以在终端玩的2048小游戏</title>
+      <link>https://littleguest.github.io/posts/t-2048/</link>
+      <pubDate>Fri, 26 Feb 2021 23:29:59 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/t-2048/</guid>
+      <description>使用 Rust 实现 2048 闲来无事，想着用 Rust 做一个练手的项目，碰巧，之前玩过2048，玩法比较简单，感觉还蛮有意思的。那我就在想我能不能用 Rust 实现呢？
+所以这个项目就诞生了。
+项目地址
+首先来说玩法，玩家只需控制方向键移动数字方块，合并数字获得最高分就行了。其次，如果要用代码来实现的话，也不是很复杂。按我的思路来说，可以将整个看作是一个二维数组，其次不管是向上，向下，向左，向右移动数字方块，我们都可以将它看作是向左移动。
+举个栗子，现在有这样一个东东，我们尝试着先向左向右移动，
+[0, 0, 0, 2] [4, 2, 0, 2] [0, 2, 2, 0] [0, 0, 0, 0] 如果我们向左移动，将会得到这个
+[2, 0, 0, 0] [4, 4, 0, 0] [4, 0, 0, 0] [0, 0, 0, 0] 如果我们向右移动，将会得到这个
+[0, 0, 0, 2] [0, 0, 4, 4] [0, 0, 0, 4] [0, 0, 0, 0] 其实我们可以将向右移动看作是向左移动之后的翻转。接下来康康向上和向下移动，
+向上移动，得到如下结果：
+[4, 4, 2, 4] [0, 0, 0, 0] [0, 0, 0, 0] [0, 0, 0, 0] 而向下移动，得到的是：</description>
+    </item>
+    
+  </channel>
+</rss>
