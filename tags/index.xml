@@ -6,7 +6,25 @@
     <description>Recent content in Tags on gopher9527&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 27 Feb 2021 00:35:29 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Mar 2021 22:12:52 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AppImage</title>
+      <link>https://littleguest.github.io/tags/appimage/</link>
+      <pubDate>Mon, 01 Mar 2021 22:12:52 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/tags/appimage/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Linux</title>
+      <link>https://littleguest.github.io/tags/linux/</link>
+      <pubDate>Mon, 01 Mar 2021 22:12:52 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/tags/linux/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Rust</title>
       <link>https://littleguest.github.io/tags/rust/</link>
@@ -157,15 +175,6 @@
       <pubDate>Tue, 08 Dec 2020 09:51:12 +0000</pubDate>
       
       <guid>https://littleguest.github.io/tags/raspberrypi/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Linux</title>
-      <link>https://littleguest.github.io/tags/linux/</link>
-      <pubDate>Tue, 01 Dec 2020 09:32:14 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/tags/linux/</guid>
       <description></description>
     </item>
     

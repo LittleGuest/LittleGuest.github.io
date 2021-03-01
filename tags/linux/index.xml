@@ -6,7 +6,18 @@
     <description>Recent content in Linux on gopher9527&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 01 Dec 2020 09:32:14 +0000</lastBuildDate><atom:link href="https://littleguest.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Mar 2021 22:12:52 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AppImage打包二进制文件</title>
+      <link>https://littleguest.github.io/posts/appimage/</link>
+      <pubDate>Mon, 01 Mar 2021 22:12:52 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/appimage/</guid>
+      <description>如何将可执行二进制文件打包成AppImage文件？   下载构建工具 linuxdeploy
+  # 创建 AppDir 目录 $ linuxdeploy.AppImage --appdir T2048.AppDir 生成的目录结构如下    将可执行文件放在 T2048.AppDir/usr/bin/ 目录下 将桌面快捷方式放在 T2048.AppDir/usr/share/applications/ 目录下，随便找个已有的桌面快捷方式复制过来，内容如下  [Desktop Entry] Name=T2048 Exec=t-2048 Terminal=false Type=Application Icon=t-2048 Categories=Game;  将图标放在 T2048.AppDir/usr/share/icons/hicolor/128x128/apps/ 目录下，大小选择对应的目录即可    # 将 AppDir 目录打包成 .AppImage 文件 $ linuxdeploy.AppImage --appdir T2048.AppDir/ --output appimage   到此，打包到此结束。
+当然这里是最简单的方式，还有很多其他的配置，以后有时间再研究吧。</description>
+    </item>
+    
     <item>
       <title>Raspberry 初体验</title>
       <link>https://littleguest.github.io/posts/raspberry-first-experience/</link>

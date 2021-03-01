@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-	<meta name="generator" content="Hugo 0.80.0" />
     <title>gopher9527&#39;s Blog</title>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
@@ -57,125 +56,45 @@
 
 <div class="row-fluid navmargin">
     <div class="page-header">
-        <h1>Talk is cheap, show me the code!    ε=ε=ε=ε=ε=ε=┌(;￣◇￣)┘
-</h1>
+        <h1>AppImage打包二进制文件 - Mon, Mar 1, 2021</h1>
     </div>
-</div>
-
-<div class="row-fluid">
-    <div class="span9 bs-docs-sidebar">
-        <p class="lead">难得糊涂！
-</p>
-        <p></p>
-        <p>路漫漫其修远兮，吾将上下而求索。</p>
-        <p></p>
-        <hr class="soften">
-        <p></p>
-        <h1>Blog posts</h1>
-        <ul>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        </ul>
-    </div>
-
-    <div class="span3 bs-docs-sidebar">
-        <h1>Categories</h1>
-        <ul class="nav nav-list bs-docs-sidenav">
-            
+    <p class="lead">如何将可执行二进制文件打包成AppImage文件</p>
+    <h2 id="如何将可执行二进制文件打包成appimage文件">如何将可执行二进制文件打包成AppImage文件？</h2>
+<ol>
 <li>
-    <a href="https://littleguest.github.io/categories/linux/">Linux</a>
+<p>下载构建工具 <a href="https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage">linuxdeploy</a></p>
 </li>
-
 <li>
-    <a href="https://littleguest.github.io/categories/rust/">Rust</a>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 创建 AppDir 目录</span>
+$ linuxdeploy.AppImage --appdir T2048.AppDir
+</code></pre></div><p>生成的目录结构如下
+<img src="appdir.png" alt=""></p>
 </li>
-
 <li>
-    <a href="https://littleguest.github.io/categories/docker/">Docker</a>
+<ul>
+<li>将可执行文件放在 <code>T2048.AppDir/usr/bin/</code> 目录下</li>
+<li>将桌面快捷方式放在 <code>T2048.AppDir/usr/share/applications/</code> 目录下，随便找个已有的桌面快捷方式复制过来，内容如下</li>
+</ul>
+<pre><code class="language-desktop" data-lang="desktop"> [Desktop Entry]
+ Name=T2048
+ Exec=t-2048
+ Terminal=false
+ Type=Application
+ Icon=t-2048
+ Categories=Game;
+</code></pre><ul>
+<li>将图标放在 <code>T2048.AppDir/usr/share/icons/hicolor/128x128/apps/</code> 目录下，大小选择对应的目录即可</li>
+</ul>
 </li>
-
 <li>
-    <a href="https://littleguest.github.io/categories/mysql/">MySQL</a>
-</li>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 将 AppDir 目录打包成 .AppImage 文件</span>
+$ linuxdeploy.AppImage --appdir T2048.AppDir/ --output appimage
+</code></pre></div></li>
+</ol>
+<p>到此，打包到此结束。</p>
+<p>当然这里是最简单的方式，还有很多其他的配置，以后有时间再研究吧。</p>
 
-<li>
-    <a href="https://littleguest.github.io/categories/java/">Java</a>
-</li>
-
-<li>
-    <a href="https://littleguest.github.io/categories/git/">Git</a>
-</li>
-
-<li>
-    <a href="https://littleguest.github.io/categories/raspberrypi/">Raspberrypi</a>
-</li>
-
-        </ul>
-        <p></p>
-        <h1>Tags</h1>
-        <ul class="nav nav-list bs-docs-sidenav">
-            
-<li>
-    <a href="https://littleguest.github.io/tags/appimage/">AppImage</a>
-</li>
-
-<li>
-    <a href="https://littleguest.github.io/tags/linux/">Linux</a>
-</li>
-
-<li>
-    <a href="https://littleguest.github.io/tags/rust/">Rust</a>
-</li>
-
-<li>
-    <a href="https://littleguest.github.io/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/">交叉编译</a>
-</li>
-
-<li>
-    <a href="https://littleguest.github.io/tags/rust%E6%B8%B8%E6%88%8F/">Rust游戏</a>
-</li>
-
-<li>
-    <a href="https://littleguest.github.io/tags/docker/">Docker</a>
-</li>
-
-<li>
-    <a href="https://littleguest.github.io/tags/mysql%E4%B8%BB%E4%BB%8E/">MySQL主从</a>
-</li>
-
-<li>
-    <a href="https://littleguest.github.io/tags/mysql/">MySQL</a>
-</li>
-
-<li>
-    <a href="https://littleguest.github.io/tags/rust%E8%BF%AD%E4%BB%A3%E5%99%A8/">Rust迭代器</a>
-</li>
-
-<li>
-    <a href="https://littleguest.github.io/tags/java/">Java</a>
-</li>
-
-        </ul>
-    </div>
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
 </div>
 
 
