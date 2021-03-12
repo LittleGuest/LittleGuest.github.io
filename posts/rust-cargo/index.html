@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Rust 的包管理工具 Cargo - Mon, Mar 8, 2021</h1>
+    </div>
+    <p class="lead">Rust 的包管理工具 Cargo</p>
+    <p><code>Cargo</code> 是 Rust 的包管理工具</p>
+<ul>
+<li><code>cargo new xxx --bin</code> 创建一个 <code>binary crate</code></li>
+<li><code>cargo build</code> 编译 <code>crate</code></li>
+<li><code>cargo run</code> 编译和运行 <code>binary crate</code></li>
+</ul>
+<h2 id="cargo-目录">Cargo 目录</h2>
+<pre><code>.
+├── Cargo.lock
+├── Cargo.toml
+├── benches
+│   └── large-input.rs
+├── examples
+│   └── simple.rs
+├── src
+│   ├── bin
+│   │   └── another_executable.rs
+│   ├── lib.rs
+│   └── main.rs
+└── tests
+    └── some-integration-tests.rs
+</code></pre><p>##　<code>Cargo.toml</code></p>
+<ul>
+<li><code>cargo-features</code> — 不稳定，nightly版本的功能</li>
+<li><code>[package]</code> — 定义一个包
+<ul>
+<li><code>name</code> — 包名（必需的）
+<ul>
+<li>软件包名称是用于引用软件包的标识符。当它被列为另一个软件包的依赖关系时，以及作为推断的lib和bin目标的默认名称时，都会使用它。</li>
+<li>**包名必须只使用字母数字字符或-或_，不能为空**。需要注意的是， <code>cargo new</code> 和 <code>cargo init</code> 对包名施加了一些额外的限制，比如强制要求包名是有效的 Rust 标识符，而不是关键字。 <code>crates.io</code> 对包名施加了更多的限制，比如强制要求只能使用 <code>ASCII</code> 字符，不能使用保留的名称，不能使用特殊的 Windows 名称，比如 &ldquo;nul&rdquo;，不能太长，等等。</li>
+</ul>
+</li>
+<li><code>version</code> — 包版本（必需的）</li>
+<li><code>authors</code> — 包的作者</li>
+<li><code>edition</code> — Rust 版本</li>
+<li><code>description</code> — 包描述</li>
+<li><code>documentation</code> — 包文档地址 URL</li>
+<li><code>readme</code> — 包的 README 文件路径
+<ul>
+<li>readme字段应该是软件包根目录下的文件路径（相对于这个Cargo.toml），它包含了软件包的一般信息。crates.io会将其解释为Markdown，并将其呈现在crate的页面上。</li>
+<li>如果没有为这个字段指定值，而根目录下存在名为 <code>README.md</code>、<code>README.txt</code> 或 <code>README</code> 的文件，那么将使用该文件的名称。您可以通过将此字段设置为<code>false</code> 来抑制这种行为。如果该字段被设置为 <code>true</code>，则会使用README.md的默认值。</li>
+</ul>
+</li>
+<li><code>homepage</code> — 包的主页地址 URL</li>
+<li><code>repository</code> — 包源码仓库地址 URL</li>
+<li><code>license</code> — 包许可证</li>
+<li><code>license-file</code> — 许可证文本路径</li>
+<li><code>keywords</code> — 包关键字</li>
+<li><code>categories</code> — 包的分类</li>
+<li><code>workspace</code> — 包工作空间路径</li>
+<li><code>build</code> — 包构建脚本的路径</li>
+<li><code>links</code> — 包中链接的本地库的名称</li>
+<li><code>exclude</code> — 发布时要排除的文件</li>
+<li><code>include</code> — 发布时要包含的文件</li>
+<li><code>publish</code> — 可以用来防止发布包</li>
+<li><code>metadata</code> — 额外的外部工具设置</li>
+<li><code>default-run</code> — 通过 <code>cargo run</code> 运行默认二进制文件</li>
+<li><code>autobins</code> — 禁用自动发现 bins</li>
+<li><code>autoexamples</code> — 禁用自动发现 example</li>
+<li><code>autotests</code> — 禁用自动发现 test</li>
+<li><code>autobenches</code> — 禁用自动发现 bench</li>
+</ul>
+</li>
+<li>Target 列表
+<ul>
+<li><code>[lib]</code> — Library target settings.</li>
+<li><code>[[bin]]</code> — Binary target settings.</li>
+<li><code>[[example]]</code> — Example target settings.</li>
+<li><code>[[test]]</code> — Test target settings.</li>
+<li><code>[[bench]]</code> — Benchmark target settings.</li>
+</ul>
+</li>
+<li>依赖列表：
+<ul>
+<li><code>[dependencies]</code> — 包的依赖</li>
+<li><code>[dev-dependencies]</code> — examples、tests 和 benchmarks的依赖</li>
+<li><code>[build-dependencies]</code> — 构建脚本的依赖</li>
+<li><code>[target]</code> — 平台特有的依赖</li>
+</ul>
+</li>
+<li><code>[badges]</code> — 注册显示的徽章(Badges to display on a registry.)</li>
+<li><code>[features]</code> — 条件编译某些功能(Conditional compilation features.)</li>
+<li><code>[patch]</code> — 覆盖依赖</li>
+<li><code>[replace]</code> — 覆盖依赖（已废弃）</li>
+<li><code>[profile]</code> — 编译器设置和优化</li>
+<li><code>[workspace]</code> — 工作空间定义</li>
+</ul>
+
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

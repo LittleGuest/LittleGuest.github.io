@@ -56,45 +56,102 @@
 
 <div class="row-fluid navmargin">
     <div class="page-header">
-        <h1>AppImage打包二进制文件 - Mon, Mar 1, 2021</h1>
+        <h1>Raspberry Pi 初体验 - Tue, Dec 1, 2020</h1>
     </div>
-    <p class="lead">如何将可执行二进制文件打包成AppImage文件</p>
-    <h2 id="如何将可执行二进制文件打包成appimage文件">如何将可执行二进制文件打包成AppImage文件？</h2>
-<ol>
-<li>
-<p>下载构建工具 <a href="https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage">linuxdeploy</a></p>
-</li>
-<li>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 创建 AppDir 目录</span>
-$ linuxdeploy.AppImage --appdir T2048.AppDir
-</code></pre></div><p>生成的目录结构如下
-<img src="appdir.png" alt=""></p>
-</li>
-<li>
+    <p class="lead">Raspberry Pi 初体验</p>
+    <h2 id="raspberry-pi-初体验">Raspberry Pi 初体验</h2>
+<h3 id="在-linux-系统上如何连接没有屏幕的树莓派">在 Linux 系统上如何连接没有屏幕的树莓派</h3>
 <ul>
-<li>将可执行文件放在 <code>T2048.AppDir/usr/bin/</code> 目录下</li>
-<li>将桌面快捷方式放在 <code>T2048.AppDir/usr/share/applications/</code> 目录下，随便找个已有的桌面快捷方式复制过来，内容如下</li>
-</ul>
-<pre><code class="language-desktop" data-lang="desktop"> [Desktop Entry]
- Name=T2048
- Exec=t-2048
- Terminal=false
- Type=Application
- Icon=t-2048
- Categories=Game;
-</code></pre><ul>
-<li>将图标放在 <code>T2048.AppDir/usr/share/icons/hicolor/128x128/apps/</code> 目录下，大小选择对应的目录即可</li>
+<li>
+<ol>
+<li>准备或制作树莓派的镜像；</li>
+</ol>
+<ul>
+<li>如何制作？
+<ol>
+<li>首先到官网<a href="https://www.raspberrypi.org/software/">下载</a>一个适合自己的镜像，我选择的是下面这个镜像；
+<img src="%E4%B8%8B%E8%BD%BD%E9%95%9C%E5%83%8F.png" alt=""></li>
+<li>使用<a href="https://www.balena.io/etcher/">BalenaEtcher</a>烧录 Raspberry Pi 镜像，烧录完成后，会有两个分区boot和rootfs；</li>
+</ol>
+</li>
 </ul>
 </li>
 <li>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 将 AppDir 目录打包成 .AppImage 文件</span>
-$ linuxdeploy.AppImage --appdir T2048.AppDir/ --output appimage
-</code></pre></div><p>AppDir 目录变化</p>
-<p><img src="appimage.png" alt=""></p>
-</li>
+<ol start="2">
+<li>在boot下创建<code>wpa_supplicant.conf</code>文件，内容如下；</li>
 </ol>
-<p>到此，打包结束。</p>
-<p>当然这里是最简单的方式，还有很多其他的配置。然这些就已经满足我当前的需求了，如果以后有时间，再研究吧。</p>
+<pre><code>  country=CN
+  ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+  update_config=1
+
+  network={
+      ssid=&quot;&quot;
+      psk=&quot;&quot;
+      priority = 1
+  }
+</code></pre>说明：
+<ul>
+<li><strong>ssid</strong>: 网络的ssid；</li>
+<li><strong>psk</strong>： 密码；</li>
+<li><strong>priority</strong>: 连接优先级，数字越大优先级越高（不可以是负数）；</li>
+<li><strong>scan_ssid</strong>：连接隐藏WiFi时需要指定该值为1；</li>
+</ul>
+</li>
+<li>
+<ol start="3">
+<li>在boot下创建不带扩展名的ssh文件；</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>启动树莓派，稍等几分钟；</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>使用<code>arp-scan</code>列出局域网内的主机；</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sudo arp-scan -interface wlp3s0 -localnet
+</code></pre></div><img src="arp-scan.png" alt=""></li>
+<li>
+<ol start="6">
+<li>使用<code>ssh</code>登录到树莓派，树莓派默认账号为pi，默认密码为raspberry;
+<img src="ssh-raspberrypi.png" alt=""></li>
+</ol>
+</li>
+</ul>
+<p><strong>到此为止，我们已经连上树莓派了</strong></p>
+<ul>
+<li>
+<ol start="7">
+<li>那么如何能看到树莓派的桌面呢？</li>
+</ol>
+<ul>
+<li>
+<ol>
+<li>下载<a href="https://www.realvnc.com/en/connect/download/vnc/raspberrypi/"><code>VNC Server</code></a>到树莓派；</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>安装并启动<code>VNC Server</code>;
+<img src="vncserver.png" alt=""></li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>下载<a href="https://www.realvnc.com/en/connect/download/viewer/linux/"><code>VNC Viewer</code></a>并运行；</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>输入刚才启动<code>VNC Server</code>生成的<code>192.168.2.100:1</code>，一直continue，输入树莓派的账号和密码，完成之后就可以看到树莓派的桌面了；
+<img src="raspberrypi-desktop.png" alt=""></li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
 
     <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
 </div>

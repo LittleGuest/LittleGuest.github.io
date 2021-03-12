@@ -3,22 +3,77 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://littleguest.github.io/categories/</loc>
+    <lastmod>2021-03-11T17:22:03+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/</loc>
+    <lastmod>2021-03-11T17:22:03+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/posts/</loc>
+    <lastmod>2021-03-11T17:22:03+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/tags/</loc>
+    <lastmod>2021-03-11T17:22:03+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/tags/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/</loc>
+    <lastmod>2021-03-11T17:22:03+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/categories/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/</loc>
+    <lastmod>2021-03-11T17:22:03+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/posts/open-source-license/</loc>
+    <lastmod>2021-03-11T17:22:03+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/tags/cargo/</loc>
+    <lastmod>2021-03-08T16:21:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/categories/rust/</loc>
+    <lastmod>2021-03-08T16:21:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/posts/rust-cargo/</loc>
+    <lastmod>2021-03-08T16:21:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/tags/vim/</loc>
+    <lastmod>2021-03-05T11:21:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/categories/vim/</loc>
+    <lastmod>2021-03-05T11:21:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/posts/vim-notes/</loc>
+    <lastmod>2021-03-05T11:21:12+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://littleguest.github.io/tags/appimage/</loc>
     <lastmod>2021-03-01T22:12:52+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://littleguest.github.io/posts/appimage/</loc>
-    <lastmod>2021-03-01T22:12:52+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://littleguest.github.io/categories/</loc>
-    <lastmod>2021-03-01T22:12:52+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://littleguest.github.io/</loc>
     <lastmod>2021-03-01T22:12:52+08:00</lastmod>
   </url>
   
@@ -33,22 +88,7 @@
   </url>
   
   <url>
-    <loc>https://littleguest.github.io/posts/</loc>
-    <lastmod>2021-03-01T22:12:52+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://littleguest.github.io/tags/</loc>
-    <lastmod>2021-03-01T22:12:52+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://littleguest.github.io/tags/rust/</loc>
-    <lastmod>2021-02-27T00:35:29+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://littleguest.github.io/categories/rust/</loc>
     <lastmod>2021-02-27T00:35:29+08:00</lastmod>
   </url>
   
@@ -228,7 +268,7 @@
   </url>
   
   <url>
-    <loc>https://littleguest.github.io/tags/raspberrypi/</loc>
+    <loc>https://littleguest.github.io/tags/raspberry-pi/</loc>
     <lastmod>2020-12-08T09:51:12+00:00</lastmod>
   </url>
   
@@ -238,12 +278,12 @@
   </url>
   
   <url>
-    <loc>https://littleguest.github.io/posts/raspberry-first-experience/</loc>
+    <loc>https://littleguest.github.io/categories/raspberry-pi/</loc>
     <lastmod>2020-12-01T09:32:14+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://littleguest.github.io/categories/raspberrypi/</loc>
+    <loc>https://littleguest.github.io/posts/raspberrypi-first-experience/</loc>
     <lastmod>2020-12-01T09:32:14+00:00</lastmod>
   </url>
   

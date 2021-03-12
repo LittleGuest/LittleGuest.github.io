@@ -53,52 +53,21 @@
         </div>
     </div>
 </nav><div id="content" class="container">
-
-<div class="row-fluid navmargin">
-    <div class="page-header">
-        <h1>AppImage打包二进制文件 - Mon, Mar 1, 2021</h1>
-    </div>
-    <p class="lead">如何将可执行二进制文件打包成AppImage文件</p>
-    <h2 id="如何将可执行二进制文件打包成appimage文件">如何将可执行二进制文件打包成AppImage文件？</h2>
-<ol>
-<li>
-<p>下载构建工具 <a href="https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage">linuxdeploy</a></p>
-</li>
-<li>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 创建 AppDir 目录</span>
-$ linuxdeploy.AppImage --appdir T2048.AppDir
-</code></pre></div><p>生成的目录结构如下
-<img src="appdir.png" alt=""></p>
-</li>
-<li>
+<article class="row-fluid navmargin">
+    <header class="page-header">
+        <h1>Raspberry Pi</h1>
+    </header>
+    
+    
+</article>
 <ul>
-<li>将可执行文件放在 <code>T2048.AppDir/usr/bin/</code> 目录下</li>
-<li>将桌面快捷方式放在 <code>T2048.AppDir/usr/share/applications/</code> 目录下，随便找个已有的桌面快捷方式复制过来，内容如下</li>
-</ul>
-<pre><code class="language-desktop" data-lang="desktop"> [Desktop Entry]
- Name=T2048
- Exec=t-2048
- Terminal=false
- Type=Application
- Icon=t-2048
- Categories=Game;
-</code></pre><ul>
-<li>将图标放在 <code>T2048.AppDir/usr/share/icons/hicolor/128x128/apps/</code> 目录下，大小选择对应的目录即可</li>
-</ul>
-</li>
-<li>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 将 AppDir 目录打包成 .AppImage 文件</span>
-$ linuxdeploy.AppImage --appdir T2048.AppDir/ --output appimage
-</code></pre></div><p>AppDir 目录变化</p>
-<p><img src="appimage.png" alt=""></p>
-</li>
-</ol>
-<p>到此，打包结束。</p>
-<p>当然这里是最简单的方式，还有很多其他的配置。然这些就已经满足我当前的需求了，如果以后有时间，再研究吧。</p>
 
-    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
-</div>
 
+    <li>
+        <a href="/posts/raspberrypi-first-experience/">2020-12-01 | Raspberry Pi 初体验</a>
+    </li>
+
+</ul>
 
         </div><footer class="container">
     <hr class="soften">

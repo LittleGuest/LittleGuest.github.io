@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>gopher9527&#39;s Blog</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
+    <link rel="canonical" href="https://littleguest.github.io/">
+    
+    
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    
+                    
+                        
+                            <li>
+                                <a href="/about/">
+                                    
+                                    <span>About</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/posts/">
+                                    
+                                    <span>Posts</span>
+                                </a>
+                            </li>
+                        
+                    
+                        
+                            <li>
+                                <a href="/links/">
+                                    
+                                    <span>Links</span>
+                                </a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav><div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>Vim 杂记 - Fri, Mar 5, 2021</h1>
+    </div>
+    <p class="lead">Vim 杂记</p>
+    <h1 id="vim-杂记">Vim 杂记</h1>
+<h3 id="vim-模式">vim 模式</h3>
+<ul>
+<li>普通模式：vim 启动后的默认模式,移动光标，删除文本等等都在该模式下</li>
+<li>插入模式
+在普通模式下，按 <code>a</code> 或 <code>i</code> 进入该模式</li>
+<li>可视模式
+在普通模式下，按 <code>v</code> 或 <code>Ctrl + v</code> 进入</li>
+<li>选择模式</li>
+<li>命令行模式
+在普通模式下，按 <code>:</code> 进入该模式；</li>
+<li>Ex模式</li>
+</ul>
+<p><strong>以下 <code>n</code> 代表数字，表示重复操作</strong></p>
+<h3 id="光标移动">光标移动</h3>
+<ul>
+<li>向下移动：<code>j</code>、<code>nj</code></li>
+<li>向上移动：<code>k</code>、<code>nk</code></li>
+<li>向左移动：<code>h</code>、<code>nh</code></li>
+<li>向右移动：<code>l</code>、<code>nl</code></li>
+<li>以单词移动：
+<ul>
+<li>向前 <code>w</code>、<code>nw</code>、<code>W</code>，光标停在单词词首</li>
+<li>向后 <code>b</code>、<code>nb</code>、<code>B</code>，光标停在单词词首</li>
+<li>向前 <code>e</code>、<code>ne</code>、<code>E</code>，光标停在单词词尾</li>
+<li>向后 <code>ge</code>、<code>nge</code>，光标停在单词词尾</li>
+</ul>
+</li>
+<li>移动光标到行尾：<code>$</code> 、<code>n$</code></li>
+<li>移动光标到行首：<code>0</code>（数字）、<code>^</code>（行首非空字符）</li>
+<li>移动到第几行：<code>nG</code>、<code>G</code>（移动到最后一行）或命令行模式输入<code>:n</code></li>
+<li>向翻前：<code>Ctrl + f</code></li>
+<li>向后翻页：<code>Ctrl + b</code></li>
+<li>&hellip;</li>
+</ul>
+<h3 id="进入插入模式">进入插入模式</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>i</code></td>
+<td>在当前光标处进行编辑</td>
+</tr>
+<tr>
+<td><code>I</code></td>
+<td>在行首插入</td>
+</tr>
+<tr>
+<td><code>A</code></td>
+<td>在行末插入</td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>在光标后插入编辑</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>在当前行后插入一个新行</td>
+</tr>
+<tr>
+<td><code>O</code></td>
+<td>在当前行前插入一个新行</td>
+</tr>
+<tr>
+<td><code>cw</code></td>
+<td>替换从光标所在位置后到一个单词结尾的字符</td>
+</tr>
+</tbody>
+</table>
+<h3 id="退出-vim">退出 Vim</h3>
+<ul>
+<li>命令行模式退出
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:q!</code></td>
+<td>强制退出，不保存</td>
+</tr>
+<tr>
+<td><code>:q</code></td>
+<td>退出</td>
+</tr>
+<tr>
+<td><code>:wq!</code></td>
+<td>强制保存并退出</td>
+</tr>
+<tr>
+<td><code>:w &lt;文件路径&gt;</code></td>
+<td>另存为</td>
+</tr>
+<tr>
+<td><code>:saveas 文件路径</code></td>
+<td>另存为</td>
+</tr>
+<tr>
+<td><code>:x</code></td>
+<td>保存并退出</td>
+</tr>
+<tr>
+<td><code>:wq</code></td>
+<td>保存并退出</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>普通模式退出
+<code>shift + zz</code></li>
+</ul>
+<h3 id="查找">查找</h3>
+<p>在普通模式下</p>
+<ul>
+<li><code>/想要搜索的内容</code>
+<ul>
+<li>支持正则表达式</li>
+<li>默认是大小写不敏感的</li>
+<li>搜索大小写敏感的
+<ul>
+<li>在想要搜索的内容后加 <code>\C</code></li>
+<li>开启智能推测 <code>:set smartcase</code> 输入大写的，匹配大写的，反之亦然</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>?</code>：与 <code>/</code> 相反</li>
+<li><code>*</code>：搜索光标当前所在的单词</li>
+<li><code>#</code>：与 <code>*</code> 相反</li>
+</ul>
+<p>输入 <code>n</code> 或 <code>N</code> 向下或向上搜索</p>
+<h3 id="替换">替换</h3>
+<p>在普通模式下</p>
+<ul>
+<li>替换单个字符：<code>r</code>、<code>nr</code></li>
+<li>替换多个字符（一个一个替换）：<code>R</code>、<code>nR</code></li>
+</ul>
+<h3 id="复制">复制</h3>
+<ul>
+<li><code>y</code>：组合命令</li>
+<li><code>x</code></li>
+</ul>
+<h3 id="粘贴">粘贴</h3>
+<p><code>p</code>、<code>np</code>粘贴文本缓冲区的内容</p>
+<h3 id="删除文本">删除文本</h3>
+<ul>
+<li><code>d</code>：组合命令</li>
+</ul>
+<p><strong><code>d</code>、<code>y</code>、<code>x</code> 共用一个文本缓冲区，也可以将三个命令看做是复制、剪切操作</strong></p>
+<h3 id="撤销和恢复撤销">撤销和恢复撤销</h3>
+<ul>
+<li>撤销：<code>u</code></li>
+<li>恢复撤销：<code>Ctrl + r</code></li>
+</ul>
+
+    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
+</div>
+
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy; 
+
+    gopher9527
+
+<span id="thisyear">2020</span>
+
+</p>
+    <p class="text-center">
+        
+        
+        
+        <a href="https://github.com/LittleGuest">GitHub</a> 
+        
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = { 
+        fastLoad: false ,
+        onePass: false , 
+        speedFactor: 1 
+    };
+
+    
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script></html>

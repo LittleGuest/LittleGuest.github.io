@@ -6,7 +6,18 @@
     <description>Recent content in Rust on gopher9527&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 27 Feb 2021 00:35:29 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/categories/rust/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 08 Mar 2021 16:21:12 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/categories/rust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust 的包管理工具 Cargo</title>
+      <link>https://littleguest.github.io/posts/rust-cargo/</link>
+      <pubDate>Mon, 08 Mar 2021 16:21:12 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-cargo/</guid>
+      <description>Cargo 是 Rust 的包管理工具
+ cargo new xxx --bin 创建一个 binary crate cargo build 编译 crate cargo run 编译和运行 binary crate  Cargo 目录 . ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├── bin │ │ └── another_executable.rs │ ├── lib.rs │ └── main.rs └── tests └── some-integration-tests.rs ##　Cargo.toml
+ cargo-features — 不稳定，nightly版本的功能 [package] — 定义一个包  name — 包名（必需的）  软件包名称是用于引用软件包的标识符。当它被列为另一个软件包的依赖关系时，以及作为推断的lib和bin目标的默认名称时，都会使用它。 **包名必须只使用字母数字字符或-或_，不能为空**。需要注意的是， cargo new 和 cargo init 对包名施加了一些额外的限制，比如强制要求包名是有效的 Rust 标识符，而不是关键字。 crates.</description>
+    </item>
+    
     <item>
       <title>Rust交叉编译</title>
       <link>https://littleguest.github.io/posts/rust-cross-compiling/</link>
