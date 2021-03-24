@@ -15,10 +15,10 @@
       <guid>https://littleguest.github.io/posts/docker-mysql-master-slave/</guid>
       <description>MySQL 主从复制 下载 MySQL 镜像
 官方镜像的 MySQL 版本是8.x
-docker pull mysql 创建 MySQL 主从容器
+$ docker pull mysql 创建 MySQL 主从容器
 主
-docker run -d --name mysql-master -p 13306:3306 -e MYSQL_ROOT_PASSWORD=root mysql 从
-docker run -d --name mysql-slave -p 13307:3306 -e MYSQL_ROOT_PASSWORD=root mysql 分别用工具连接，测试能正常使用。
+$ docker run -d --name mysql-master -p 13306:3306 -e MYSQL_ROOT_PASSWORD=root mysql 从
+$ docker run -d --name mysql-slave -p 13307:3306 -e MYSQL_ROOT_PASSWORD=root mysql 分别用工具连接，测试能正常使用。
 配置
   主库配置
 # 进入主库容器 $ docker exec -it mysql-master bash # 编辑MySQL配置 $ vim /etc/mysql/my.cnf 添加如下内容

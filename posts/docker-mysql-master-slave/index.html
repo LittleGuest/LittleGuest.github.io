@@ -62,12 +62,12 @@
     <h2 id="mysql-主从复制">MySQL 主从复制</h2>
 <p><strong>下载 MySQL 镜像</strong></p>
 <p>官方镜像的 MySQL 版本是8.x</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker pull mysql
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker pull mysql
 </code></pre></div><p><strong>创建 MySQL 主从容器</strong></p>
 <p>主</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker run -d --name mysql-master -p 13306:3306 -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span>root mysql
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker run -d --name mysql-master -p 13306:3306 -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span>root mysql
 </code></pre></div><p>从</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker run -d --name mysql-slave -p 13307:3306 -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span>root mysql
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker run -d --name mysql-slave -p 13307:3306 -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span>root mysql
 </code></pre></div><p>分别用工具连接，测试能正常使用。</p>
 <p><strong>配置</strong></p>
 <ul>
