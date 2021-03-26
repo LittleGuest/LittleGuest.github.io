@@ -1,65 +1,559 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-    <title>gopher9527&#39;s Blog</title>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <meta content="utf-8" http-equiv="encoding">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="theme-color" content="#000084" />
-    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
-    <link rel="canonical" href="https://littleguest.github.io/">
+<html lang="zh">
+  <head>
+    <title>
+        Rust之旅-错误处理 - 蒲建全的博客
+      </title>
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    
+    <meta name="theme-color" content="#000000" />
+    
+    <meta http-equiv="window-target" content="_top" />
     
     
-</head>
-<body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
-            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-                    
-                    
-                        
-                            <li>
-                                <a href="/about/">
-                                    
-                                    <span>About</span>
-                                </a>
-                            </li>
-                        
-                    
-                        
-                            <li>
-                                <a href="/posts/">
-                                    
-                                    <span>Posts</span>
-                                </a>
-                            </li>
-                        
-                    
-                        
-                            <li>
-                                <a href="/links/">
-                                    
-                                    <span>Links</span>
-                                </a>
-                            </li>
-                        
-                    
-                </ul>
+    <meta name="keywords"
+      content="Rust, 错误处理" /><meta name="description" content="Rust之旅-错误处理" />
+    <meta name="generator" content="Hugo 0.80.0 with theme pure" />
+    <title>Rust之旅-错误处理 - 蒲建全的博客</title>
+    
+    
+    <link rel="stylesheet" href="https://littleguest.github.io/css/style.min.5743fa7b2206cb1eb1d7532cda60d1ebf1e3ae4aac4077fc182a92c911e04e02.css">
+    
+    <link href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/styles/github.min.css" rel="stylesheet" async>
+    <link href="https://cdn.bootcdn.net/ajax/libs/tocbot/4.12.2/tocbot.css" rel="stylesheet" async>
+    <meta property="og:title" content="Rust之旅-错误处理" />
+<meta property="og:description" content="Rust之旅-错误处理" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://littleguest.github.io/posts/rust-tour-error-handle/" />
+<meta property="article:published_time" content="2021-01-12T21:33:07+00:00" />
+<meta property="article:modified_time" content="2021-01-12T21:33:07+00:00" />
+<meta itemprop="name" content="Rust之旅-错误处理">
+<meta itemprop="description" content="Rust之旅-错误处理">
+<meta itemprop="datePublished" content="2021-01-12T21:33:07+00:00" />
+<meta itemprop="dateModified" content="2021-01-12T21:33:07+00:00" />
+<meta itemprop="wordCount" content="983">
+
+
+
+<meta itemprop="keywords" content="Rust,Rust错误处理," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Rust之旅-错误处理"/>
+<meta name="twitter:description" content="Rust之旅-错误处理"/>
+
+    <!--[if lte IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+      <![endif]-->
+
+    <!--[if lt IE 9]>
+        <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+      <![endif]-->
+  </head>
+
+  
+  
+
+  <body class="main-left theme-green" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="https://github.com/LittleGuest" target="_blank">
+            <img class="img-circle img-rotate" src="https://littleguest.github.io/avatar.png" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">蒲建全</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">一位热衷于摸鱼的搬砖工。</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Chengdu, China</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-about">
+                <a href="/about/">
+                    <i class="icon icon-cup-fill"></i>
+                  <span class="menu-title">关于我</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-links">
+                <a href="/links/">
+                    <i class="icon icon-friendship"></i>
+                  <span class="menu-title">友链</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">enjoy~
             </div>
         </div>
     </div>
-</nav><div id="content" class="container">
+</div>
 
-<div class="row-fluid navmargin">
-    <div class="page-header">
-        <h1>Rust之旅-错误处理 - Tue, Jan 12, 2021</h1>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div id="tag-cloud-list" class="widget-body">
+            
+            
+            <a href="https://littleguest.github.io/tags/appimage/" class="tag-list-link" rel="1">appimage<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/cargo/" class="tag-list-link" rel="1">cargo<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/docker/" class="tag-list-link" rel="3">docker<span
+               class="tag-list-count">3</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/git/" class="tag-list-link" rel="2">git<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/java/" class="tag-list-link" rel="3">java<span
+               class="tag-list-count">3</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/linux/" class="tag-list-link" rel="2">linux<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/lombok/" class="tag-list-link" rel="1">lombok<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/mysql/" class="tag-list-link" rel="1">mysql<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/mysql%E4%B8%BB%E4%BB%8E/" class="tag-list-link" rel="1">mysql主从<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/raspberry-pi/" class="tag-list-link" rel="2">raspberry-pi<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust/" class="tag-list-link" rel="15">rust<span
+               class="tag-list-count">15</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E5%85%B3%E9%94%AE%E5%AD%97/" class="tag-list-link" rel="1">rust关键字<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E5%8F%98%E9%87%8F/" class="tag-list-link" rel="1">rust变量<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/" class="tag-list-link" rel="1">rust控制流程<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="tag-list-link" rel="1">rust数据类型<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%9D%82%E8%AE%B0/" class="tag-list-link" rel="1">rust杂记<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%B3%9B%E5%9E%8B/" class="tag-list-link" rel="1">rust泛型<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%B8%B8%E6%88%8F/" class="tag-list-link" rel="1">rust游戏<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="tag-list-link" rel="1">rust生命周期<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E8%BF%90%E7%AE%97%E7%AC%A6%E4%B8%8E%E7%AC%A6%E5%8F%B7/" class="tag-list-link" rel="1">rust运算符与符号<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E8%BF%AD%E4%BB%A3%E5%99%A8/" class="tag-list-link" rel="1">rust迭代器<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" class="tag-list-link" rel="1">rust错误处理<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/stream/" class="tag-list-link" rel="1">stream<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/vim/" class="tag-list-link" rel="1">vim<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" class="tag-list-link" rel="2">交叉编译<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/" class="tag-list-link" rel="1">开源协议<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E6%B5%8B%E8%AF%95/" class="tag-list-link" rel="1">测试<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E8%B0%83%E8%AF%95rust/" class="tag-list-link" rel="1">调试rust<span
+               class="tag-list-count">1</span></a>
+            
     </div>
-    <p class="lead">Rust之旅-错误处理</p>
-    <h2 id="rust中的错误处理">Rust中的错误处理</h2>
+<script>
+document.onreadystatechange = () => {
+  if (document.readyState === 'complete') {
+    tagCloud('#tag-cloud-list a',  8 ,  20 );
+  }
+};
+
+function tagCloud(where, min, max) {
+  let iMax = 0;
+  let iMin = 0;
+  $(where).each(function() {
+    let weight = Number($(this).attr("rel"));
+    if(iMax < weight) iMax = weight;
+    if(iMin > weight || iMin == 0) iMin = weight;
+  });
+  let step = (max - min)/(iMax - iMin);
+  $(where).each(function() {
+    let weight = $(this).attr("rel") - iMin;
+    $(this).css({"font-size": min + (weight * step) + 'px'});
+  });
+};
+</script>
+</div>
+
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/docker/" class="category-list-link">docker</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/git/" class="category-list-link">git</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/java/" class="category-list-link">java</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/mysql/" class="category-list-link">mysql</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/raspberry-pi/" class="category-list-link">raspberry-pi</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/rust/" class="category-list-link">rust</a><span class="category-list-count">17</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/vim/" class="category-list-link">vim</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/" class="category-list-link">开源协议</a><span class="category-list-count">1</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/appimage/" class="tag-list-link">appimage</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/cargo/" class="tag-list-link">cargo</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/docker/" class="tag-list-link">docker</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/java/" class="tag-list-link">java</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/linux/" class="tag-list-link">linux</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/lombok/" class="tag-list-link">lombok</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/mysql/" class="tag-list-link">mysql</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/mysql%E4%B8%BB%E4%BB%8E/" class="tag-list-link">mysql主从</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/raspberry-pi/" class="tag-list-link">raspberry-pi</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust/" class="tag-list-link">rust</a><span
+                    class="tag-list-count">15</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E5%85%B3%E9%94%AE%E5%AD%97/" class="tag-list-link">rust关键字</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E5%8F%98%E9%87%8F/" class="tag-list-link">rust变量</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/" class="tag-list-link">rust控制流程</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="tag-list-link">rust数据类型</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%9D%82%E8%AE%B0/" class="tag-list-link">rust杂记</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%B3%9B%E5%9E%8B/" class="tag-list-link">rust泛型</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%B8%B8%E6%88%8F/" class="tag-list-link">rust游戏</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="tag-list-link">rust生命周期</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E8%BF%90%E7%AE%97%E7%AC%A6%E4%B8%8E%E7%AC%A6%E5%8F%B7/" class="tag-list-link">rust运算符与符号</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E8%BF%AD%E4%BB%A3%E5%99%A8/" class="tag-list-link">rust迭代器</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" class="tag-list-link">rust错误处理</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/stream/" class="tag-list-link">stream</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/vim/" class="tag-list-link">vim</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" class="tag-list-link">交叉编译</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/" class="tag-list-link">开源协议</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E6%B5%8B%E8%AF%95/" class="tag-list-link">测试</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E8%B0%83%E8%AF%95rust/" class="tag-list-link">调试rust</a><span
+                    class="tag-list-count">1</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/docker-gogs/" class="title">Docker 搭建私有 Git 服务</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-24 10:30:53 &#43;0800 CST" itemprop="datePublished">2021-03-24</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/open-source-license/" class="title">开源协议对比</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-11 17:22:03 &#43;0800 CST" itemprop="datePublished">2021-03-11</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/rust-cargo/" class="title">Rust 的包管理工具 Cargo</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-08 16:21:12 &#43;0800 CST" itemprop="datePublished">2021-03-08</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/vim-notes/" class="title">Vim 杂记</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-05 11:21:12 &#43;0800 CST" itemprop="datePublished">2021-03-05</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/appimage/" class="title">AppImage打包二进制文件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-01 22:12:52 &#43;0800 CST" itemprop="datePublished">2021-03-01</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/posts/rust-tour-error-handle/"
+    >Rust之旅-错误处理</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://littleguest.github.io/posts/rust-tour-error-handle/" class="article-date">
+  <time datetime="2021-01-12 21:33:07 &#43;0000 UTC" itemprop="datePublished">2021-01-12</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/rust/"> Rust </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/rust/"> Rust </a>
+    <a class="article-tag-link" href="/tags/rust%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/"> Rust错误处理 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="https://littleguest.github.io/posts/rust-tour-error-handle/" class="leancloud_visitors"  data-flag-title="Rust之旅-错误处理">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/posts/rust-tour-error-handle/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 983字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 2分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <h2 id="rust中的错误处理">Rust中的错误处理</h2>
 <p>在 <code>Java</code> 中处理异常一般有以下几种方式：</p>
 <ul>
 <li>使用 <code>try-catch</code> 捕获异常</li>
@@ -70,218 +564,322 @@
 <p>好了，回归正题，</p>
 <p><strong>那么在 <code>Rust</code> 中是怎么处理错误的呢？</strong></p>
 <p>来讲怎么处理错误之前，我们首先需要了解标准库中的 <code>std::result::Result</code> 这个枚举</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#75715e">#[must_use = </span><span style="color:#e6db74">&#34;this `Result` may be an `Err` variant, which should be handled&#34;</span><span style="color:#75715e">]</span>
-<span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">enum</span> Result<span style="color:#f92672">&lt;</span>T, E<span style="color:#f92672">&gt;</span> {
+<pre><code class="language-rust">#[must_use = &quot;this `Result` may be an `Err` variant, which should be handled&quot;]
+pub enum Result&lt;T, E&gt; {
     Ok(T),
     Err(E),
 }
-</code></pre></div><p>它是用来返回错误和传播错误的，<code>Ok(T)</code> 代表成功并且包含一个成功值, <code>Err(E)</code> 代表错误并且包含一个错误值， <code>#[must_use]</code> 属性表示返回值 <code>Result</code> 需要被处理，否则编译器会给出警告；</p>
+</code></pre>
+<p>它是用来返回错误和传播错误的，<code>Ok(T)</code> 代表成功并且包含一个成功值, <code>Err(E)</code> 代表错误并且包含一个错误值， <code>#[must_use]</code> 属性表示返回值 <code>Result</code> 需要被处理，否则编译器会给出警告；</p>
 <ul>
 <li>
 <p><strong>最简单粗暴的方式就是直接 unwrap</strong></p>
 <ul>
 <li><code>unwrap</code> 如果出现错误，直接 panic，一般不推荐使用；</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">assert_eq<span style="color:#f92672">!</span>(Ok::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u32</span>, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">str</span><span style="color:#f92672">&gt;</span>(<span style="color:#ae81ff">1</span>).unwrap(), <span style="color:#ae81ff">1</span>);
-Err::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u32</span>, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">str</span><span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;error&#34;</span>).unwrap(); <span style="color:#75715e">// panic
-</span></code></pre></div><ul>
+<pre><code class="language-rust">assert_eq!(Ok::&lt;u32, &amp;str&gt;(1).unwrap(), 1);
+Err::&lt;u32, &amp;str&gt;(&quot;error&quot;).unwrap(); // panic
+</code></pre>
+<ul>
 <li><code>unwrap_or</code> 如果出现错误，返回给出的值；</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">assert_eq<span style="color:#f92672">!</span>(Err::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u32</span>, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">str</span><span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;error&#34;</span>).unwrap_or(<span style="color:#ae81ff">1</span>), <span style="color:#ae81ff">1</span>);
-</code></pre></div><ul>
+<pre><code class="language-rust">assert_eq!(Err::&lt;u32, &amp;str&gt;(&quot;error&quot;).unwrap_or(1), 1);
+</code></pre>
+<ul>
 <li><code>unwrap_or_else</code> 如果出现错误，返回闭包计算出的值；</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">assert_eq<span style="color:#f92672">!</span>(Err::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u32</span>, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">str</span><span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;error&#34;</span>).unwrap_or_else(<span style="color:#f92672">|</span>_<span style="color:#f92672">|</span> <span style="color:#ae81ff">1</span>), <span style="color:#ae81ff">1</span>);
+<pre><code class="language-rust">assert_eq!(Err::&lt;u32, &amp;str&gt;(&quot;error&quot;).unwrap_or_else(|_| 1), 1);
 
-<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">count</span>(x: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">str</span>) -&gt; <span style="color:#66d9ef">usize</span> {
+fn count(x: &amp;str) -&gt; usize {
     x.len()
 }
-assert_eq<span style="color:#f92672">!</span>(Err::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">usize</span>, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">str</span><span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;error&#34;</span>).unwrap_or_else(count), <span style="color:#ae81ff">5</span>);  
-</code></pre></div><ul>
+assert_eq!(Err::&lt;usize, &amp;str&gt;(&quot;error&quot;).unwrap_or_else(count), 5);  
+</code></pre>
+<ul>
 <li><code>unwrap_or_default</code> 如果出现错误，返回改类型的默认值，否则返回 <code>Ok(T)</code> 包含的值；</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">assert_eq<span style="color:#f92672">!</span>(Err::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">i32</span>, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">str</span><span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;error&#34;</span>).unwrap_or_default(), <span style="color:#ae81ff">0</span>);
-assert_eq<span style="color:#f92672">!</span>(Err::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">bool</span>, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">str</span><span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;error&#34;</span>).unwrap_or_default(), <span style="color:#66d9ef">false</span>);
-</code></pre></div></li>
+<pre><code class="language-rust">assert_eq!(Err::&lt;i32, &amp;str&gt;(&quot;error&quot;).unwrap_or_default(), 0);
+assert_eq!(Err::&lt;bool, &amp;str&gt;(&quot;error&quot;).unwrap_or_default(), false);
+</code></pre>
+</li>
 <li>
 <p><strong>或者 expect</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust">Err::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u32</span>, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">str</span><span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;error&#34;</span>).expect(<span style="color:#e6db74">&#34;panic&#34;</span>); <span style="color:#75715e">// ...thread &#39;main&#39; panicked at &#39;panic: &#34;error&#34;&#39;,...
-</span></code></pre></div></li>
+<pre><code class="language-rust">Err::&lt;u32, &amp;str&gt;(&quot;error&quot;).expect(&quot;panic&quot;); // ...thread 'main' panicked at 'panic: &quot;error&quot;',...
+</code></pre>
+</li>
 </ul>
 <p>我们想要快速获取 <code>Ok(T)</code> 中的值，常用的就是以上这几种 <code>Result</code> 的方法，接下来我们尝试其它途径来处理错误；</p>
 <ul>
 <li>
 <p><strong>使用 match 模式匹配</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> std::fs::File;
-<span style="color:#66d9ef">use</span> std::io::Read;
+<pre><code class="language-rust">use std::fs::File;
+use std::io::Read;
 
-<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
-    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> file <span style="color:#f92672">=</span> File::open(<span style="color:#e6db74">&#34;./setting.toml&#34;</span>);
-    <span style="color:#66d9ef">match</span> file {
-        Ok(<span style="color:#66d9ef">mut</span> f) <span style="color:#f92672">=&gt;</span> {
-            <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> buf <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>.to_string();
-            <span style="color:#66d9ef">let</span> read <span style="color:#f92672">=</span> f.read_to_string(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> buf);
-            <span style="color:#66d9ef">match</span> read {
-                Ok(_) <span style="color:#f92672">=&gt;</span> {}
-                Err(e) <span style="color:#f92672">=&gt;</span> eprintln<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;read err: {}&#34;</span>, e),
+fn main() {
+    let mut file = File::open(&quot;./setting.toml&quot;);
+    match file {
+        Ok(mut f) =&gt; {
+            let mut buf = &quot;&quot;.to_string();
+            let read = f.read_to_string(&amp;mut buf);
+            match read {
+                Ok(_) =&gt; {}
+                Err(e) =&gt; eprintln!(&quot;read err: {}&quot;, e),
             }
         }
-        Err(e) <span style="color:#f92672">=&gt;</span> eprintln<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;open err: {}&#34;</span>, e),
+        Err(e) =&gt; eprintln!(&quot;open err: {}&quot;, e),
     }
 }
-</code></pre></div><p>当我们需要处理多个错误时，使用 <code>match</code> 匹配就有点啰嗦了。</p>
+</code></pre>
+<p>当我们需要处理多个错误时，使用 <code>match</code> 匹配就有点啰嗦了。</p>
 </li>
 <li>
 <p><strong>传播错误</strong>
 我们可以使用 <code>?</code> 操作符来简化 <code>match</code> 模式匹配</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> std::fs::File;
-<span style="color:#66d9ef">use</span> std::io::Read;
+<pre><code class="language-rust">use std::fs::File;
+use std::io::Read;
 
-<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() -&gt; Result<span style="color:#f92672">&lt;</span>(), std::io::Error<span style="color:#f92672">&gt;</span> {
-    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> file <span style="color:#f92672">=</span> File::open(<span style="color:#e6db74">&#34;./setting.toml&#34;</span>)<span style="color:#f92672">?</span>;
-    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> buf <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>.to_string();
-    <span style="color:#66d9ef">let</span> _ <span style="color:#f92672">=</span> file.read_to_string(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> buf)<span style="color:#f92672">?</span>;
+fn main() -&gt; Result&lt;(), std::io::Error&gt; {
+    let mut file = File::open(&quot;./setting.toml&quot;)?;
+    let mut buf = &quot;&quot;.to_string();
+    let _ = file.read_to_string(&amp;mut buf)?;
     Ok(())
 }
-</code></pre></div><p>可以看到使用 <code>?</code> 极大的简化了我们的代码，当然现在我们只返回来一种错误，接下来我们看看是怎样返回多种错误的；</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> std::fs::File;
-<span style="color:#66d9ef">use</span> std::io::Read;
+</code></pre>
+<p>可以看到使用 <code>?</code> 极大的简化了我们的代码，当然现在我们只返回来一种错误，接下来我们看看是怎样返回多种错误的；</p>
+<pre><code class="language-rust">use std::fs::File;
+use std::io::Read;
 
-<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() -&gt; Result<span style="color:#f92672">&lt;</span>(), Box<span style="color:#f92672">&lt;</span>dyn std::error::Error<span style="color:#f92672">&gt;&gt;</span> {
-    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> file <span style="color:#f92672">=</span> File::open(<span style="color:#e6db74">&#34;./Cargo.toml&#34;</span>)<span style="color:#f92672">?</span>;
-    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> buf <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>.to_string();
-    <span style="color:#66d9ef">let</span> _ <span style="color:#f92672">=</span> file.read_to_string(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> buf)<span style="color:#f92672">?</span>;
+fn main() -&gt; Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
+    let mut file = File::open(&quot;./Cargo.toml&quot;)?;
+    let mut buf = &quot;&quot;.to_string();
+    let _ = file.read_to_string(&amp;mut buf)?;
 
-    <span style="color:#e6db74">&#34;a&#34;</span>.parse::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">i32</span><span style="color:#f92672">&gt;</span>()<span style="color:#f92672">?</span>;
+    &quot;a&quot;.parse::&lt;i32&gt;()?;
     Ok(())
 }
-</code></pre></div></li>
+</code></pre>
+</li>
 <li>
 <p><strong>自定义错误</strong>
 开始自定义错误之前，需要了解标准库 <code>std::error::Error</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">trait</span> Error: <span style="color:#a6e22e">Debug</span> <span style="color:#f92672">+</span> Display {
-  <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">source</span>(<span style="color:#f92672">&amp;</span>self) -&gt; Option<span style="color:#f92672">&lt;&amp;</span>(dyn Error <span style="color:#f92672">+</span> &#39;static)<span style="color:#f92672">&gt;</span> { ... }
-  <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">backtrace</span>(<span style="color:#f92672">&amp;</span>self) -&gt; Option<span style="color:#f92672">&lt;&amp;</span>Backtrace<span style="color:#f92672">&gt;</span> { ... }
-  <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">description</span>(<span style="color:#f92672">&amp;</span>self) -&gt; <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">str</span> { ... }
-  <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">cause</span>(<span style="color:#f92672">&amp;</span>self) -&gt; Option<span style="color:#f92672">&lt;&amp;</span>dyn Error<span style="color:#f92672">&gt;</span> { ... }
+<pre><code class="language-rust">pub trait Error: Debug + Display {
+  fn source(&amp;self) -&gt; Option&lt;&amp;(dyn Error + 'static)&gt; { ... }
+  fn backtrace(&amp;self) -&gt; Option&lt;&amp;Backtrace&gt; { ... }
+  fn description(&amp;self) -&gt; &amp;str { ... }
+  fn cause(&amp;self) -&gt; Option&lt;&amp;dyn Error&gt; { ... }
 }
-</code></pre></div><p>当我们自定义错误时，只需要管 <code>source</code> 这个方法就行了， <code>description</code> 和 <code>cause</code> 已经废弃了，<code>backtrace</code> 在 <code>nightly</code> 版本中还是实验性的（我的版本是 1.49.0）；</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> std::fmt::{Debug, Display, Formatter};
-<span style="color:#66d9ef">use</span> std::fs::File;
-<span style="color:#66d9ef">use</span> std::io::{Error, Read};
-<span style="color:#66d9ef">use</span> std::num::ParseIntError;
-<span style="color:#66d9ef">use</span> std::<span style="color:#66d9ef">str</span>::Utf8Error;
+</code></pre>
+<p>当我们自定义错误时，只需要管 <code>source</code> 这个方法就行了， <code>description</code> 和 <code>cause</code> 已经废弃了，<code>backtrace</code> 在 <code>nightly</code> 版本中还是实验性的（我的版本是 1.49.0）；</p>
+<pre><code class="language-rust">use std::fmt::{Debug, Display, Formatter};
+use std::fs::File;
+use std::io::{Error, Read};
+use std::num::ParseIntError;
+use std::str::Utf8Error;
 
-<span style="color:#75715e">#[derive(Debug)]</span>
-<span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">CustomError</span> {
+#[derive(Debug)]
+enum CustomError {
     IoErr,
     ParseIntError(ParseIntError),
     Utf8Error(Utf8Error),
 }
 
-<span style="color:#66d9ef">impl</span> Display <span style="color:#66d9ef">for</span> CustomError {
-    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">fmt</span>(<span style="color:#f92672">&amp;</span>self, f: <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">mut</span> Formatter<span style="color:#f92672">&lt;</span><span style="color:#a6e22e">&#39;_</span><span style="color:#f92672">&gt;</span>) -&gt; <span style="color:#a6e22e">std</span>::fmt::Result {
-        <span style="color:#66d9ef">match</span> self {
-            CustomError::IoErr <span style="color:#f92672">=&gt;</span> write<span style="color:#f92672">!</span>(f, <span style="color:#e6db74">&#34;io error&#34;</span>),
-            CustomError::ParseIntError(_) <span style="color:#f92672">=&gt;</span> write<span style="color:#f92672">!</span>(f, <span style="color:#e6db74">&#34;parse int error&#34;</span>),
-            CustomError::Utf8Error(_) <span style="color:#f92672">=&gt;</span> write<span style="color:#f92672">!</span>(f, <span style="color:#e6db74">&#34;utf8 error&#34;</span>),
+impl Display for CustomError {
+    fn fmt(&amp;self, f: &amp;mut Formatter&lt;'_&gt;) -&gt; std::fmt::Result {
+        match self {
+            CustomError::IoErr =&gt; write!(f, &quot;io error&quot;),
+            CustomError::ParseIntError(_) =&gt; write!(f, &quot;parse int error&quot;),
+            CustomError::Utf8Error(_) =&gt; write!(f, &quot;utf8 error&quot;),
         }
     }
 }
 
-<span style="color:#66d9ef">impl</span> std::error::Error <span style="color:#66d9ef">for</span> CustomError {
-    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">source</span>(<span style="color:#f92672">&amp;</span>self) -&gt; Option<span style="color:#f92672">&lt;&amp;</span>(dyn std::error::Error <span style="color:#f92672">+</span> &#39;static)<span style="color:#f92672">&gt;</span> {
-        <span style="color:#66d9ef">match</span> self {
-            CustomError::IoErr <span style="color:#f92672">=&gt;</span> None,
-            CustomError::ParseIntError(e) <span style="color:#f92672">=&gt;</span> Some(e),
-            CustomError::Utf8Error(e) <span style="color:#f92672">=&gt;</span> Some(e),
+impl std::error::Error for CustomError {
+    fn source(&amp;self) -&gt; Option&lt;&amp;(dyn std::error::Error + 'static)&gt; {
+        match self {
+            CustomError::IoErr =&gt; None,
+            CustomError::ParseIntError(e) =&gt; Some(e),
+            CustomError::Utf8Error(e) =&gt; Some(e),
         }
     }
 }
 
-<span style="color:#66d9ef">impl</span> From<span style="color:#f92672">&lt;</span>std::io::Error<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">for</span> CustomError {
-    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">from</span>(_: <span style="color:#a6e22e">Error</span>) -&gt; <span style="color:#a6e22e">Self</span> {
+impl From&lt;std::io::Error&gt; for CustomError {
+    fn from(_: Error) -&gt; Self {
         Self::IoErr
     }
 }
 
-<span style="color:#66d9ef">impl</span> From<span style="color:#f92672">&lt;</span>ParseIntError<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">for</span> CustomError {
-    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">from</span>(e: <span style="color:#a6e22e">ParseIntError</span>) -&gt; <span style="color:#a6e22e">Self</span> {
+impl From&lt;ParseIntError&gt; for CustomError {
+    fn from(e: ParseIntError) -&gt; Self {
         Self::ParseIntError(e)
     }
 }
 
-<span style="color:#66d9ef">impl</span> From<span style="color:#f92672">&lt;</span>Utf8Error<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">for</span> CustomError {
-    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">from</span>(e: <span style="color:#a6e22e">Utf8Error</span>) -&gt; <span style="color:#a6e22e">Self</span> {
+impl From&lt;Utf8Error&gt; for CustomError {
+    fn from(e: Utf8Error) -&gt; Self {
         Self::Utf8Error(e)
     }
 }
 
-<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() -&gt; Result<span style="color:#f92672">&lt;</span>(), CustomError<span style="color:#f92672">&gt;</span> {
-    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> file <span style="color:#f92672">=</span> File::open(<span style="color:#e6db74">&#34;./Cargo.toml&#34;</span>)<span style="color:#f92672">?</span>;
-    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> buf <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>.to_string();
-    <span style="color:#66d9ef">let</span> _ <span style="color:#f92672">=</span> file.read_to_string(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> buf)<span style="color:#f92672">?</span>;
+fn main() -&gt; Result&lt;(), CustomError&gt; {
+    let mut file = File::open(&quot;./Cargo.toml&quot;)?;
+    let mut buf = &quot;&quot;.to_string();
+    let _ = file.read_to_string(&amp;mut buf)?;
 
-    std::<span style="color:#66d9ef">str</span>::from_utf8(<span style="color:#e6db74">&#34;😄&#34;</span>.as_bytes())<span style="color:#f92672">?</span>;
-    <span style="color:#e6db74">&#34;a&#34;</span>.parse::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">i32</span><span style="color:#f92672">&gt;</span>()<span style="color:#f92672">?</span>;
+    std::str::from_utf8(&quot;😄&quot;.as_bytes())?;
+    &quot;a&quot;.parse::&lt;i32&gt;()?;
     Ok(())
 }
-</code></pre></div></li>
+</code></pre>
+</li>
 </ul>
 <p>以上就是我了解的错误处理方式，如果想要更深入了解，可以看看 <code>std::io::Error</code> ；</p>
 
-    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
-</div>
+    </div>
+    <div class="article-footer">
+
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://littleguest.github.io/posts/java-stream-distinct/" title="Java-记一次Stream去重操作"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://littleguest.github.io/posts/rust-tour-generic-type/"
+                    title="Rust之旅-泛型"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,qzone"></div>
+        </div>
+    </div>
+</nav>
 
 
-        </div><footer class="container">
-    <hr class="soften">
-    <p>
-
-&copy; 
-
-    gopher9527
-
-<span id="thisyear">2020</span>
-
-</p>
-    <p class="text-center">
-        
-        
-        
-        <a href="https://github.com/LittleGuest">GitHub</a> 
-        
-    </p>
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://github.com/LittleGuest" target="_blank" title="github" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-github"></i></a></li>
+    <li><a href="https://littleguest.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2020  -
+    2021
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
 </footer>
 
-</body><link rel="stylesheet" href="/css/bootstrap.css">
-<link rel="stylesheet" href="/css/bootstrap-responsive.css">
-<link rel="stylesheet" href="/css/style.css">
+<script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
 
-<script src="/js/jquery.js"></script>
-<script src="/js/bootstrap-386.js"></script>
-<script src="/js/bootstrap-transition.js"></script>
-<script src="/js/bootstrap-alert.js"></script>
-<script src="/js/bootstrap-modal.js"></script>
-<script src="/js/bootstrap-dropdown.js"></script>
-<script src="/js/bootstrap-scrollspy.js"></script>
-<script src="/js/bootstrap-tab.js"></script>
-<script src="/js/bootstrap-tooltip.js"></script>
-<script src="/js/bootstrap-popover.js"></script>
-<script src="/js/bootstrap-button.js"></script>
-<script src="/js/bootstrap-collapse.js"></script>
-<script src="/js/bootstrap-carousel.js"></script>
-<script src="/js/bootstrap-typeahead.js"></script>
-<script src="/js/bootstrap-affix.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
-    _386 = { 
-        fastLoad: false ,
-        onePass: false , 
-        speedFactor: 1 
-    };
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/python.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/javascript.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/rust.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/java.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/go.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/c.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/cpp.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/shell.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/sql.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://littleguest.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://littleguest.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
 
-    
-    function ThisYear() {
-        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
-    };
-</script></html>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/littleguest.github.io\/',
+            CONTENT_URL: 'https:\/\/littleguest.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://littleguest.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/tocbot/4.12.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        
+        
+        appId: 'gkzEGKSHEpVGvpy0znhhBDuM-gzGzoHsz',
+        appKey: 'd4ngyH9kAtx6G8UzVPjfhAGi',
+        placeholder: '快来发表评论吧~',
+        avatar: 'retro',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: true ,
+        requiredFields:["nick","mail"]
+});
+</script>
+
+  </body>
+</html>

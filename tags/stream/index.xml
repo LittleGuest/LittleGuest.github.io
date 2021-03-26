@@ -1,22 +1,193 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Stream on gopher9527&#39;s Blog</title>
+    <title>Stream on 蒲建全的博客</title>
     <link>https://littleguest.github.io/tags/stream/</link>
-    <description>Recent content in Stream on gopher9527&#39;s Blog</description>
+    <description>Recent content in Stream on 蒲建全的博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Fri, 08 Jan 2021 23:48:47 +0000</lastBuildDate><atom:link href="https://littleguest.github.io/tags/stream/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 08 Jan 2021 23:48:47 +0000</lastBuildDate>
+    
+        <atom:link href="https://littleguest.github.io/tags/stream/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Docker 搭建私有 Git 服务</title>
+      <link>https://littleguest.github.io/posts/docker-gogs/</link>
+      <pubDate>Wed, 24 Mar 2021 10:30:53 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/docker-gogs/</guid>
+      <description>在这里我们使用 Gogs 来搭建私有 Git 服务。 $ docker pull gogs/gogs $ docker docker run -d --name=gogs -p 12200:22 -p 13000:3000 -v /var/gogs:/data gogs/gogs 首次访问 localhost:13000 会出现安装界面， 我们这里数据库选择 MySQL ，并创建对应的 gogs 账户和 gogs 库</description>
+    </item>
+    
+    <item>
+      <title>开源协议对比</title>
+      <link>https://littleguest.github.io/posts/open-source-license/</link>
+      <pubDate>Thu, 11 Mar 2021 17:22:03 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/open-source-license/</guid>
+      <description>怎样选择开源协议 在网上找了一张远古对比图，大家可以简单了解下 作为个人开发者，我一般选择的是 MIT License 。</description>
+    </item>
+    
+    <item>
+      <title>Rust 的包管理工具 Cargo</title>
+      <link>https://littleguest.github.io/posts/rust-cargo/</link>
+      <pubDate>Mon, 08 Mar 2021 16:21:12 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-cargo/</guid>
+      <description>Cargo 是 Rust 的包管理工具 cargo new xxx --bin 创建一个 binary crate cargo build 编译 crate cargo run 编译和运行 binary crate Cargo 目录 . ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├─</description>
+    </item>
+    
+    <item>
+      <title>Vim 杂记</title>
+      <link>https://littleguest.github.io/posts/vim-notes/</link>
+      <pubDate>Fri, 05 Mar 2021 11:21:12 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/vim-notes/</guid>
+      <description>Vim 杂记 vim 模式 普通模式：vim 启动后的默认模式,移动光标，删除文本等等都在该模式下 插入模式 在普通模式下，按 a 或 i 进入该模式 可视模式 在普通模式下</description>
+    </item>
+    
+    <item>
+      <title>AppImage打包二进制文件</title>
+      <link>https://littleguest.github.io/posts/appimage/</link>
+      <pubDate>Mon, 01 Mar 2021 22:12:52 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/appimage/</guid>
+      <description>如何将可执行二进制文件打包成AppImage文件？ 下载构建工具 linuxdeploy # 创建 AppDir 目录 $ linuxdeploy.AppImage --appdir T2048.AppDir 生成的目录结构如下 将可执行文件放在 T2048.AppDir/usr/bin/ 目录下 将桌面快捷方式</description>
+    </item>
+    
+    <item>
+      <title>Rust交叉编译</title>
+      <link>https://littleguest.github.io/posts/rust-cross-compiling/</link>
+      <pubDate>Sat, 27 Feb 2021 00:35:29 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-cross-compiling/</guid>
+      <description>本机系统为 Linux 查看Rust支持的系统和架构 参考 https://wiki.archlinux.org/index.php/Rust $ rustup target list # 或者 $ rustc --print target-list Windows aarch64-pc-windows-msvc i586-pc-windows-msvc i686-pc-windows-gnu i686-pc-windows-msvc x86_64-pc-windows-gnu $ rustup toolchain install stable-x86_64-pc-windows-gnu $ sudo apt install mingw-w64 # vim ~/.cargo/config [target.x86_64-pc-windows-gnu] linker = &amp;quot;/usr/bin/x86_64-w64-mingw32-gcc&amp;quot; ar = &amp;quot;/usr/bin/x86_64-w64-mingw32-ar&amp;quot; $ cargo build --release --target x86_64-pc-windows-gnu x86_64-pc-windows-msvc Linux Mac</description>
+    </item>
+    
+    <item>
+      <title>一款可以在终端玩的2048小游戏</title>
+      <link>https://littleguest.github.io/posts/t-2048/</link>
+      <pubDate>Fri, 26 Feb 2021 23:29:59 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/t-2048/</guid>
+      <description>使用 Rust 实现 2048 闲来无事，想着用 Rust 做一个练手的项目，碰巧，之前玩过2048，玩法比较简单，感觉还蛮有意思的。那我就在想我能不能用 Rust 实现呢？ 所以这</description>
+    </item>
+    
+    <item>
+      <title>使用Docker部署主从MySQL</title>
+      <link>https://littleguest.github.io/posts/docker-mysql-master-slave/</link>
+      <pubDate>Tue, 23 Feb 2021 14:58:02 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/docker-mysql-master-slave/</guid>
+      <description>MySQL 主从复制 下载 MySQL 镜像 官方镜像的 MySQL 版本是8.x $ docker pull mysql 创建 MySQL 主从容器 主 $ docker run -d --name mysql-master -p 13306:3306 -e MYSQL_ROOT_PASSWORD=root mysql 从 $ docker run -d --name mysql-slave -p 13307:3306 -e MYSQL_ROOT_PASSWORD=root mysql 分别用工具连接，测试能正常</description>
+    </item>
+    
+    <item>
+      <title>Docker搭建MySQL</title>
+      <link>https://littleguest.github.io/posts/docker-mysql/</link>
+      <pubDate>Tue, 23 Feb 2021 11:14:38 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/docker-mysql/</guid>
+      <description>如何使用Docker搭建MySQL服务 下载 MySQL 镜像 官方镜像的 MySQL 版本是8.x $ docker pull mysql 启动容器 -d 在后台运行 &amp;ndash;name mysql 指定容器的名字为 mysql -p 映射容器ip:3</description>
+    </item>
+    
+    <item>
+      <title>关于Rust迭代器的一些骚操作</title>
+      <link>https://littleguest.github.io/posts/rust-iterator-group/</link>
+      <pubDate>Tue, 02 Feb 2021 22:28:20 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-iterator-group/</guid>
+      <description>首先，先在这里抛出 两个问题 1. 如何将一个 List 转换为一个 HashMap 2. 如何将两个 List 转换为一个 HashMap 让我们来看看 在 Java 中是如何实现的。😄 第一个问题 @Data @AllArgsConstructor public class Person { private Long id;</description>
+    </item>
+    
+    <item>
+      <title>FastJson 使用 toJSONString 时字段序列化问题</title>
+      <link>https://littleguest.github.io/posts/java-fastjson-serialize/</link>
+      <pubDate>Wed, 27 Jan 2021 21:55:40 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/java-fastjson-serialize/</guid>
+      <description>首先来看看代码 Map&amp;lt;String, Object&amp;gt; map = new HashMap&amp;lt;&amp;gt;(2); map.put(&amp;quot;reportNo&amp;quot;, null); map.put(&amp;quot;reportDate&amp;quot;, new Date()); System.out.println(JSON.toJSONString(map)); 输出结果为 {&amp;quot;reportDate&amp;quot;:1611756215215} 为什么会出现这种情况呢？ 通过分析源码得知 if (value == null) { if (!SerializerFeature.isEnabled(out.features, features, SerializerFeature.WriteMapNullValue)) { continue; } } 当值为 null 时，默认是不会被</description>
+    </item>
+    
+    <item>
+      <title>Java根据Word模板生成Word文件</title>
+      <link>https://littleguest.github.io/posts/java-word-template/</link>
+      <pubDate>Wed, 27 Jan 2021 17:27:14 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/java-word-template/</guid>
+      <description>在开发过程中，避免不了会生成各种 Excel 或者 Word 文件，为了简化我们的工作（有更多的时间摸鱼）或者根据项目的需要，我们有时候需要根据定义好的统一的模板</description>
+    </item>
+    
+    <item>
+      <title>Rust之旅-测试</title>
+      <link>https://littleguest.github.io/posts/rust-tour-test/</link>
+      <pubDate>Mon, 25 Jan 2021 22:30:11 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-test/</guid>
+      <description>如何在 Rust 中编写测试 当我们创建一个 lib 项目时，cargo 会帮我们创建一个test模块和一个测试函数 #[cfg(test)] mod tests { #[test] fn it_works() { assert_eq!(2 + 2, 4); } } #[test] 用于标记一个 fn 函</description>
+    </item>
+    
+    <item>
+      <title>Git杂记</title>
+      <link>https://littleguest.github.io/posts/git-notes/</link>
+      <pubDate>Thu, 21 Jan 2021 22:12:54 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/git-notes/</guid>
+      <description>Git 杂记 不同类别的修改 (如：Bug修复和功能添加) 要尽量分开提交，以方便以后从历史记录里查找特定的修改内容; Git的标准注解: 第1行：提交修改</description>
+    </item>
+    
+    <item>
+      <title>关于我</title>
+      <link>https://littleguest.github.io/2021/01/about/</link>
+      <pubDate>Thu, 21 Jan 2021 18:03:48 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/2021/01/about/</guid>
+      <description>姓名 蒲建全 年龄 96年 联系方式 2190975784@qq.com gopher9527@gmail.com 毕业时间 2018 兴趣爱好 游戏（MOBA，休闲益智，沙盒，&amp;hellip;），发呆 为什么要写博客 记录和分享</description>
+    </item>
+    
+    <item>
+      <title>友情链接</title>
+      <link>https://littleguest.github.io/2021/01/links/</link>
+      <pubDate>Thu, 21 Jan 2021 17:33:52 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/2021/01/links/</guid>
+      <description>SoulReader-前端大菜哔 让我们一起摇摆。。。 大佬的博客 纯洁的微笑 柒&amp;rsquo;s Blog 何先生-分享IT技术及网络资源的个人博客</description>
+    </item>
+    
+    <item>
+      <title>Rust之旅-生命周期</title>
+      <link>https://littleguest.github.io/posts/rust-tour-lifetime/</link>
+      <pubDate>Tue, 12 Jan 2021 21:41:40 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-lifetime/</guid>
+      <description>生命周期与引用有效性 Rust 中的每一个引用都有其 生命周期（lifetime），也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正</description>
+    </item>
+    
+    <item>
+      <title>Rust之旅-泛型</title>
+      <link>https://littleguest.github.io/posts/rust-tour-generic-type/</link>
+      <pubDate>Tue, 12 Jan 2021 21:41:32 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-generic-type/</guid>
+      <description>Rust如何使用泛型 在函数定义中使用泛型 比如我们定义一个求slice中的最大值的函数，传入的参数是一个元素类型为 T 的slice，返回值也是 T</description>
+    </item>
+    
+    <item>
+      <title>Rust之旅-错误处理</title>
+      <link>https://littleguest.github.io/posts/rust-tour-error-handle/</link>
+      <pubDate>Tue, 12 Jan 2021 21:33:07 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-error-handle/</guid>
+      <description>Rust中的错误处理 在 Java 中处理异常一般有以下几种方式： 使用 try-catch 捕获异常 通过 throw 的方式向上抛异常 在web中全局拦截异常 当然还有其他方式处理异常，这</description>
+    </item>
+    
     <item>
       <title>Java-记一次Stream去重操作</title>
       <link>https://littleguest.github.io/posts/java-stream-distinct/</link>
       <pubDate>Fri, 08 Jan 2021 23:48:47 +0000</pubDate>
       
       <guid>https://littleguest.github.io/posts/java-stream-distinct/</guid>
-      <description>记一次Java Stream 去重操作 为了重现当时的错误，我会尽量保持一致，只是类名和类的属性不一样而已，现定义如下两个类
-public class BaseEntity implements Serializable { private Long id; public BaseEntity() { } public Long getId() { return id; } public void setId(Long id) { this.id = id; } } @Data public class Entity extends BaseEntity { private Long id; private String field; } Entity 是继承 BaseEntity ，并且 BaseEntity 是实现了 Serializable 这个接口
-接下来编写测试代码
-public static void main(String[] args) { List&amp;lt;Entity&amp;gt; entities = new ArrayList&amp;lt;&amp;gt;(); for (int i = 0; i &amp;lt; 5; i++) { Entity entity = new Entity(); entity.</description>
+      <description>记一次Java Stream 去重操作 为了重现当时的错误，我会尽量保持一致，只是类名和类的属性不一样而已，现定义如下两个类 public class BaseEntity implements Serializable { private Long id; public BaseEntity() { } public Long getId()</description>
     </item>
     
   </channel>

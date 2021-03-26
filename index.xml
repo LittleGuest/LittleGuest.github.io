@@ -1,23 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>gopher9527&#39;s Blog</title>
+    <title>蒲建全的博客</title>
     <link>https://littleguest.github.io/</link>
-    <description>Recent content on gopher9527&#39;s Blog</description>
+    <description>Recent content on 蒲建全的博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Wed, 24 Mar 2021 10:30:53 +0800</lastBuildDate><atom:link href="https://littleguest.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 24 Mar 2021 10:30:53 +0800</lastBuildDate>
+    
+        <atom:link href="https://littleguest.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Docker 搭建私有 Git 服务</title>
       <link>https://littleguest.github.io/posts/docker-gogs/</link>
       <pubDate>Wed, 24 Mar 2021 10:30:53 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/docker-gogs/</guid>
-      <description>在这里我们使用 Gogs 来搭建私有 Git 服务。
-$ docker pull gogs/gogs $ docker docker run -d --name=gogs -p 12200:22 -p 13000:3000 -v /var/gogs:/data gogs/gogs 首次访问 localhost:13000 会出现安装界面，
-我们这里数据库选择 MySQL ，并创建对应的 gogs 账户和 gogs 库。对应的 HTTP端口 和 SSH端口 设置为映射到主机的端口。然后创建一个管理员的账号。配置如下：
-但是这会遇到问题，错误为数据库连接不上，因为我的 MySQL 也是使用 Docker 安装的。数据库主机地址不管是用 localhost:3306 还是 127.0.0.1:3306 都不起作用。这是因为这两个容器不在同一个网络中，所以首先得创建一个网络，指定 MySQL 和 Gogs 的容器在同一个网络中。
-# 创建网络 $ docker network create gogs-mysql8 # 创建 MySQL 容器，指定网络 $ docker run -d --name gogs-mysql8 --network gogs-mysql8 -p 13001:3306 -e MYSQL_ROOT_PASSWORD=root mysql:latest # 创建 Gogs容器，指定网络 $ docker run -d --name=gogs --network gogs-mysql8 -p 12200:22 -p 13000:3000 -v /var/gogs:/data gogs/gogs 重新配置数据库连接</description>
+      <description>在这里我们使用 Gogs 来搭建私有 Git 服务。 $ docker pull gogs/gogs $ docker docker run -d --name=gogs -p 12200:22 -p 13000:3000 -v /var/gogs:/data gogs/gogs 首次访问 localhost:13000 会出现安装界面， 我们这里数据库选择 MySQL ，并创建对应的 gogs 账户和 gogs 库</description>
     </item>
     
     <item>
@@ -26,9 +25,7 @@ $ docker pull gogs/gogs $ docker docker run -d --name=gogs -p 12200:22 -p 13000:
       <pubDate>Thu, 11 Mar 2021 17:22:03 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/open-source-license/</guid>
-      <description>怎样选择开源协议
-在网上找了一张远古对比图，大家可以简单了解下
-作为个人开发者，我一般选择的是 MIT License 。</description>
+      <description>怎样选择开源协议 在网上找了一张远古对比图，大家可以简单了解下 作为个人开发者，我一般选择的是 MIT License 。</description>
     </item>
     
     <item>
@@ -37,9 +34,7 @@ $ docker pull gogs/gogs $ docker docker run -d --name=gogs -p 12200:22 -p 13000:
       <pubDate>Mon, 08 Mar 2021 16:21:12 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/rust-cargo/</guid>
-      <description>Cargo 是 Rust 的包管理工具
- cargo new xxx --bin 创建一个 binary crate cargo build 编译 crate cargo run 编译和运行 binary crate  Cargo 目录 . ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├── bin │ │ └── another_executable.rs │ ├── lib.rs │ └── main.rs └── tests └── some-integration-tests.rs ##　Cargo.toml
- cargo-features — 不稳定，nightly版本的功能 [package] — 定义一个包  name — 包名（必需的）  软件包名称是用于引用软件包的标识符。当它被列为另一个软件包的依赖关系时，以及作为推断的lib和bin目标的默认名称时，都会使用它。 **包名必须只使用字母数字字符或-或_，不能为空**。需要注意的是， cargo new 和 cargo init 对包名施加了一些额外的限制，比如强制要求包名是有效的 Rust 标识符，而不是关键字。 crates.</description>
+      <description>Cargo 是 Rust 的包管理工具 cargo new xxx --bin 创建一个 binary crate cargo build 编译 crate cargo run 编译和运行 binary crate Cargo 目录 . ├── Cargo.lock ├── Cargo.toml ├── benches │ └── large-input.rs ├── examples │ └── simple.rs ├── src │ ├─</description>
     </item>
     
     <item>
@@ -48,8 +43,7 @@ $ docker pull gogs/gogs $ docker docker run -d --name=gogs -p 12200:22 -p 13000:
       <pubDate>Fri, 05 Mar 2021 11:21:12 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/vim-notes/</guid>
-      <description>Vim 杂记 vim 模式  普通模式：vim 启动后的默认模式,移动光标，删除文本等等都在该模式下 插入模式 在普通模式下，按 a 或 i 进入该模式 可视模式 在普通模式下，按 v 或 Ctrl + v 进入 选择模式 命令行模式 在普通模式下，按 : 进入该模式； Ex模式  以下 n 代表数字，表示重复操作
-光标移动  向下移动：j、nj 向上移动：k、nk 向左移动：h、nh 向右移动：l、nl 以单词移动：  向前 w、nw、W，光标停在单词词首 向后 b、nb、B，光标停在单词词首 向前 e、ne、E，光标停在单词词尾 向后 ge、nge，光标停在单词词尾   移动光标到行尾：$ 、n$ 移动光标到行首：0（数字）、^（行首非空字符） 移动到第几行：nG、G（移动到最后一行）或命令行模式输入:n 向翻前：Ctrl + f 向后翻页：Ctrl + b &amp;hellip;  进入插入模式    命令 说明     i 在当前光标处进行编辑   I 在行首插入   A 在行末插入   a 在光标后插入编辑   o 在当前行后插入一个新行   O 在当前行前插入一个新行   cw 替换从光标所在位置后到一个单词结尾的字符    退出 Vim  命令行模式退出    命令 说明     :q!</description>
+      <description>Vim 杂记 vim 模式 普通模式：vim 启动后的默认模式,移动光标，删除文本等等都在该模式下 插入模式 在普通模式下，按 a 或 i 进入该模式 可视模式 在普通模式下</description>
     </item>
     
     <item>
@@ -58,10 +52,7 @@ $ docker pull gogs/gogs $ docker docker run -d --name=gogs -p 12200:22 -p 13000:
       <pubDate>Mon, 01 Mar 2021 22:12:52 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/appimage/</guid>
-      <description>如何将可执行二进制文件打包成AppImage文件？   下载构建工具 linuxdeploy
-  # 创建 AppDir 目录 $ linuxdeploy.AppImage --appdir T2048.AppDir 生成的目录结构如下    将可执行文件放在 T2048.AppDir/usr/bin/ 目录下 将桌面快捷方式放在 T2048.AppDir/usr/share/applications/ 目录下，随便找个已有的桌面快捷方式复制过来，文件后缀名为 .desktop，内容如下  [Desktop Entry] Name=T2048 Exec=t-2048 Terminal=false Type=Application Icon=t-2048 Categories=Game;  将图标放在 T2048.AppDir/usr/share/icons/hicolor/128x128/apps/ 目录下，大小选择对应的目录即可    # 将 AppDir 目录打包成 .AppImage 文件 $ linuxdeploy.AppImage --appdir T2048.AppDir/ --output appimage AppDir 目录变化
-  到此，打包结束。
-当然这里是最简单的方式，还有很多其他的配置。然这些就已经满足我当前的需求了，如果以后有时间，再做深入研究吧。</description>
+      <description>如何将可执行二进制文件打包成AppImage文件？ 下载构建工具 linuxdeploy # 创建 AppDir 目录 $ linuxdeploy.AppImage --appdir T2048.AppDir 生成的目录结构如下 将可执行文件放在 T2048.AppDir/usr/bin/ 目录下 将桌面快捷方式</description>
     </item>
     
     <item>
@@ -70,16 +61,7 @@ $ docker pull gogs/gogs $ docker docker run -d --name=gogs -p 12200:22 -p 13000:
       <pubDate>Sat, 27 Feb 2021 00:35:29 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/rust-cross-compiling/</guid>
-      <description>本机系统为 Linux
-查看Rust支持的系统和架构
-参考 https://wiki.archlinux.org/index.php/Rust
-$ rustup target list # 或者 $ rustc --print target-list Windows   aarch64-pc-windows-msvc
-  i586-pc-windows-msvc
-  i686-pc-windows-gnu
-  i686-pc-windows-msvc
-  x86_64-pc-windows-gnu
-   $ rustup toolchain install stable-x86_64-pc-windows-gnu $ sudo apt install mingw-w64   # vim ~/.cargo/config [target.x86_64-pc-windows-gnu] linker = &amp;#34;/usr/bin/x86_64-w64-mingw32-gcc&amp;#34; ar = &amp;#34;/usr/bin/x86_64-w64-mingw32-ar&amp;#34;   $ cargo build --release --target x86_64-pc-windows-gnu   x86_64-pc-windows-msvc
-  Linux Mac </description>
+      <description>本机系统为 Linux 查看Rust支持的系统和架构 参考 https://wiki.archlinux.org/index.php/Rust $ rustup target list # 或者 $ rustc --print target-list Windows aarch64-pc-windows-msvc i586-pc-windows-msvc i686-pc-windows-gnu i686-pc-windows-msvc x86_64-pc-windows-gnu $ rustup toolchain install stable-x86_64-pc-windows-gnu $ sudo apt install mingw-w64 # vim ~/.cargo/config [target.x86_64-pc-windows-gnu] linker = &amp;quot;/usr/bin/x86_64-w64-mingw32-gcc&amp;quot; ar = &amp;quot;/usr/bin/x86_64-w64-mingw32-ar&amp;quot; $ cargo build --release --target x86_64-pc-windows-gnu x86_64-pc-windows-msvc Linux Mac</description>
     </item>
     
     <item>
@@ -88,16 +70,7 @@ $ rustup target list # 或者 $ rustc --print target-list Windows   aarch64-pc-w
       <pubDate>Fri, 26 Feb 2021 23:29:59 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/t-2048/</guid>
-      <description>使用 Rust 实现 2048 闲来无事，想着用 Rust 做一个练手的项目，碰巧，之前玩过2048，玩法比较简单，感觉还蛮有意思的。那我就在想我能不能用 Rust 实现呢？
-所以这个项目就诞生了。
-项目地址
-首先来说玩法，玩家只需控制方向键移动数字方块，合并数字获得最高分就行了。其次，如果要用代码来实现的话，也不是很复杂。按我的思路来说，可以将整个看作是一个二维数组，其次不管是向上，向下，向左，向右移动数字方块，我们都可以将它看作是向左移动。
-举个栗子，现在有这样一个东东，我们尝试着先向左向右移动，
-[0, 0, 0, 2] [4, 2, 0, 2] [0, 2, 2, 0] [0, 0, 0, 0] 如果我们向左移动，将会得到这个
-[2, 0, 0, 0] [4, 4, 0, 0] [4, 0, 0, 0] [0, 0, 0, 0] 如果我们向右移动，将会得到这个
-[0, 0, 0, 2] [0, 0, 4, 4] [0, 0, 0, 4] [0, 0, 0, 0] 其实我们可以将向右移动看作是向左移动之后的翻转。接下来康康向上和向下移动，
-向上移动，得到如下结果：
-[4, 4, 2, 4] [0, 0, 0, 0] [0, 0, 0, 0] [0, 0, 0, 0] 而向下移动，得到的是：</description>
+      <description>使用 Rust 实现 2048 闲来无事，想着用 Rust 做一个练手的项目，碰巧，之前玩过2048，玩法比较简单，感觉还蛮有意思的。那我就在想我能不能用 Rust 实现呢？ 所以这</description>
     </item>
     
     <item>
@@ -106,16 +79,7 @@ $ rustup target list # 或者 $ rustc --print target-list Windows   aarch64-pc-w
       <pubDate>Tue, 23 Feb 2021 14:58:02 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/docker-mysql-master-slave/</guid>
-      <description>MySQL 主从复制 下载 MySQL 镜像
-官方镜像的 MySQL 版本是8.x
-$ docker pull mysql 创建 MySQL 主从容器
-主
-$ docker run -d --name mysql-master -p 13306:3306 -e MYSQL_ROOT_PASSWORD=root mysql 从
-$ docker run -d --name mysql-slave -p 13307:3306 -e MYSQL_ROOT_PASSWORD=root mysql 分别用工具连接，测试能正常使用。
-配置
-  主库配置
-# 进入主库容器 $ docker exec -it mysql-master bash # 编辑MySQL配置 $ vim /etc/mysql/my.cnf 添加如下内容
-[mysqld] server-id = 1 log-bin = mysql-bin # 退出容器并重启容器 $ docker restart mysql-master 再次进入容器，在主库中创建数据同步用户 slave ，授予改用户 REPLICATION SLAVE 和 REPLICATION CLIENT 权限，用户在主从库之间同步数据。</description>
+      <description>MySQL 主从复制 下载 MySQL 镜像 官方镜像的 MySQL 版本是8.x $ docker pull mysql 创建 MySQL 主从容器 主 $ docker run -d --name mysql-master -p 13306:3306 -e MYSQL_ROOT_PASSWORD=root mysql 从 $ docker run -d --name mysql-slave -p 13307:3306 -e MYSQL_ROOT_PASSWORD=root mysql 分别用工具连接，测试能正常</description>
     </item>
     
     <item>
@@ -124,13 +88,7 @@ $ docker run -d --name mysql-slave -p 13307:3306 -e MYSQL_ROOT_PASSWORD=root mys
       <pubDate>Tue, 23 Feb 2021 11:14:38 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/docker-mysql/</guid>
-      <description>如何使用Docker搭建MySQL服务 下载 MySQL 镜像
-官方镜像的 MySQL 版本是8.x
-$ docker pull mysql 启动容器
- -d 在后台运行 &amp;ndash;name mysql 指定容器的名字为 mysql -p 映射容器ip:3306到主机ip:13306 -e MYSQL_ROOT_PASSWORD=root 初始化root用户密码为root  $ docker run -d --name mysql -p 13306:3306 -e MYSQL_ROOT_PASSWORD=root mysql 如果要将数据保存在主机上，这需要加上下面的参数
- -v 将容器中的文件挂载到主机  $ docker run -d --name mysql -p 13306:3306 -e MYSQL_ROOT_PASSWORD=root -v /home/mysql/cnf.d:/etc/my.cnf.d -v /home/mysql/data:/var/lib/mysql/data mysql 进入容器
-$ docker exec -it mysql bash 进入 MySQL
-$ mysql -u root -p 输入密码，能正常进入，就说明已经搭建好了。</description>
+      <description>如何使用Docker搭建MySQL服务 下载 MySQL 镜像 官方镜像的 MySQL 版本是8.x $ docker pull mysql 启动容器 -d 在后台运行 &amp;ndash;name mysql 指定容器的名字为 mysql -p 映射容器ip:3</description>
     </item>
     
     <item>
@@ -139,12 +97,7 @@ $ mysql -u root -p 输入密码，能正常进入，就说明已经搭建好了�
       <pubDate>Tue, 02 Feb 2021 22:28:20 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/rust-iterator-group/</guid>
-      <description>首先，先在这里抛出 两个问题
-1. 如何将一个 List 转换为一个 HashMap
-2. 如何将两个 List 转换为一个 HashMap
-让我们来看看 在 Java 中是如何实现的。😄
-第一个问题
-@Data @AllArgsConstructor public class Person { private Long id; private String name; private String sex; public static void main(String[] args) { List&amp;lt;Person&amp;gt; persons = new ArrayList&amp;lt;&amp;gt;(); persons.add(new Person(1L, &amp;#34;张三&amp;#34;, &amp;#34;男&amp;#34;)); persons.add(new Person(2L, &amp;#34;李四&amp;#34;, &amp;#34;男&amp;#34;)); persons.add(new Person(3L, &amp;#34;王兰&amp;#34;, &amp;#34;女&amp;#34;)); // 根据性别进行分组  Map&amp;lt;String, List&amp;lt;Person&amp;gt;&amp;gt; sexMap = persons.stream().collect(Collectors.groupingBy(Person::getSex)); System.out.println(sexMap); // {女=[Person(id=3, name=王兰, sex=女)], 男=[Person(id=1, name=张三, sex=男), Person(id=2, name=李四, sex=男)]}  // 将人的姓名作为键，基本信息作为值  // 测试数据不考虑姓名相同的问题  Map&amp;lt;String, Person&amp;gt; personMap = persons.</description>
+      <description>首先，先在这里抛出 两个问题 1. 如何将一个 List 转换为一个 HashMap 2. 如何将两个 List 转换为一个 HashMap 让我们来看看 在 Java 中是如何实现的。😄 第一个问题 @Data @AllArgsConstructor public class Person { private Long id;</description>
     </item>
     
     <item>
@@ -153,15 +106,7 @@ $ mysql -u root -p 输入密码，能正常进入，就说明已经搭建好了�
       <pubDate>Wed, 27 Jan 2021 21:55:40 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/java-fastjson-serialize/</guid>
-      <description>首先来看看代码
-Map&amp;lt;String, Object&amp;gt; map = new HashMap&amp;lt;&amp;gt;(2); map.put(&amp;#34;reportNo&amp;#34;, null); map.put(&amp;#34;reportDate&amp;#34;, new Date()); System.out.println(JSON.toJSONString(map)); 输出结果为
-{&amp;#34;reportDate&amp;#34;:1611756215215} 为什么会出现这种情况呢？
-通过分析源码得知
-if (value == null) { if (!SerializerFeature.isEnabled(out.features, features, SerializerFeature.WriteMapNullValue)) { continue; } } 当值为 null 时，默认是不会被序列化的，但是我们有时候是需要的，那么如何解决呢？
-解决方法
-通过刚才的源码得知，可以指定 SerializerFeature.WriteMapNullValue 来序列化为 null 的值。
-Map&amp;lt;String, Object&amp;gt; map = new HashMap&amp;lt;&amp;gt;(2); map.put(&amp;#34;reportNo&amp;#34;, null); map.put(&amp;#34;reportDate&amp;#34;, new Date()); System.out.println(JSON.toJSONString(map, SerializerFeature.WriteMapNullValue)); 输出结果为
-{&amp;#34;reportDate&amp;#34;:1611757294826,&amp;#34;reportNo&amp;#34;:null} </description>
+      <description>首先来看看代码 Map&amp;lt;String, Object&amp;gt; map = new HashMap&amp;lt;&amp;gt;(2); map.put(&amp;quot;reportNo&amp;quot;, null); map.put(&amp;quot;reportDate&amp;quot;, new Date()); System.out.println(JSON.toJSONString(map)); 输出结果为 {&amp;quot;reportDate&amp;quot;:1611756215215} 为什么会出现这种情况呢？ 通过分析源码得知 if (value == null) { if (!SerializerFeature.isEnabled(out.features, features, SerializerFeature.WriteMapNullValue)) { continue; } } 当值为 null 时，默认是不会被</description>
     </item>
     
     <item>
@@ -170,16 +115,7 @@ Map&amp;lt;String, Object&amp;gt; map = new HashMap&amp;lt;&amp;gt;(2); map.put(
       <pubDate>Wed, 27 Jan 2021 17:27:14 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/java-word-template/</guid>
-      <description>在开发过程中，避免不了会生成各种 Excel 或者 Word 文件，为了简化我们的工作（有更多的时间摸鱼）或者根据项目的需要，我们有时候需要根据定义好的统一的模板创建一类文件。 那么如何在 Java 中根据模板生成文件呢？
-当然，有很多种方法可以实现，但是今天的主角是 Poi-tl
- 在文档的任何地方做任何事情（Do Anything Anywhere）是poi-tl的星辰大海。
- 该库的文档已经写的很详细了，这里就不去讲如何使用了，废话不多说，直接上代码。
-环境
- jdk11 gradle linux  引依赖
- compile group: &amp;lsquo;com.deepoove&amp;rsquo;, name: &amp;lsquo;poi-tl&amp;rsquo;, version: &amp;lsquo;1.9.1&amp;rsquo;
-  implementation &amp;lsquo;org.springframework:spring-expression:5.3.3&amp;rsquo;
- 首先，定义两个类 TestReport 和 CheckItems
-@Data public class TestReport { private String reportNo; private Date reportDate; private String projectName; private List&amp;lt;CheckItems&amp;gt; checkItems; private Object testerSign; private Date testDate; } @Data public class CheckItems { private String itemNo; private String checkPosition; private String checkResult; private Integer level; } 定义好模板</description>
+      <description>在开发过程中，避免不了会生成各种 Excel 或者 Word 文件，为了简化我们的工作（有更多的时间摸鱼）或者根据项目的需要，我们有时候需要根据定义好的统一的模板</description>
     </item>
     
     <item>
@@ -188,9 +124,7 @@ Map&amp;lt;String, Object&amp;gt; map = new HashMap&amp;lt;&amp;gt;(2); map.put(
       <pubDate>Mon, 25 Jan 2021 22:30:11 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/rust-tour-test/</guid>
-      <description>如何在 Rust 中编写测试 当我们创建一个 lib 项目时，cargo 会帮我们创建一个test模块和一个测试函数
-#[cfg(test)] mod tests { #[test] fn it_works() { assert_eq!(2 + 2, 4); } } #[test] 用于标记一个 fn 函数 为一个测试函数；#[cfg(test)] 表示只有在运行 cargo test 命令时执行； 当我们运行 cargo test 命令后，会得到一些信息；
-Finished test [unoptimized + debuginfo] target(s) in 0.00s Running target/debug/deps/rust_tour_test-13122ed7b69a820b running 1 test test tests::it_works ... ok test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out Doc-tests rust-tour-test running 0 tests test result: ok.</description>
+      <description>如何在 Rust 中编写测试 当我们创建一个 lib 项目时，cargo 会帮我们创建一个test模块和一个测试函数 #[cfg(test)] mod tests { #[test] fn it_works() { assert_eq!(2 + 2, 4); } } #[test] 用于标记一个 fn 函</description>
     </item>
     
     <item>
@@ -199,25 +133,25 @@ Finished test [unoptimized + debuginfo] target(s) in 0.00s Running target/debug/
       <pubDate>Thu, 21 Jan 2021 22:12:54 +0800</pubDate>
       
       <guid>https://littleguest.github.io/posts/git-notes/</guid>
-      <description>Git 杂记  不同类别的修改 (如：Bug修复和功能添加) 要尽量分开提交，以方便以后从历史记录里查找特定的修改内容; Git的标准注解:  第1行：提交修改内容的摘要; 第2行：空行; 第3行以后：修改的理由;   . 可以把所有的文件加入到索引;  </description>
+      <description>Git 杂记 不同类别的修改 (如：Bug修复和功能添加) 要尽量分开提交，以方便以后从历史记录里查找特定的修改内容; Git的标准注解: 第1行：提交修改</description>
     </item>
     
     <item>
       <title>关于我</title>
-      <link>https://littleguest.github.io/about/</link>
+      <link>https://littleguest.github.io/2021/01/about/</link>
       <pubDate>Thu, 21 Jan 2021 18:03:48 +0800</pubDate>
       
-      <guid>https://littleguest.github.io/about/</guid>
-      <description>姓名  蒲建全   年龄  96年   联系方式  2190975784@qq.com gopher9527@gmail.com   毕业时间  2018   兴趣爱好  手游（MOBA，休闲益智），发呆    为什么要写博客 记录和分享</description>
+      <guid>https://littleguest.github.io/2021/01/about/</guid>
+      <description>姓名 蒲建全 年龄 96年 联系方式 2190975784@qq.com gopher9527@gmail.com 毕业时间 2018 兴趣爱好 游戏（MOBA，休闲益智，沙盒，&amp;hellip;），发呆 为什么要写博客 记录和分享</description>
     </item>
     
     <item>
       <title>友情链接</title>
-      <link>https://littleguest.github.io/links/</link>
+      <link>https://littleguest.github.io/2021/01/links/</link>
       <pubDate>Thu, 21 Jan 2021 17:33:52 +0800</pubDate>
       
-      <guid>https://littleguest.github.io/links/</guid>
-      <description> SoulReader-前端大菜哔 让我们一起摇摆。。。  大佬的博客  纯洁的微笑 柒&amp;rsquo;s Blog 何先生-分享IT技术及网络资源的个人博客  </description>
+      <guid>https://littleguest.github.io/2021/01/links/</guid>
+      <description>SoulReader-前端大菜哔 让我们一起摇摆。。。 大佬的博客 纯洁的微笑 柒&amp;rsquo;s Blog 何先生-分享IT技术及网络资源的个人博客</description>
     </item>
     
     <item>
@@ -226,15 +160,7 @@ Finished test [unoptimized + debuginfo] target(s) in 0.00s Running target/debug/
       <pubDate>Tue, 12 Jan 2021 21:41:40 +0000</pubDate>
       
       <guid>https://littleguest.github.io/posts/rust-tour-lifetime/</guid>
-      <description>生命周期与引用有效性 Rust 中的每一个引用都有其 生命周期（lifetime），也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正如大部分时候类型也是可以推断的一样。类似于当因为有多种可能类型的时候必须注明类型，也会出现引用的生命周期以一些不同方式相关联的情况，所以 Rust 需要我们使用 泛型生命周期参数 来注明他们的关系，这样就能确保运行时实际使用的引用绝对是有效的。
-生命周期避免了悬垂引用
-借用检查器：比较作用域来确保所有的借用都是有效的
-生命周期语法
- 生命周期参数名称必须以撇号（&#39;）开头，其名称通常全是小写，类似于泛型其名称非常短。&amp;lsquo;a 是大多数人默认使用的名称。生命周期参数注解位于引用的 &amp;amp; 之后，并有一个空格来将引用类型与生命周期注解分隔开；
- 通过在函数签名中指定生命周期参数时，我们并没有改变任何传入值或返回值的生命周期，而是指出任何不满足这个约束条件的值都将被借用检查器拒绝；
-指定生命周期参数的正确方式依赖函数实现的具体功能；
-当从函数返回一个引用，返回值的生命周期参数需要与一个参数的生命周期参数相匹配。如果返回的引用 没有 指向任何一个参数，那么唯一的可能就是它指向一个函数内部创建的值，它将会是一个悬垂引用，因为它将会在函数结束时离开作用域。最好的解决方案是返回一个有所有权的数据类型而不是一个引用；
-生命周期语法是用于将函数的多个参数与其返回值的生命周期进行关联的。一旦他们形成了某种关联，Rust 就有了足够的信息来允许内存安全的操作并阻止会产生悬垂指针亦或是违反内存安全的行为；</description>
+      <description>生命周期与引用有效性 Rust 中的每一个引用都有其 生命周期（lifetime），也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正</description>
     </item>
     
     <item>
@@ -243,13 +169,7 @@ Finished test [unoptimized + debuginfo] target(s) in 0.00s Running target/debug/
       <pubDate>Tue, 12 Jan 2021 21:41:32 +0000</pubDate>
       
       <guid>https://littleguest.github.io/posts/rust-tour-generic-type/</guid>
-      <description>Rust如何使用泛型 在函数定义中使用泛型
-比如我们定义一个求slice中的最大值的函数，传入的参数是一个元素类型为 T 的slice，返回值也是 T； 如果要在函数体内使用泛型参数，那么必须要在函数签名中声明泛型名称。
-fn largest&amp;lt;T&amp;gt;(list: &amp;amp;[T]) -&amp;gt; T { 结构体定义中的泛型
-必须在结构体名称后面的尖括号中声明泛型参数的名称
-// 一个泛型参数 struct Point&amp;lt;T&amp;gt; { x: T, y: T, } // 多个泛型参数 struct Point2&amp;lt;T, U&amp;gt; { x: T, y: U, } 枚举定义中的泛型
-// 一个泛型参数 pub enum Option&amp;lt;T&amp;gt; { None, Some(T), } // 多个泛型参数 pub enum Result&amp;lt;T, E&amp;gt; { Ok(T), Err(E), } 方法定义中的泛型
-struct Point&amp;lt;T&amp;gt; { x: T, y: T, } impl&amp;lt;T&amp;gt; Point&amp;lt;T&amp;gt; { fn x(&amp;amp;self) -&amp;gt; &amp;amp;T { &amp;amp;self.</description>
+      <description>Rust如何使用泛型 在函数定义中使用泛型 比如我们定义一个求slice中的最大值的函数，传入的参数是一个元素类型为 T 的slice，返回值也是 T</description>
     </item>
     
     <item>
@@ -258,14 +178,7 @@ struct Point&amp;lt;T&amp;gt; { x: T, y: T, } impl&amp;lt;T&amp;gt; Point&amp;lt
       <pubDate>Tue, 12 Jan 2021 21:33:07 +0000</pubDate>
       
       <guid>https://littleguest.github.io/posts/rust-tour-error-handle/</guid>
-      <description>Rust中的错误处理 在 Java 中处理异常一般有以下几种方式：
- 使用 try-catch 捕获异常 通过 throw 的方式向上抛异常 在web中全局拦截异常  当然还有其他方式处理异常，这里就不一一列举了。
-好了，回归正题，
-那么在 Rust 中是怎么处理错误的呢？
-来讲怎么处理错误之前，我们首先需要了解标准库中的 std::result::Result 这个枚举
-#[must_use = &amp;#34;this `Result` may be an `Err` variant, which should be handled&amp;#34;] pub enum Result&amp;lt;T, E&amp;gt; { Ok(T), Err(E), } 它是用来返回错误和传播错误的，Ok(T) 代表成功并且包含一个成功值, Err(E) 代表错误并且包含一个错误值， #[must_use] 属性表示返回值 Result 需要被处理，否则编译器会给出警告；
-  最简单粗暴的方式就是直接 unwrap
- unwrap 如果出现错误，直接 panic，一般不推荐使用；  assert_eq!(Ok::&amp;lt;u32, &amp;amp;str&amp;gt;(1).unwrap(), 1); Err::&amp;lt;u32, &amp;amp;str&amp;gt;(&amp;#34;error&amp;#34;).unwrap(); // panic  unwrap_or 如果出现错误，返回给出的值；  assert_eq!</description>
+      <description>Rust中的错误处理 在 Java 中处理异常一般有以下几种方式： 使用 try-catch 捕获异常 通过 throw 的方式向上抛异常 在web中全局拦截异常 当然还有其他方式处理异常，这</description>
     </item>
     
     <item>
@@ -274,123 +187,7 @@ struct Point&amp;lt;T&amp;gt; { x: T, y: T, } impl&amp;lt;T&amp;gt; Point&amp;lt
       <pubDate>Fri, 08 Jan 2021 23:48:47 +0000</pubDate>
       
       <guid>https://littleguest.github.io/posts/java-stream-distinct/</guid>
-      <description>记一次Java Stream 去重操作 为了重现当时的错误，我会尽量保持一致，只是类名和类的属性不一样而已，现定义如下两个类
-public class BaseEntity implements Serializable { private Long id; public BaseEntity() { } public Long getId() { return id; } public void setId(Long id) { this.id = id; } } @Data public class Entity extends BaseEntity { private Long id; private String field; } Entity 是继承 BaseEntity ，并且 BaseEntity 是实现了 Serializable 这个接口
-接下来编写测试代码
-public static void main(String[] args) { List&amp;lt;Entity&amp;gt; entities = new ArrayList&amp;lt;&amp;gt;(); for (int i = 0; i &amp;lt; 5; i++) { Entity entity = new Entity(); entity.</description>
-    </item>
-    
-    <item>
-      <title>Rust-杂记</title>
-      <link>https://littleguest.github.io/posts/rust-notes/</link>
-      <pubDate>Sun, 27 Dec 2020 18:07:18 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/rust-notes/</guid>
-      <description>&amp;amp; 表示是一个引用，它允许多出代码访问同一处数据，而无需在内存中多次拷贝；
-  关联函数是针对类型实现的；
-  语义化版本；
-  变量是默认不可改变的，但通过加 mut 来使其改变；
-  常量总是不变的；
-  Rust 有四种基本的标量类型：整型，浮点型，布尔类型和字符类型；
- 整型：有符号（[$-2^(n-1)$:$2^(n-1) - 1$]），无符号（[0:$2^n - 1$]）    长度 有符号 无符号     8-bit i8 u8   16-bit i16 u16   32-bit i32（默认） u32   64-bit i64 u64   128-bit i128 u128   arch isize usize     浮点型：f32，f64（默认） 布尔类型：true，false 字符类型： char    所有权规则</description>
-    </item>
-    
-    <item>
-      <title>Rust-交叉编译-树莓派</title>
-      <link>https://littleguest.github.io/posts/rust-cross-compiling-raspberrypi/</link>
-      <pubDate>Tue, 08 Dec 2020 09:51:12 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/rust-cross-compiling-raspberrypi/</guid>
-      <description>Rust交叉编译问题 $ cargo build --release --target armv7-unknown-linux-musleabihf 下面是错误日志
-error: failed to run custom build command for `openssl-sys v0.9.58` Caused by: process didn&#39;t exit successfully: `~/workspace/raspi_ip_email/target/release/build/openssl-sys-86e8fa49856e4dc9/build-script-main` (exit code: 101) --- stdout cargo:rustc-cfg=const_fn cargo:rerun-if-env-changed=ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_LIB_DIR ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_LIB_DIR unset cargo:rerun-if-env-changed=OPENSSL_LIB_DIR OPENSSL_LIB_DIR unset cargo:rerun-if-env-changed=ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_INCLUDE_DIR ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_INCLUDE_DIR unset cargo:rerun-if-env-changed=OPENSSL_INCLUDE_DIR OPENSSL_INCLUDE_DIR unset cargo:rerun-if-env-changed=ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_DIR ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_DIR unset cargo:rerun-if-env-changed=OPENSSL_DIR OPENSSL_DIR unset cargo:rerun-if-env-changed=OPENSSL_NO_PKG_CONFIG cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_armv7-unknown-linux-musleabihf cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_armv7_unknown_linux_musleabihf cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_ALLOW_CROSS cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS cargo:rerun-if-env-changed=PKG_CONFIG_armv7-unknown-linux-musleabihf cargo:rerun-if-env-changed=PKG_CONFIG_armv7_unknown_linux_musleabihf cargo:rerun-if-env-changed=TARGET_PKG_CONFIG cargo:rerun-if-env-changed=PKG_CONFIG cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_armv7-unknown-linux-musleabihf cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR_armv7_unknown_linux_musleabihf cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_SYSROOT_DIR cargo:rerun-if-env-changed=PKG_CONFIG_SYSROOT_DIR run pkg_config fail: &amp;quot;pkg-config has not been configured to support cross-compilation.</description>
-    </item>
-    
-    <item>
-      <title>Raspberry Pi 初体验</title>
-      <link>https://littleguest.github.io/posts/raspberrypi-first-experience/</link>
-      <pubDate>Tue, 01 Dec 2020 09:32:14 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/raspberrypi-first-experience/</guid>
-      <description>Raspberry Pi 初体验 在 Linux 系统上如何连接没有屏幕的树莓派    准备或制作树莓派的镜像；   如何制作？  首先到官网下载一个适合自己的镜像，我选择的是下面这个镜像；  使用BalenaEtcher烧录 Raspberry Pi 镜像，烧录完成后，会有两个分区boot和rootfs；      在boot下创建wpa_supplicant.conf文件，内容如下；   country=CN ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev update_config=1 network={ ssid=&amp;quot;&amp;quot; psk=&amp;quot;&amp;quot; priority = 1 } 说明：  ssid: 网络的ssid； psk： 密码； priority: 连接优先级，数字越大优先级越高（不可以是负数）； scan_ssid：连接隐藏WiFi时需要指定该值为1；    在boot下创建不带扩展名的ssh文件；    启动树莓派，稍等几分钟；    使用arp-scan列出局域网内的主机；  sudo arp-scan -interface wlp3s0 -localnet   使用ssh登录到树莓派，树莓派默认账号为pi，默认密码为raspberry;     到此为止，我们已经连上树莓派了</description>
-    </item>
-    
-    <item>
-      <title>VSCode中调试Rust</title>
-      <link>https://littleguest.github.io/posts/vscode-debug-rust/</link>
-      <pubDate>Sat, 29 Aug 2020 10:48:41 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/vscode-debug-rust/</guid>
-      <description>如何在 VSCode 中调试 Rust 来源：如何在 VSCode 中调试 Rust 代码
- 安装 CodeLLDB 创建 launch.json 文件，添加配置如下  { &amp;#34;version&amp;#34;: &amp;#34;0.2.0&amp;#34;, &amp;#34;configurations&amp;#34;: [ { &amp;#34;name&amp;#34;: &amp;#34;(Linux) Launch&amp;#34;, &amp;#34;type&amp;#34;: &amp;#34;lldb&amp;#34;, &amp;#34;request&amp;#34;: &amp;#34;launch&amp;#34;, &amp;#34;program&amp;#34;: &amp;#34;${workspaceRoot}/target/debug/文件名称&amp;#34;, &amp;#34;args&amp;#34;: [], &amp;#34;cwd&amp;#34;: &amp;#34;${workspaceRoot}&amp;#34; } ] } </description>
-    </item>
-    
-    <item>
-      <title>Rust之旅-控制流程</title>
-      <link>https://littleguest.github.io/posts/rust-tour-control-flow/</link>
-      <pubDate>Sun, 23 Aug 2020 11:14:48 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/rust-tour-control-flow/</guid>
-      <description>if 表达式 fn main() { let number = 3; if number &amp;lt; 5 { println!(&amp;#34;condition was true&amp;#34;); } else { println!(&amp;#34;condition was false&amp;#34;); } } 使用 else if 处理多重条件 let number = 6; if number % 4 == 0 { println!(&amp;#34;number is divisible by 4&amp;#34;); } else if number % 3 == 0 { println!(&amp;#34;number is divisible by 3&amp;#34;); } else if number % 2 == 0 { println!(&amp;#34;number is divisible by 2&amp;#34;); } else { println!</description>
-    </item>
-    
-    <item>
-      <title>Rust之旅-数据类型</title>
-      <link>https://littleguest.github.io/posts/rust-tour-data-types/</link>
-      <pubDate>Sun, 23 Aug 2020 10:37:10 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/rust-tour-data-types/</guid>
-      <description>整型    长度 有符号 无符号     8-bit i8 u8   16-bit i16 u16   32-bit i32 u32   64-bit i64 u64   128-bit i128 u128   arch isize usize    浮点型 f32，f64
-布尔类型 bool
-字符类型 使用单引号指定
-元组类型 数组类型 元组长度固定，使用包含在圆括号中的逗号分隔的值列表来创建一个元组。元组中的每一个位置都有一个类型，而且这些不同值的类型也不必是相同的。
-use std::fmt; use std::mem; #[derive(Debug)] struct Matrix(f32, f32, f32, f32); fn main(){ // 变量可以给出类型说明。  let logical: bool = true; let a_float: f64 = 1.</description>
-    </item>
-    
-    <item>
-      <title>Rust之旅-变量和可变性</title>
-      <link>https://littleguest.github.io/posts/rust-tour-variable/</link>
-      <pubDate>Sat, 22 Aug 2020 16:33:05 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/rust-tour-variable/</guid>
-      <description>变量 声明变量使用 let 关键字，变量是默认不可变的；
-可变变量 在变量前加mut关键字，使其可变；
-常量 声明常量使用const关键字，并且必须指定类型，常量不能使用mut（Rust 常量的命名规范是使用下划线分隔的大写字母单词，并且可以在数字字面值中插入下划线来提升可读性）；
-Shadowing const MAX_SIZE: i32 = 10; fn main() { let an_integer = 1u32; let a_boolean = true; let unit = (); // 将 `an_integer` 复制到 `copied_integer`  let copied_integer = an_integer; println!(&amp;#34;An integer: {:?}&amp;#34;, copied_integer); println!(&amp;#34;A boolean: {:?}&amp;#34;, a_boolean); println!(&amp;#34;Meet the unit value: {:?}&amp;#34;, unit); // 编译器会对未使用的变量绑定产生警告；可以给变量名加上下划线前缀来消除警告。  let _unused_variable = 3u32; let _noisy_unused_variable = 2u32; // 改正 ^ 在变量名前加上下划线以消除警告  println!</description>
-    </item>
-    
-    <item>
-      <title>Rust之旅-运算符与符号</title>
-      <link>https://littleguest.github.io/posts/rust-tour-operators-symbols/</link>
-      <pubDate>Sat, 22 Aug 2020 16:22:10 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/rust-tour-operators-symbols/</guid>
-      <description>运算符    运算符 示例 解释 是否可重载     ! ident!(...), ident!{...}, ident![...] 宏展开    ! !expr 按位非或逻辑非 Not   != var != expr 不等比较 PartialEq   % expr % expr 算术取模 Rem   %= var %= expr 算术取模与赋值 RemAssign   &amp;amp; &amp;amp;expr, &amp;amp;mut expr 借用    &amp;amp; &amp;amp;type, &amp;amp;mut type, &amp;amp;&#39;a type, &amp;amp;&#39;a mut type 借用指针类型    &amp;amp; expr &amp;amp; expr 按位与 BitAnd   &amp;amp;= var &amp;amp;= expr 按位与及赋值 BitAndAssign   &amp;amp;&amp;amp; expr &amp;amp;&amp;amp; expr 逻辑与    * expr * expr 算术乘法 Mul   *= var *= expr 算术乘法与赋值 MulAssign   * *expr 解引用    * *const type, *mut type 裸指针    + trait + trait, &#39;a + trait 复合类型限制    + expr + expr 算术加法 Add   += var += expr 算术加法与赋值 AddAssign   , expr, expr 参数以及元素分隔符    - - expr 算术取负 Neg   - expr - expr 算术减法 Sub   -= var -= expr 算术减法与赋值 SubAssign   -&amp;gt; fn(.</description>
-    </item>
-    
-    <item>
-      <title>Rust之旅-关键字</title>
-      <link>https://littleguest.github.io/posts/rust-tour-keywords/</link>
-      <pubDate>Fri, 21 Aug 2020 20:07:49 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/rust-tour-keywords/</guid>
-      <description>Rust 关键字 正在使用的关键字    关键字 描述     as 强制类型转换，消除特定包含项的 trait 的歧义，或者对 use 和 extern crate 语句中的项重命名   async 返回一个 Future 而不是阻塞当前线程   await suspend execution until the result of a Future is ready   break 立刻退出循环   const 定义常量或不变裸指针（constant raw pointer）   continue 继续进入下一次循环迭代   crate 链接（link）一个外部 crate 或一个代表宏定义的 crate 的宏变量   dyn 动态分发 trait 对象   else 作为 if 和 if let 控制流结构的 fallback   enum 定义一个枚举   extern 链接一个外部 crate 、函数或变量   false 布尔字面值 false   fn 定义一个函数或 函数指针类型 (function pointer type)   for 遍历一个迭代器或实现一个 trait 或者指定一个更高级的生命周期   if 基于条件表达式的结果分支   impl 实现自有或 trait 功能   in for 循环语法的一部分   let 绑定一个变量   loop 无条件循环   match 模式匹配   mod 定义一个模块   move 使闭包获取其所捕获项的所有权   mut 表示引用、裸指针或模式绑定的可变性   pub 表示结构体字段、impl 块或模块的公有可见性   ref 通过引用绑定   return 从函数中返回   Self 实现 trait 的类型的类型别名   self 表示方法本身或当前模块   static 表示全局变量或在整个程序执行期间保持其生命周期   struct 定义一个结构体   super 表示当前模块的父模块   trait 定义一个 trait   true 布尔字面值 true   type 定义一个类型别名或关联类型   union define a union and is only a keyword when used in a union declaration   unsafe 表示不安全的代码、函数、trait 或实现   use 引入外部空间的符号   where 表示一个约束类型的从句   while 基于一个表达式的结果判断是否进行循环    保留做将来使用的关键字  abstract become box do final macro override priv try typeof unsized virtual yield  以上关键字不能被用作标识符（除了“原始标识符”），这包括函数、变量、参数、结构体字段、模块、crate、常量、宏、静态值、属性、类型、trait 或生命周期 的名字。</description>
-    </item>
-    
-    <item>
-      <title>Rust之旅-从放弃到放弃</title>
-      <link>https://littleguest.github.io/posts/rust-tour-give-up/</link>
-      <pubDate>Thu, 20 Aug 2020 09:51:18 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/rust-tour-give-up/</guid>
-      <description>Rust 之旅 今天开始 Rust 的旅程。^_^
-安装 Rust
-我的系统是 deepin20，直接根据官网安装教程走就行了，使用 Rustup 安装
- curl &amp;ndash;proto &amp;lsquo;=https&amp;rsquo; &amp;ndash;tlsv1.2 -sSf https://sh.rustup.rs | sh
- 查看 Rust 版本
- rustc -V
- rustc 1.45.2 (d3fb005a3 2020-07-31) 更新 Rust
- rustup update
- </description>
+      <description>记一次Java Stream 去重操作 为了重现当时的错误，我会尽量保持一致，只是类名和类的属性不一样而已，现定义如下两个类 public class BaseEntity implements Serializable { private Long id; public BaseEntity() { } public Long getId()</description>
     </item>
     
   </channel>

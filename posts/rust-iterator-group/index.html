@@ -1,377 +1,968 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-    <title>gopher9527&#39;s Blog</title>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <meta content="utf-8" http-equiv="encoding">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="theme-color" content="#000084" />
-    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
-    <link rel="canonical" href="https://littleguest.github.io/">
+<html lang="zh">
+  <head>
+    <title>
+        关于Rust迭代器的一些骚操作 - 蒲建全的博客
+      </title>
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    
+    <meta name="theme-color" content="#000000" />
+    
+    <meta http-equiv="window-target" content="_top" />
     
     
-</head>
-<body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
-            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-                    
-                    
-                        
-                            <li>
-                                <a href="/about/">
-                                    
-                                    <span>About</span>
-                                </a>
-                            </li>
-                        
-                    
-                        
-                            <li>
-                                <a href="/posts/">
-                                    
-                                    <span>Posts</span>
-                                </a>
-                            </li>
-                        
-                    
-                        
-                            <li>
-                                <a href="/links/">
-                                    
-                                    <span>Links</span>
-                                </a>
-                            </li>
-                        
-                    
-                </ul>
+    <meta name="keywords"
+      content="Rust, 迭代器" /><meta name="description" content="关于Rust迭代器的一些骚操作" />
+    <meta name="generator" content="Hugo 0.80.0 with theme pure" />
+    <title>关于Rust迭代器的一些骚操作 - 蒲建全的博客</title>
+    
+    
+    <link rel="stylesheet" href="https://littleguest.github.io/css/style.min.5743fa7b2206cb1eb1d7532cda60d1ebf1e3ae4aac4077fc182a92c911e04e02.css">
+    
+    <link href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/styles/github.min.css" rel="stylesheet" async>
+    <link href="https://cdn.bootcdn.net/ajax/libs/tocbot/4.12.2/tocbot.css" rel="stylesheet" async>
+    <meta property="og:title" content="关于Rust迭代器的一些骚操作" />
+<meta property="og:description" content="关于Rust迭代器的一些骚操作" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://littleguest.github.io/posts/rust-iterator-group/" />
+<meta property="article:published_time" content="2021-02-02T22:28:20+08:00" />
+<meta property="article:modified_time" content="2021-02-02T22:28:20+08:00" />
+<meta itemprop="name" content="关于Rust迭代器的一些骚操作">
+<meta itemprop="description" content="关于Rust迭代器的一些骚操作">
+<meta itemprop="datePublished" content="2021-02-02T22:28:20+08:00" />
+<meta itemprop="dateModified" content="2021-02-02T22:28:20+08:00" />
+<meta itemprop="wordCount" content="1961">
+
+
+
+<meta itemprop="keywords" content="Rust,Rust迭代器," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="关于Rust迭代器的一些骚操作"/>
+<meta name="twitter:description" content="关于Rust迭代器的一些骚操作"/>
+
+    <!--[if lte IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+      <![endif]-->
+
+    <!--[if lt IE 9]>
+        <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+      <![endif]-->
+  </head>
+
+  
+  
+
+  <body class="main-left theme-green" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="https://github.com/LittleGuest" target="_blank">
+            <img class="img-circle img-rotate" src="https://littleguest.github.io/avatar.png" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">蒲建全</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">一位热衷于摸鱼的搬砖工。</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Chengdu, China</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-about">
+                <a href="/about/">
+                    <i class="icon icon-cup-fill"></i>
+                  <span class="menu-title">关于我</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-links">
+                <a href="/links/">
+                    <i class="icon icon-friendship"></i>
+                  <span class="menu-title">友链</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">enjoy~
             </div>
         </div>
     </div>
-</nav><div id="content" class="container">
+</div>
 
-<div class="row-fluid navmargin">
-    <div class="page-header">
-        <h1>关于Rust迭代器的一些骚操作 - Tue, Feb 2, 2021</h1>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div id="tag-cloud-list" class="widget-body">
+            
+            
+            <a href="https://littleguest.github.io/tags/appimage/" class="tag-list-link" rel="1">appimage<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/cargo/" class="tag-list-link" rel="1">cargo<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/docker/" class="tag-list-link" rel="3">docker<span
+               class="tag-list-count">3</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/git/" class="tag-list-link" rel="2">git<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/java/" class="tag-list-link" rel="3">java<span
+               class="tag-list-count">3</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/linux/" class="tag-list-link" rel="2">linux<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/lombok/" class="tag-list-link" rel="1">lombok<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/mysql/" class="tag-list-link" rel="1">mysql<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/mysql%E4%B8%BB%E4%BB%8E/" class="tag-list-link" rel="1">mysql主从<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/raspberry-pi/" class="tag-list-link" rel="2">raspberry-pi<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust/" class="tag-list-link" rel="15">rust<span
+               class="tag-list-count">15</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E5%85%B3%E9%94%AE%E5%AD%97/" class="tag-list-link" rel="1">rust关键字<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E5%8F%98%E9%87%8F/" class="tag-list-link" rel="1">rust变量<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/" class="tag-list-link" rel="1">rust控制流程<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="tag-list-link" rel="1">rust数据类型<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%9D%82%E8%AE%B0/" class="tag-list-link" rel="1">rust杂记<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%B3%9B%E5%9E%8B/" class="tag-list-link" rel="1">rust泛型<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%B8%B8%E6%88%8F/" class="tag-list-link" rel="1">rust游戏<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="tag-list-link" rel="1">rust生命周期<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E8%BF%90%E7%AE%97%E7%AC%A6%E4%B8%8E%E7%AC%A6%E5%8F%B7/" class="tag-list-link" rel="1">rust运算符与符号<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E8%BF%AD%E4%BB%A3%E5%99%A8/" class="tag-list-link" rel="1">rust迭代器<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" class="tag-list-link" rel="1">rust错误处理<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/stream/" class="tag-list-link" rel="1">stream<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/vim/" class="tag-list-link" rel="1">vim<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" class="tag-list-link" rel="2">交叉编译<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/" class="tag-list-link" rel="1">开源协议<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E6%B5%8B%E8%AF%95/" class="tag-list-link" rel="1">测试<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E8%B0%83%E8%AF%95rust/" class="tag-list-link" rel="1">调试rust<span
+               class="tag-list-count">1</span></a>
+            
     </div>
-    <p class="lead">关于Rust迭代器的一些骚操作</p>
-    <p>首先，先在这里抛出 两个问题</p>
+<script>
+document.onreadystatechange = () => {
+  if (document.readyState === 'complete') {
+    tagCloud('#tag-cloud-list a',  8 ,  20 );
+  }
+};
+
+function tagCloud(where, min, max) {
+  let iMax = 0;
+  let iMin = 0;
+  $(where).each(function() {
+    let weight = Number($(this).attr("rel"));
+    if(iMax < weight) iMax = weight;
+    if(iMin > weight || iMin == 0) iMin = weight;
+  });
+  let step = (max - min)/(iMax - iMin);
+  $(where).each(function() {
+    let weight = $(this).attr("rel") - iMin;
+    $(this).css({"font-size": min + (weight * step) + 'px'});
+  });
+};
+</script>
+</div>
+
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/docker/" class="category-list-link">docker</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/git/" class="category-list-link">git</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/java/" class="category-list-link">java</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/mysql/" class="category-list-link">mysql</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/raspberry-pi/" class="category-list-link">raspberry-pi</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/rust/" class="category-list-link">rust</a><span class="category-list-count">17</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/vim/" class="category-list-link">vim</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/" class="category-list-link">开源协议</a><span class="category-list-count">1</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/appimage/" class="tag-list-link">appimage</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/cargo/" class="tag-list-link">cargo</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/docker/" class="tag-list-link">docker</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/java/" class="tag-list-link">java</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/linux/" class="tag-list-link">linux</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/lombok/" class="tag-list-link">lombok</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/mysql/" class="tag-list-link">mysql</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/mysql%E4%B8%BB%E4%BB%8E/" class="tag-list-link">mysql主从</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/raspberry-pi/" class="tag-list-link">raspberry-pi</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust/" class="tag-list-link">rust</a><span
+                    class="tag-list-count">15</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E5%85%B3%E9%94%AE%E5%AD%97/" class="tag-list-link">rust关键字</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E5%8F%98%E9%87%8F/" class="tag-list-link">rust变量</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/" class="tag-list-link">rust控制流程</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="tag-list-link">rust数据类型</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%9D%82%E8%AE%B0/" class="tag-list-link">rust杂记</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%B3%9B%E5%9E%8B/" class="tag-list-link">rust泛型</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%B8%B8%E6%88%8F/" class="tag-list-link">rust游戏</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="tag-list-link">rust生命周期</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E8%BF%90%E7%AE%97%E7%AC%A6%E4%B8%8E%E7%AC%A6%E5%8F%B7/" class="tag-list-link">rust运算符与符号</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E8%BF%AD%E4%BB%A3%E5%99%A8/" class="tag-list-link">rust迭代器</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" class="tag-list-link">rust错误处理</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/stream/" class="tag-list-link">stream</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/vim/" class="tag-list-link">vim</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" class="tag-list-link">交叉编译</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/" class="tag-list-link">开源协议</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E6%B5%8B%E8%AF%95/" class="tag-list-link">测试</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E8%B0%83%E8%AF%95rust/" class="tag-list-link">调试rust</a><span
+                    class="tag-list-count">1</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/docker-gogs/" class="title">Docker 搭建私有 Git 服务</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-24 10:30:53 &#43;0800 CST" itemprop="datePublished">2021-03-24</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/open-source-license/" class="title">开源协议对比</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-11 17:22:03 &#43;0800 CST" itemprop="datePublished">2021-03-11</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/rust-cargo/" class="title">Rust 的包管理工具 Cargo</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-08 16:21:12 &#43;0800 CST" itemprop="datePublished">2021-03-08</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/vim-notes/" class="title">Vim 杂记</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-05 11:21:12 &#43;0800 CST" itemprop="datePublished">2021-03-05</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/appimage/" class="title">AppImage打包二进制文件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-01 22:12:52 &#43;0800 CST" itemprop="datePublished">2021-03-01</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/posts/rust-iterator-group/"
+    >关于Rust迭代器的一些骚操作</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://littleguest.github.io/posts/rust-iterator-group/" class="article-date">
+  <time datetime="2021-02-02 22:28:20 &#43;0800 CST" itemprop="datePublished">2021-02-02</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/rust/"> Rust </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/rust/"> Rust </a>
+    <a class="article-tag-link" href="/tags/rust%E8%BF%AD%E4%BB%A3%E5%99%A8/"> Rust迭代器 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="https://littleguest.github.io/posts/rust-iterator-group/" class="leancloud_visitors"  data-flag-title="关于Rust迭代器的一些骚操作">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/posts/rust-iterator-group/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1961字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>首先，先在这里抛出 两个问题</p>
 <p><strong>1. 如何将一个 List 转换为一个 HashMap</strong></p>
 <p><strong>2. 如何将两个 List 转换为一个 HashMap</strong></p>
 <p>让我们来看看 在 <code>Java</code> 中是如何实现的。😄</p>
 <p>第一个问题</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Data</span>
-<span style="color:#a6e22e">@AllArgsConstructor</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Person</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">private</span> Long id<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> String name<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> String sex<span style="color:#f92672">;</span>
+<pre><code class="language-java">@Data
+@AllArgsConstructor
+public class Person {
+    private Long id;
+    private String name;
+    private String sex;
 
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        List<span style="color:#f92672">&lt;</span>Person<span style="color:#f92672">&gt;</span> persons <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
-        persons<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Person<span style="color:#f92672">(</span>1L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;张三&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;男&#34;</span><span style="color:#f92672">));</span>
-        persons<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Person<span style="color:#f92672">(</span>2L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;李四&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;男&#34;</span><span style="color:#f92672">));</span>
-        persons<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Person<span style="color:#f92672">(</span>3L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;王兰&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;女&#34;</span><span style="color:#f92672">));</span>
+    public static void main(String[] args) {
+        List&lt;Person&gt; persons = new ArrayList&lt;&gt;();
+        persons.add(new Person(1L, &quot;张三&quot;, &quot;男&quot;));
+        persons.add(new Person(2L, &quot;李四&quot;, &quot;男&quot;));
+        persons.add(new Person(3L, &quot;王兰&quot;, &quot;女&quot;));
 
-        <span style="color:#75715e">// 根据性别进行分组
-</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> List<span style="color:#f92672">&lt;</span>Person<span style="color:#f92672">&gt;&gt;</span> sexMap <span style="color:#f92672">=</span> persons<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">().</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">groupingBy</span><span style="color:#f92672">(</span>Person<span style="color:#f92672">::</span>getSex<span style="color:#f92672">));</span>
-        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>sexMap<span style="color:#f92672">);</span>
-        <span style="color:#75715e">// {女=[Person(id=3, name=王兰, sex=女)], 男=[Person(id=1, name=张三, sex=男), Person(id=2, name=李四, sex=男)]}
-</span><span style="color:#75715e"></span>
-        <span style="color:#75715e">// 将人的姓名作为键，基本信息作为值
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 测试数据不考虑姓名相同的问题
-</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> Person<span style="color:#f92672">&gt;</span> personMap <span style="color:#f92672">=</span> persons<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">().</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">toMap</span><span style="color:#f92672">(</span>Person<span style="color:#f92672">::</span>getName<span style="color:#f92672">,</span> e <span style="color:#f92672">-&gt;</span> e<span style="color:#f92672">));</span>
-        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>personMap<span style="color:#f92672">);</span>
-        <span style="color:#75715e">// {李四=Person(id=2, name=李四, sex=男), 张三=Person(id=1, name=张三, sex=男), 王兰=Person(id=3, name=王兰, sex=女)}
-</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><p>我觉得这个问题在开发过程中会经常遇到（手动狗头）</p>
+        // 根据性别进行分组
+        Map&lt;String, List&lt;Person&gt;&gt; sexMap = persons.stream().collect(Collectors.groupingBy(Person::getSex));
+        System.out.println(sexMap);
+        // {女=[Person(id=3, name=王兰, sex=女)], 男=[Person(id=1, name=张三, sex=男), Person(id=2, name=李四, sex=男)]}
+
+        // 将人的姓名作为键，基本信息作为值
+        // 测试数据不考虑姓名相同的问题
+        Map&lt;String, Person&gt; personMap = persons.stream().collect(Collectors.toMap(Person::getName, e -&gt; e));
+        System.out.println(personMap);
+        // {李四=Person(id=2, name=李四, sex=男), 张三=Person(id=1, name=张三, sex=男), 王兰=Person(id=3, name=王兰, sex=女)}
+    }
+}
+</code></pre>
+<p>我觉得这个问题在开发过程中会经常遇到（手动狗头）</p>
 <p>第二个问题</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Data</span>
-<span style="color:#a6e22e">@AllArgsConstructor</span>
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Field</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">private</span> Long id<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> String name<span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+<pre><code class="language-java">@Data
+@AllArgsConstructor
+class Field {
+    private Long id;
+    private String name;
+}
 
-<span style="color:#a6e22e">@Data</span>
-<span style="color:#a6e22e">@AllArgsConstructor</span>
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">FieldData</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">private</span> Long id<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> Long fieldId<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">private</span> String value<span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
+@Data
+@AllArgsConstructor
+class FieldData {
+    private Long id;
+    private Long fieldId;
+    private String value;
+}
 
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">FieldTest</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        List<span style="color:#f92672">&lt;</span>Field<span style="color:#f92672">&gt;</span> fields <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
-        fields<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Field<span style="color:#f92672">(</span>1L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;field_1&#34;</span><span style="color:#f92672">));</span>
-        fields<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Field<span style="color:#f92672">(</span>2L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;field_2&#34;</span><span style="color:#f92672">));</span>
-        fields<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Field<span style="color:#f92672">(</span>3L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;field_3&#34;</span><span style="color:#f92672">));</span>
-        fields<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Field<span style="color:#f92672">(</span>4L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;field_4&#34;</span><span style="color:#f92672">));</span>
+public class FieldTest {
+    public static void main(String[] args) {
+        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();
+        fields.add(new Field(1L, &quot;field_1&quot;));
+        fields.add(new Field(2L, &quot;field_2&quot;));
+        fields.add(new Field(3L, &quot;field_3&quot;));
+        fields.add(new Field(4L, &quot;field_4&quot;));
 
-        List<span style="color:#f92672">&lt;</span>FieldData<span style="color:#f92672">&gt;</span> fieldDatas <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;();</span>
-        fieldDatas<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> FieldData<span style="color:#f92672">(</span>5L<span style="color:#f92672">,</span> 1L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Stream 好用吗&#34;</span><span style="color:#f92672">));</span>
-        fieldDatas<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> FieldData<span style="color:#f92672">(</span>6L<span style="color:#f92672">,</span> 2L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Stream 好用&#34;</span><span style="color:#f92672">));</span>
-        fieldDatas<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> FieldData<span style="color:#f92672">(</span>7L<span style="color:#f92672">,</span> 3L<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;Stream 牛逼&#34;</span><span style="color:#f92672">));</span>
+        List&lt;FieldData&gt; fieldDatas = new ArrayList&lt;&gt;();
+        fieldDatas.add(new FieldData(5L, 1L, &quot;Stream 好用吗&quot;));
+        fieldDatas.add(new FieldData(6L, 2L, &quot;Stream 好用&quot;));
+        fieldDatas.add(new FieldData(7L, 3L, &quot;Stream 牛逼&quot;));
 
-        <span style="color:#75715e">// 说明：
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Field 的名称是唯一的
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Field 和 FieldData 是一对一的关系
-</span><span style="color:#75715e"></span>
-        <span style="color:#75715e">// 1、 经过多次转换
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 将 Field 的名称 和 Field 转换成 Map
-</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> Field<span style="color:#f92672">&gt;</span> fieldMap <span style="color:#f92672">=</span> fields<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">().</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">toMap</span><span style="color:#f92672">(</span>Field<span style="color:#f92672">::</span>getName<span style="color:#f92672">,</span> e <span style="color:#f92672">-&gt;</span> e<span style="color:#f92672">));</span>
-        <span style="color:#75715e">// FieldData 也转换为 Map
-</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>Long<span style="color:#f92672">,</span> FieldData<span style="color:#f92672">&gt;</span> fieldDataMap <span style="color:#f92672">=</span> fieldDatas<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">()</span>
-                <span style="color:#f92672">.</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">toMap</span><span style="color:#f92672">(</span>FieldData<span style="color:#f92672">::</span>getFieldId<span style="color:#f92672">,</span> e <span style="color:#f92672">-&gt;</span> e<span style="color:#f92672">));</span>
-        <span style="color:#75715e">// 我们想要得到的数据结构
-</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> FieldData<span style="color:#f92672">&gt;</span> fieldNameFieldDataMap <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;(</span>fieldMap<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">());</span>
-        <span style="color:#75715e">// 组装我们想要要的数据
-</span><span style="color:#75715e"></span>        fieldMap<span style="color:#f92672">.</span><span style="color:#a6e22e">forEach</span><span style="color:#f92672">((</span>k<span style="color:#f92672">,</span> v<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> fieldNameFieldDataMap<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>k<span style="color:#f92672">,</span> fieldDataMap<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>v<span style="color:#f92672">.</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">())));</span>
-        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>fieldNameFieldDataMap<span style="color:#f92672">);</span>
-        <span style="color:#75715e">// {field_3=FieldData(id=7, fieldId=3, value=Stream 牛逼), field_4=null,
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// field_1=FieldData(id=5, fieldId=1, value=Stream 好用吗), field_2=FieldData(id=6,
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// fieldId=2, value=Stream 好用)}
-</span><span style="color:#75715e"></span>
-        <span style="color:#75715e">// 2、直接一步到胃
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// FIXME: 暂时只能做到这种，有没有更好的方法？
-</span><span style="color:#75715e"></span>        List<span style="color:#f92672">&lt;</span>Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> FieldData<span style="color:#f92672">&gt;&gt;</span> fieldNameFieldDataList <span style="color:#f92672">=</span> fields<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">()</span>
-                <span style="color:#f92672">.</span><span style="color:#a6e22e">flatMap</span><span style="color:#f92672">(</span>f <span style="color:#f92672">-&gt;</span> fieldDatas<span style="color:#f92672">.</span><span style="color:#a6e22e">stream</span><span style="color:#f92672">().</span><span style="color:#a6e22e">filter</span><span style="color:#f92672">(</span>fd <span style="color:#f92672">-&gt;</span> fd<span style="color:#f92672">.</span><span style="color:#a6e22e">getFieldId</span><span style="color:#f92672">().</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>f<span style="color:#f92672">.</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">())).</span><span style="color:#a6e22e">map</span><span style="color:#f92672">(</span>fieldData <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span>
-                    Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> FieldData<span style="color:#f92672">&gt;</span> map <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;();</span>
-                    map<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>f<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">(),</span> fieldData<span style="color:#f92672">);</span>
-                    <span style="color:#66d9ef">return</span> map<span style="color:#f92672">;</span>
-                <span style="color:#f92672">})).</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>Collectors<span style="color:#f92672">.</span><span style="color:#a6e22e">toList</span><span style="color:#f92672">());</span>
-        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>fieldNameFieldDataList<span style="color:#f92672">);</span>
-        <span style="color:#75715e">// [{field_1=FieldData(id=5, fieldId=1, value=Stream 好用吗)},
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// {field_2=FieldData(id=6, fieldId=2, value=Stream 好用)},
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// {field_3=FieldData(id=7, fieldId=3, value=Stream 牛逼)}]
-</span><span style="color:#75715e"></span>
-        <span style="color:#75715e">// 再次转换
-</span><span style="color:#75715e"></span>        Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> FieldData<span style="color:#f92672">&gt;</span> fieldNameFieldDataMap2 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashMap<span style="color:#f92672">&lt;&gt;(</span>fieldMap<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">());</span>
-        fieldNameFieldDataList<span style="color:#f92672">.</span><span style="color:#a6e22e">forEach</span><span style="color:#f92672">(</span>d <span style="color:#f92672">-&gt;</span> d<span style="color:#f92672">.</span><span style="color:#a6e22e">forEach</span><span style="color:#f92672">((</span>k<span style="color:#f92672">,</span> v<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> fieldNameFieldDataMap2<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>k<span style="color:#f92672">,</span> v<span style="color:#f92672">)));</span>
-        System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>fieldNameFieldDataMap2<span style="color:#f92672">);</span>
-        <span style="color:#75715e">// {field_3=FieldData(id=7, fieldId=3, value=Stream 牛逼), field_1=FieldData(id=5,
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// fieldId=1, value=Stream 好用吗), field_2=FieldData(id=6, fieldId=2, value=Stream
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 好用)}
-</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><p>这样就解决了一开始提出的两个问题，当然，还有其他的方法，在这里就不列举了。</p>
+        // 说明：
+        // Field 的名称是唯一的
+        // Field 和 FieldData 是一对一的关系
+
+        // 1、 经过多次转换
+        // 将 Field 的名称 和 Field 转换成 Map
+        Map&lt;String, Field&gt; fieldMap = fields.stream().collect(Collectors.toMap(Field::getName, e -&gt; e));
+        // FieldData 也转换为 Map
+        Map&lt;Long, FieldData&gt; fieldDataMap = fieldDatas.stream()
+                .collect(Collectors.toMap(FieldData::getFieldId, e -&gt; e));
+        // 我们想要得到的数据结构
+        Map&lt;String, FieldData&gt; fieldNameFieldDataMap = new HashMap&lt;&gt;(fieldMap.size());
+        // 组装我们想要要的数据
+        fieldMap.forEach((k, v) -&gt; fieldNameFieldDataMap.put(k, fieldDataMap.get(v.getId())));
+        System.out.println(fieldNameFieldDataMap);
+        // {field_3=FieldData(id=7, fieldId=3, value=Stream 牛逼), field_4=null,
+        // field_1=FieldData(id=5, fieldId=1, value=Stream 好用吗), field_2=FieldData(id=6,
+        // fieldId=2, value=Stream 好用)}
+
+        // 2、直接一步到胃
+        // FIXME: 暂时只能做到这种，有没有更好的方法？
+        List&lt;Map&lt;String, FieldData&gt;&gt; fieldNameFieldDataList = fields.stream()
+                .flatMap(f -&gt; fieldDatas.stream().filter(fd -&gt; fd.getFieldId().equals(f.getId())).map(fieldData -&gt; {
+                    Map&lt;String, FieldData&gt; map = new HashMap&lt;&gt;();
+                    map.put(f.getName(), fieldData);
+                    return map;
+                })).collect(Collectors.toList());
+        System.out.println(fieldNameFieldDataList);
+        // [{field_1=FieldData(id=5, fieldId=1, value=Stream 好用吗)},
+        // {field_2=FieldData(id=6, fieldId=2, value=Stream 好用)},
+        // {field_3=FieldData(id=7, fieldId=3, value=Stream 牛逼)}]
+
+        // 再次转换
+        Map&lt;String, FieldData&gt; fieldNameFieldDataMap2 = new HashMap&lt;&gt;(fieldMap.size());
+        fieldNameFieldDataList.forEach(d -&gt; d.forEach((k, v) -&gt; fieldNameFieldDataMap2.put(k, v)));
+        System.out.println(fieldNameFieldDataMap2);
+        // {field_3=FieldData(id=7, fieldId=3, value=Stream 牛逼), field_1=FieldData(id=5,
+        // fieldId=1, value=Stream 好用吗), field_2=FieldData(id=6, fieldId=2, value=Stream
+        // 好用)}
+    }
+}
+</code></pre>
+<p>这样就解决了一开始提出的两个问题，当然，还有其他的方法，在这里就不列举了。</p>
 <p>回归正题，<strong>在 Rust 中是如何解决这两个问题的呢？</strong></p>
 <p>第一个问题</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> std::collections::HashMap;
+<pre><code class="language-rust">use std::collections::HashMap;
 
-<span style="color:#75715e">#[derive(Debug)]</span>
-<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Person</span> {
-    id: <span style="color:#66d9ef">u64</span>,
+#[derive(Debug)]
+struct Person {
+    id: u64,
     name: String,
     sex: String,
 }
 
-<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
-    <span style="color:#66d9ef">let</span> persons <span style="color:#f92672">=</span> [
+fn main() {
+    let persons = [
         Person {
-            id: <span style="color:#ae81ff">1</span>,
-            name: <span style="color:#e6db74">&#34;张三&#34;</span>.to_string(),
-            sex: <span style="color:#e6db74">&#34;男&#34;</span>.to_string(),
+            id: 1,
+            name: &quot;张三&quot;.to_string(),
+            sex: &quot;男&quot;.to_string(),
         },
         Person {
-            id: <span style="color:#ae81ff">2</span>,
-            name: <span style="color:#e6db74">&#34;李四&#34;</span>.to_string(),
-            sex: <span style="color:#e6db74">&#34;男&#34;</span>.to_string(),
+            id: 2,
+            name: &quot;李四&quot;.to_string(),
+            sex: &quot;男&quot;.to_string(),
         },
         Person {
-            id: <span style="color:#ae81ff">3</span>,
-            name: <span style="color:#e6db74">&#34;王兰&#34;</span>.to_string(),
-            sex: <span style="color:#e6db74">&#34;女&#34;</span>.to_string(),
+            id: 3,
+            name: &quot;王兰&quot;.to_string(),
+            sex: &quot;女&quot;.to_string(),
         },
     ];
 
-    <span style="color:#75715e">// 1、先将性别放进 HashMap 中，然后遍历 HashMap 和 persons 数组，将 persons 中满足 HashMap 键的 person 放到对应的键下面。
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 首先想到的就是这种方法
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> sex_map <span style="color:#f92672">=</span> persons
+    // 1、先将性别放进 HashMap 中，然后遍历 HashMap 和 persons 数组，将 persons 中满足 HashMap 键的 person 放到对应的键下面。
+    // 首先想到的就是这种方法
+    let mut sex_map = persons
         .iter()
-        .map(<span style="color:#f92672">|</span>p<span style="color:#f92672">|</span> (p.sex.clone(), Vec::new()))
-        .collect::<span style="color:#f92672">&lt;</span>HashMap<span style="color:#f92672">&lt;</span>_, _<span style="color:#f92672">&gt;&gt;</span>();
-    <span style="color:#66d9ef">for</span> snm <span style="color:#66d9ef">in</span> sex_map.iter_mut() {
-        persons.iter().for_each(<span style="color:#f92672">|</span>p<span style="color:#f92672">|</span> {
-            <span style="color:#66d9ef">if</span> p.sex.eq(snm.<span style="color:#ae81ff">0</span>) {
-                snm.<span style="color:#ae81ff">1.</span>push(p);
+        .map(|p| (p.sex.clone(), Vec::new()))
+        .collect::&lt;HashMap&lt;_, _&gt;&gt;();
+    for snm in sex_map.iter_mut() {
+        persons.iter().for_each(|p| {
+            if p.sex.eq(snm.0) {
+                snm.1.push(p);
             }
         })
     }
-    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{:?}&#34;</span>, sex_map);
-    <span style="color:#75715e">// {&#34;女&#34;: [Person { id: 3, name: &#34;王兰&#34;, sex: &#34;女&#34; }], &#34;男&#34;: [Person { id: 1, name: &#34;张三&#34;, sex: &#34;男&#34; }, Person { id: 2, name: &#34;李四&#34;, sex: &#34;男&#34; }]}
-</span><span style="color:#75715e"></span>
-    <span style="color:#75715e">// 2、使用 fold
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> sex_map <span style="color:#f92672">=</span> persons.iter().fold(HashMap::with_capacity(<span style="color:#ae81ff">2</span>), <span style="color:#f92672">|</span><span style="color:#66d9ef">mut</span> m, p<span style="color:#f92672">|</span> {
+    println!(&quot;{:?}&quot;, sex_map);
+    // {&quot;女&quot;: [Person { id: 3, name: &quot;王兰&quot;, sex: &quot;女&quot; }], &quot;男&quot;: [Person { id: 1, name: &quot;张三&quot;, sex: &quot;男&quot; }, Person { id: 2, name: &quot;李四&quot;, sex: &quot;男&quot; }]}
+
+    // 2、使用 fold
+    let sex_map = persons.iter().fold(HashMap::with_capacity(2), |mut m, p| {
         m.insert(
             p.sex.clone(),
             persons
                 .iter()
-                .filter(<span style="color:#f92672">|</span>pp<span style="color:#f92672">|</span> pp.sex <span style="color:#f92672">==</span> p.sex)
-                .collect::<span style="color:#f92672">&lt;</span>Vec<span style="color:#f92672">&lt;</span>_<span style="color:#f92672">&gt;&gt;</span>(),
+                .filter(|pp| pp.sex == p.sex)
+                .collect::&lt;Vec&lt;_&gt;&gt;(),
         );
         m
     });
-    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{:?}&#34;</span>, sex_map);
-    <span style="color:#75715e">// {&#34;女&#34;: [Person { id: 3, name: &#34;王兰&#34;, sex: &#34;女&#34; }], &#34;男&#34;: [Person { id: 1, name: &#34;张三&#34;, sex: &#34;男&#34; }, Person { id: 2, name: &#34;李四&#34;, sex: &#34;男&#34; }]}
-</span><span style="color:#75715e"></span>}
-</code></pre></div><p>第二个问题</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-rust" data-lang="rust"><span style="color:#66d9ef">use</span> std::collections::HashMap;
+    println!(&quot;{:?}&quot;, sex_map);
+    // {&quot;女&quot;: [Person { id: 3, name: &quot;王兰&quot;, sex: &quot;女&quot; }], &quot;男&quot;: [Person { id: 1, name: &quot;张三&quot;, sex: &quot;男&quot; }, Person { id: 2, name: &quot;李四&quot;, sex: &quot;男&quot; }]}
+}
+</code></pre>
+<p>第二个问题</p>
+<pre><code class="language-rust">use std::collections::HashMap;
 
-<span style="color:#75715e">#[derive(Debug)]</span>
-<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Field</span> {
-    id: <span style="color:#66d9ef">u64</span>,
+#[derive(Debug)]
+struct Field {
+    id: u64,
     name: String,
 }
 
-<span style="color:#75715e">#[derive(Debug)]</span>
-<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">FieldData</span> {
-    id: <span style="color:#66d9ef">u64</span>,
-    field_id: <span style="color:#66d9ef">u64</span>,
+#[derive(Debug)]
+struct FieldData {
+    id: u64,
+    field_id: u64,
     value: String,
 }
 
-<span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">main</span>() {
-    <span style="color:#66d9ef">let</span> fields <span style="color:#f92672">=</span> [
+fn main() {
+    let fields = [
         Field {
-            id: <span style="color:#ae81ff">1</span>,
-            name: <span style="color:#e6db74">&#34;field_1&#34;</span>.to_string(),
+            id: 1,
+            name: &quot;field_1&quot;.to_string(),
         },
         Field {
-            id: <span style="color:#ae81ff">2</span>,
-            name: <span style="color:#e6db74">&#34;field_2&#34;</span>.to_string(),
+            id: 2,
+            name: &quot;field_2&quot;.to_string(),
         },
         Field {
-            id: <span style="color:#ae81ff">3</span>,
-            name: <span style="color:#e6db74">&#34;field_3&#34;</span>.to_string(),
+            id: 3,
+            name: &quot;field_3&quot;.to_string(),
         },
         Field {
-            id: <span style="color:#ae81ff">4</span>,
-            name: <span style="color:#e6db74">&#34;field_4&#34;</span>.to_string(),
+            id: 4,
+            name: &quot;field_4&quot;.to_string(),
         },
     ];
 
-    <span style="color:#66d9ef">let</span> field_datas <span style="color:#f92672">=</span> [
+    let field_datas = [
         FieldData {
-            id: <span style="color:#ae81ff">5</span>,
-            field_id: <span style="color:#ae81ff">1</span>,
-            value: <span style="color:#e6db74">&#34;Rust 牛逼!&#34;</span>.to_string(),
+            id: 5,
+            field_id: 1,
+            value: &quot;Rust 牛逼!&quot;.to_string(),
         },
         FieldData {
-            id: <span style="color:#ae81ff">6</span>,
-            field_id: <span style="color:#ae81ff">2</span>,
-            value: <span style="color:#e6db74">&#34;Rust 牛逼!!&#34;</span>.to_string(),
+            id: 6,
+            field_id: 2,
+            value: &quot;Rust 牛逼!!&quot;.to_string(),
         },
         FieldData {
-            id: <span style="color:#ae81ff">7</span>,
-            field_id: <span style="color:#ae81ff">3</span>,
-            value: <span style="color:#e6db74">&#34;Rust 牛逼!!!&#34;</span>.to_string(),
+            id: 7,
+            field_id: 3,
+            value: &quot;Rust 牛逼!!!&quot;.to_string(),
         },
     ];
 
-    <span style="color:#75715e">// 说明：
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Field 的名称是唯一的
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Field 和 FieldData 是一对一的关系
-</span><span style="color:#75715e"></span>
-    <span style="color:#75715e">// 1、
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> field_map <span style="color:#f92672">=</span> fields
+    // 说明：
+    // Field 的名称是唯一的
+    // Field 和 FieldData 是一对一的关系
+
+    // 1、
+    let field_map = fields
         .iter()
-        .fold(HashMap::with_capacity(fields.len()), <span style="color:#f92672">|</span><span style="color:#66d9ef">mut</span> a, b<span style="color:#f92672">|</span> {
+        .fold(HashMap::with_capacity(fields.len()), |mut a, b| {
             a.insert(b.name.clone(), b);
             a
         });
 
-    <span style="color:#66d9ef">let</span> field_data_map <span style="color:#f92672">=</span>
+    let field_data_map =
         field_datas
             .iter()
-            .fold(HashMap::with_capacity(field_datas.len()), <span style="color:#f92672">|</span><span style="color:#66d9ef">mut</span> a, b<span style="color:#f92672">|</span> {
+            .fold(HashMap::with_capacity(field_datas.len()), |mut a, b| {
                 a.insert(b.field_id, b);
                 a
             });
-    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> field_name_field_data_map <span style="color:#f92672">=</span> HashMap::with_capacity(fields.len());
-    field_map.iter().for_each(<span style="color:#f92672">|</span>(k, v)<span style="color:#f92672">|</span> {
-        field_name_field_data_map.insert(k.clone(), field_data_map.get(<span style="color:#f92672">&amp;</span>v.id));
+    let mut field_name_field_data_map = HashMap::with_capacity(fields.len());
+    field_map.iter().for_each(|(k, v)| {
+        field_name_field_data_map.insert(k.clone(), field_data_map.get(&amp;v.id));
     });
-    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{:?}&#34;</span>, field_name_field_data_map);
-    <span style="color:#75715e">// {&#34;field_1&#34;: Some(FieldData { id: 5, field_id: 1, value: &#34;Rust 牛逼!&#34; }), &#34;field_2&#34;: Some(FieldData { id: 6, field_id: 2, value: &#34;Rust 牛逼!!&#34; }), &#34;field_3&#34;: Some(FieldData { id: 7, field_id: 3, value: &#34;Rust 牛逼!!!&#34; }), &#34;field_4&#34;: None}
-</span><span style="color:#75715e"></span>
-    <span style="color:#75715e">// 2 、使用 fold 和 filter_map
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> field_name_field_data_map <span style="color:#f92672">=</span> fields.iter().fold(HashMap::new(), <span style="color:#f92672">|</span><span style="color:#66d9ef">mut</span> a, b<span style="color:#f92672">|</span> {
+    println!(&quot;{:?}&quot;, field_name_field_data_map);
+    // {&quot;field_1&quot;: Some(FieldData { id: 5, field_id: 1, value: &quot;Rust 牛逼!&quot; }), &quot;field_2&quot;: Some(FieldData { id: 6, field_id: 2, value: &quot;Rust 牛逼!!&quot; }), &quot;field_3&quot;: Some(FieldData { id: 7, field_id: 3, value: &quot;Rust 牛逼!!!&quot; }), &quot;field_4&quot;: None}
+
+    // 2 、使用 fold 和 filter_map
+    let field_name_field_data_map = fields.iter().fold(HashMap::new(), |mut a, b| {
         a.insert(
             b.name.clone(),
             field_datas
                 .iter()
-                .filter_map(<span style="color:#66d9ef">move</span> <span style="color:#f92672">|</span>fd<span style="color:#f92672">|</span> <span style="color:#66d9ef">if</span> fd.field_id <span style="color:#f92672">==</span> b.id { Some(fd) } <span style="color:#66d9ef">else</span> { None })
+                .filter_map(move |fd| if fd.field_id == b.id { Some(fd) } else { None })
                 .next(),
         );
         a
     });
-    println<span style="color:#f92672">!</span>(<span style="color:#e6db74">&#34;{:?}&#34;</span>, field_name_field_data_map);
-    <span style="color:#75715e">// {&#34;field_1&#34;: Some(FieldData { id: 5, field_id: 1, value: &#34;Rust 牛逼!&#34; }), &#34;field_3&#34;: Some(FieldData { id: 7, field_id: 3, value: &#34;Rust 牛逼!!!&#34; }), &#34;field_4&#34;: None, &#34;field_2&#34;: Some(FieldData { id: 6, field_id: 2, value: &#34;Rust 牛逼!!&#34; })}
-</span><span style="color:#75715e"></span>}
-</code></pre></div><p>虽然实现的方法不一定是最好的，但是还是实现了想要达到的效果。😆</p>
+    println!(&quot;{:?}&quot;, field_name_field_data_map);
+    // {&quot;field_1&quot;: Some(FieldData { id: 5, field_id: 1, value: &quot;Rust 牛逼!&quot; }), &quot;field_3&quot;: Some(FieldData { id: 7, field_id: 3, value: &quot;Rust 牛逼!!!&quot; }), &quot;field_4&quot;: None, &quot;field_2&quot;: Some(FieldData { id: 6, field_id: 2, value: &quot;Rust 牛逼!!&quot; })}
+}
+</code></pre>
+<p>虽然实现的方法不一定是最好的，但是还是实现了想要达到的效果。😆</p>
 <p>这里就起个抛个砖引个玉的效果。</p>
 <p>嗯~~，这里暂时不介绍 <code>fold</code> <code>filter_map</code> <code>filter</code> <code>for_each</code>等方法的使用，后面的文章可能会逐一介绍。</p>
 <p>如果想要更加熟练的使用这些方法，那还得勤加练习才行。</p>
 
-    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
-</div>
+    </div>
+    <div class="article-footer">
+
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://littleguest.github.io/posts/java-fastjson-serialize/" title="FastJson 使用 toJSONString 时字段序列化问题"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://littleguest.github.io/posts/docker-mysql/"
+                    title="Docker搭建MySQL"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,qzone"></div>
+        </div>
+    </div>
+</nav>
 
 
-        </div><footer class="container">
-    <hr class="soften">
-    <p>
-
-&copy; 
-
-    gopher9527
-
-<span id="thisyear">2020</span>
-
-</p>
-    <p class="text-center">
-        
-        
-        
-        <a href="https://github.com/LittleGuest">GitHub</a> 
-        
-    </p>
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://github.com/LittleGuest" target="_blank" title="github" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-github"></i></a></li>
+    <li><a href="https://littleguest.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2020  -
+    2021
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
 </footer>
 
-</body><link rel="stylesheet" href="/css/bootstrap.css">
-<link rel="stylesheet" href="/css/bootstrap-responsive.css">
-<link rel="stylesheet" href="/css/style.css">
+<script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
 
-<script src="/js/jquery.js"></script>
-<script src="/js/bootstrap-386.js"></script>
-<script src="/js/bootstrap-transition.js"></script>
-<script src="/js/bootstrap-alert.js"></script>
-<script src="/js/bootstrap-modal.js"></script>
-<script src="/js/bootstrap-dropdown.js"></script>
-<script src="/js/bootstrap-scrollspy.js"></script>
-<script src="/js/bootstrap-tab.js"></script>
-<script src="/js/bootstrap-tooltip.js"></script>
-<script src="/js/bootstrap-popover.js"></script>
-<script src="/js/bootstrap-button.js"></script>
-<script src="/js/bootstrap-collapse.js"></script>
-<script src="/js/bootstrap-carousel.js"></script>
-<script src="/js/bootstrap-typeahead.js"></script>
-<script src="/js/bootstrap-affix.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
-    _386 = { 
-        fastLoad: false ,
-        onePass: false , 
-        speedFactor: 1 
-    };
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/python.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/javascript.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/rust.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/java.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/go.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/c.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/cpp.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/shell.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/sql.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://littleguest.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://littleguest.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
 
-    
-    function ThisYear() {
-        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
-    };
-</script></html>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/littleguest.github.io\/',
+            CONTENT_URL: 'https:\/\/littleguest.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://littleguest.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/tocbot/4.12.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        
+        
+        appId: 'gkzEGKSHEpVGvpy0znhhBDuM-gzGzoHsz',
+        appKey: 'd4ngyH9kAtx6G8UzVPjfhAGi',
+        placeholder: '快来发表评论吧~',
+        avatar: 'retro',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: true ,
+        requiredFields:["nick","mail"]
+});
+</script>
+
+  </body>
+</html>

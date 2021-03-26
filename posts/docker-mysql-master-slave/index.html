@@ -1,113 +1,618 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-    <title>gopher9527&#39;s Blog</title>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <meta content="utf-8" http-equiv="encoding">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="theme-color" content="#000084" />
-    <link rel="icon" href="https://littleguest.github.io//favicon.ico">
-    <link rel="canonical" href="https://littleguest.github.io/">
+<html lang="zh">
+  <head>
+    <title>
+        使用Docker部署主从MySQL - 蒲建全的博客
+      </title>
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    
+    <meta name="theme-color" content="#000000" />
+    
+    <meta http-equiv="window-target" content="_top" />
     
     
-</head>
-<body>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
-            <a class="brand" href="https://littleguest.github.io/">gopher9527&#39;s Blog</a>
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-                    
-                    
-                        
-                            <li>
-                                <a href="/about/">
-                                    
-                                    <span>About</span>
-                                </a>
-                            </li>
-                        
-                    
-                        
-                            <li>
-                                <a href="/posts/">
-                                    
-                                    <span>Posts</span>
-                                </a>
-                            </li>
-                        
-                    
-                        
-                            <li>
-                                <a href="/links/">
-                                    
-                                    <span>Links</span>
-                                </a>
-                            </li>
-                        
-                    
-                </ul>
+    <meta name="keywords"
+      content="Docker, MySQL, 主从" /><meta name="description" content="如何使用Docker部署主从MySQL" />
+    <meta name="generator" content="Hugo 0.80.0 with theme pure" />
+    <title>使用Docker部署主从MySQL - 蒲建全的博客</title>
+    
+    
+    <link rel="stylesheet" href="https://littleguest.github.io/css/style.min.5743fa7b2206cb1eb1d7532cda60d1ebf1e3ae4aac4077fc182a92c911e04e02.css">
+    
+    <link href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/styles/github.min.css" rel="stylesheet" async>
+    <link href="https://cdn.bootcdn.net/ajax/libs/tocbot/4.12.2/tocbot.css" rel="stylesheet" async>
+    <meta property="og:title" content="使用Docker部署主从MySQL" />
+<meta property="og:description" content="如何使用Docker部署主从MySQL" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://littleguest.github.io/posts/docker-mysql-master-slave/" />
+<meta property="article:published_time" content="2021-02-23T14:58:02+08:00" />
+<meta property="article:modified_time" content="2021-02-23T14:58:02+08:00" />
+<meta itemprop="name" content="使用Docker部署主从MySQL">
+<meta itemprop="description" content="如何使用Docker部署主从MySQL">
+<meta itemprop="datePublished" content="2021-02-23T14:58:02+08:00" />
+<meta itemprop="dateModified" content="2021-02-23T14:58:02+08:00" />
+<meta itemprop="wordCount" content="1429">
+
+
+
+<meta itemprop="keywords" content="Docker,MySQL主从," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用Docker部署主从MySQL"/>
+<meta name="twitter:description" content="如何使用Docker部署主从MySQL"/>
+
+    <!--[if lte IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+      <![endif]-->
+
+    <!--[if lt IE 9]>
+        <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+      <![endif]-->
+  </head>
+
+  
+  
+
+  <body class="main-left theme-green" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="https://github.com/LittleGuest" target="_blank">
+            <img class="img-circle img-rotate" src="https://littleguest.github.io/avatar.png" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">蒲建全</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">一位热衷于摸鱼的搬砖工。</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>Chengdu, China</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-about">
+                <a href="/about/">
+                    <i class="icon icon-cup-fill"></i>
+                  <span class="menu-title">关于我</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-links">
+                <a href="/links/">
+                    <i class="icon icon-friendship"></i>
+                  <span class="menu-title">友链</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">enjoy~
             </div>
         </div>
     </div>
-</nav><div id="content" class="container">
+</div>
 
-<div class="row-fluid navmargin">
-    <div class="page-header">
-        <h1>使用Docker部署主从MySQL - Tue, Feb 23, 2021</h1>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div id="tag-cloud-list" class="widget-body">
+            
+            
+            <a href="https://littleguest.github.io/tags/appimage/" class="tag-list-link" rel="1">appimage<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/cargo/" class="tag-list-link" rel="1">cargo<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/docker/" class="tag-list-link" rel="3">docker<span
+               class="tag-list-count">3</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/git/" class="tag-list-link" rel="2">git<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/java/" class="tag-list-link" rel="3">java<span
+               class="tag-list-count">3</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/linux/" class="tag-list-link" rel="2">linux<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/lombok/" class="tag-list-link" rel="1">lombok<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/mysql/" class="tag-list-link" rel="1">mysql<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/mysql%E4%B8%BB%E4%BB%8E/" class="tag-list-link" rel="1">mysql主从<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/raspberry-pi/" class="tag-list-link" rel="2">raspberry-pi<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust/" class="tag-list-link" rel="15">rust<span
+               class="tag-list-count">15</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E5%85%B3%E9%94%AE%E5%AD%97/" class="tag-list-link" rel="1">rust关键字<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E5%8F%98%E9%87%8F/" class="tag-list-link" rel="1">rust变量<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/" class="tag-list-link" rel="1">rust控制流程<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="tag-list-link" rel="1">rust数据类型<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%9D%82%E8%AE%B0/" class="tag-list-link" rel="1">rust杂记<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%B3%9B%E5%9E%8B/" class="tag-list-link" rel="1">rust泛型<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E6%B8%B8%E6%88%8F/" class="tag-list-link" rel="1">rust游戏<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="tag-list-link" rel="1">rust生命周期<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E8%BF%90%E7%AE%97%E7%AC%A6%E4%B8%8E%E7%AC%A6%E5%8F%B7/" class="tag-list-link" rel="1">rust运算符与符号<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E8%BF%AD%E4%BB%A3%E5%99%A8/" class="tag-list-link" rel="1">rust迭代器<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/rust%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" class="tag-list-link" rel="1">rust错误处理<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/stream/" class="tag-list-link" rel="1">stream<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/vim/" class="tag-list-link" rel="1">vim<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" class="tag-list-link" rel="2">交叉编译<span
+               class="tag-list-count">2</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/" class="tag-list-link" rel="1">开源协议<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E6%B5%8B%E8%AF%95/" class="tag-list-link" rel="1">测试<span
+               class="tag-list-count">1</span></a>
+            
+            
+            <a href="https://littleguest.github.io/tags/%E8%B0%83%E8%AF%95rust/" class="tag-list-link" rel="1">调试rust<span
+               class="tag-list-count">1</span></a>
+            
     </div>
-    <p class="lead">如何使用Docker部署主从MySQL</p>
-    <h2 id="mysql-主从复制">MySQL 主从复制</h2>
+<script>
+document.onreadystatechange = () => {
+  if (document.readyState === 'complete') {
+    tagCloud('#tag-cloud-list a',  8 ,  20 );
+  }
+};
+
+function tagCloud(where, min, max) {
+  let iMax = 0;
+  let iMin = 0;
+  $(where).each(function() {
+    let weight = Number($(this).attr("rel"));
+    if(iMax < weight) iMax = weight;
+    if(iMin > weight || iMin == 0) iMin = weight;
+  });
+  let step = (max - min)/(iMax - iMin);
+  $(where).each(function() {
+    let weight = $(this).attr("rel") - iMin;
+    $(this).css({"font-size": min + (weight * step) + 'px'});
+  });
+};
+</script>
+</div>
+
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/docker/" class="category-list-link">docker</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/git/" class="category-list-link">git</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/java/" class="category-list-link">java</a><span class="category-list-count">3</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/linux/" class="category-list-link">linux</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/mysql/" class="category-list-link">mysql</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/raspberry-pi/" class="category-list-link">raspberry-pi</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/rust/" class="category-list-link">rust</a><span class="category-list-count">17</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/vim/" class="category-list-link">vim</a><span class="category-list-count">1</span></li>
+            <li class="category-list-item"><a href="https://littleguest.github.io/categories/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/" class="category-list-link">开源协议</a><span class="category-list-count">1</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/appimage/" class="tag-list-link">appimage</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/cargo/" class="tag-list-link">cargo</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/docker/" class="tag-list-link">docker</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/git/" class="tag-list-link">git</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/java/" class="tag-list-link">java</a><span
+                    class="tag-list-count">3</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/linux/" class="tag-list-link">linux</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/lombok/" class="tag-list-link">lombok</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/mysql/" class="tag-list-link">mysql</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/mysql%E4%B8%BB%E4%BB%8E/" class="tag-list-link">mysql主从</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/raspberry-pi/" class="tag-list-link">raspberry-pi</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust/" class="tag-list-link">rust</a><span
+                    class="tag-list-count">15</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E5%85%B3%E9%94%AE%E5%AD%97/" class="tag-list-link">rust关键字</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E5%8F%98%E9%87%8F/" class="tag-list-link">rust变量</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%8E%A7%E5%88%B6%E6%B5%81%E7%A8%8B/" class="tag-list-link">rust控制流程</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="tag-list-link">rust数据类型</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%9D%82%E8%AE%B0/" class="tag-list-link">rust杂记</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%B3%9B%E5%9E%8B/" class="tag-list-link">rust泛型</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E6%B8%B8%E6%88%8F/" class="tag-list-link">rust游戏</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="tag-list-link">rust生命周期</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E8%BF%90%E7%AE%97%E7%AC%A6%E4%B8%8E%E7%AC%A6%E5%8F%B7/" class="tag-list-link">rust运算符与符号</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E8%BF%AD%E4%BB%A3%E5%99%A8/" class="tag-list-link">rust迭代器</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/rust%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" class="tag-list-link">rust错误处理</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/stream/" class="tag-list-link">stream</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/vim/" class="tag-list-link">vim</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" class="tag-list-link">交叉编译</a><span
+                    class="tag-list-count">2</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/" class="tag-list-link">开源协议</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E6%B5%8B%E8%AF%95/" class="tag-list-link">测试</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://littleguest.github.io/tags/%E8%B0%83%E8%AF%95rust/" class="tag-list-link">调试rust</a><span
+                    class="tag-list-count">1</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/docker-gogs/" class="title">Docker 搭建私有 Git 服务</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-24 10:30:53 &#43;0800 CST" itemprop="datePublished">2021-03-24</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/open-source-license/" class="title">开源协议对比</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-11 17:22:03 &#43;0800 CST" itemprop="datePublished">2021-03-11</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/rust-cargo/" class="title">Rust 的包管理工具 Cargo</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-08 16:21:12 &#43;0800 CST" itemprop="datePublished">2021-03-08</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/vim-notes/" class="title">Vim 杂记</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-05 11:21:12 &#43;0800 CST" itemprop="datePublished">2021-03-05</time>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://littleguest.github.io/posts/appimage/" class="title">AppImage打包二进制文件</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2021-03-01 22:12:52 &#43;0800 CST" itemprop="datePublished">2021-03-01</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/posts/docker-mysql-master-slave/"
+    >使用Docker部署主从MySQL</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://littleguest.github.io/posts/docker-mysql-master-slave/" class="article-date">
+  <time datetime="2021-02-23 14:58:02 &#43;0800 CST" itemprop="datePublished">2021-02-23</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/docker/"> Docker </a>
+  <a class="article-category-link" href="/categories/mysql/"> MySQL </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/docker/"> Docker </a>
+    <a class="article-tag-link" href="/tags/mysql%E4%B8%BB%E4%BB%8E/"> MySQL主从 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+    	<i class="icon icon-eye-fill" aria-hidden="true"></i>
+    	<span id="https://littleguest.github.io/posts/docker-mysql-master-slave/" class="leancloud_visitors"  data-flag-title="使用Docker部署主从MySQL">
+			<span class="leancloud-visitors-count">0</span>
+		</span>
+    </span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/posts/docker-mysql-master-slave/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1429字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 3分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <h2 id="mysql-主从复制">MySQL 主从复制</h2>
 <p><strong>下载 MySQL 镜像</strong></p>
 <p>官方镜像的 MySQL 版本是8.x</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker pull mysql
-</code></pre></div><p><strong>创建 MySQL 主从容器</strong></p>
+<pre><code class="language-shell">$ docker pull mysql
+</code></pre>
+<p><strong>创建 MySQL 主从容器</strong></p>
 <p>主</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker run -d --name mysql-master -p 13306:3306 -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span>root mysql
-</code></pre></div><p>从</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker run -d --name mysql-slave -p 13307:3306 -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span>root mysql
-</code></pre></div><p>分别用工具连接，测试能正常使用。</p>
+<pre><code class="language-shell">$ docker run -d --name mysql-master -p 13306:3306 -e MYSQL_ROOT_PASSWORD=root mysql
+</code></pre>
+<p>从</p>
+<pre><code class="language-shell">$ docker run -d --name mysql-slave -p 13307:3306 -e MYSQL_ROOT_PASSWORD=root mysql
+</code></pre>
+<p>分别用工具连接，测试能正常使用。</p>
 <p><strong>配置</strong></p>
 <ul>
 <li>
 <p>主库配置</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 进入主库容器</span>
+<pre><code class="language-shell"># 进入主库容器
 $ docker exec -it mysql-master bash
-<span style="color:#75715e"># 编辑MySQL配置</span>
+# 编辑MySQL配置
 $ vim /etc/mysql/my.cnf
-</code></pre></div><p>添加如下内容</p>
-<pre><code class="language-cnf" data-lang="cnf">[mysqld]
+</code></pre>
+<p>添加如下内容</p>
+<pre><code class="language-cnf">[mysqld]
 server-id = 1
 log-bin = mysql-bin
-</code></pre><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 退出容器并重启容器</span>
+</code></pre>
+<pre><code class="language-shell"># 退出容器并重启容器
 $ docker restart mysql-master
-</code></pre></div><p>再次进入容器，在主库中创建数据同步用户 <code>slave</code> ，授予改用户 <code>REPLICATION SLAVE</code> 和 <code>REPLICATION CLIENT</code> 权限，用户在主从库之间同步数据。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mysql&gt; CREATE USER <span style="color:#e6db74">&#39;slave&#39;</span>@<span style="color:#e6db74">&#39;%&#39;</span> IDENTIFIED BY <span style="color:#e6db74">&#39;slave&#39;</span>;
-mysql&gt; GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO <span style="color:#e6db74">&#39;slave&#39;</span>@<span style="color:#e6db74">&#39;%&#39;</span>;
-</code></pre></div></li>
+</code></pre>
+<p>再次进入容器，在主库中创建数据同步用户 <code>slave</code> ，授予改用户 <code>REPLICATION SLAVE</code> 和 <code>REPLICATION CLIENT</code> 权限，用户在主从库之间同步数据。</p>
+<pre><code class="language-shell">mysql&gt; CREATE USER 'slave'@'%' IDENTIFIED BY 'slave';
+mysql&gt; GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'slave'@'%';
+</code></pre>
+</li>
 <li>
 <p>从库配置</p>
 <p>在同样的配置文件中添加如下配置</p>
-<pre><code class="language-cnf" data-lang="cnf">[mysqld]
+<pre><code class="language-cnf">[mysqld]
 server-id = 2
 log-bin = mysql-slave-bin
 relay_log = mysql-slave-relay-bin
-</code></pre></li>
+</code></pre>
+</li>
 <li>
 <p>开启主从配置</p>
 <p>在主客户端输入</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> master status;
-<span style="color:#f92672">+------------------+----------+--------------+------------------+-------------------+</span>
-<span style="color:#f92672">|</span> File             <span style="color:#f92672">|</span> Position <span style="color:#f92672">|</span> Binlog_Do_DB <span style="color:#f92672">|</span> Binlog_Ignore_DB <span style="color:#f92672">|</span> Executed_Gtid_Set <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------+----------+--------------+------------------+-------------------+</span>
-<span style="color:#f92672">|</span> mysql<span style="color:#f92672">-</span>bin.<span style="color:#ae81ff">000001</span> <span style="color:#f92672">|</span>      <span style="color:#ae81ff">713</span> <span style="color:#f92672">|</span>              <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>                   <span style="color:#f92672">|</span>
-<span style="color:#f92672">+------------------+----------+--------------+------------------+-------------------+</span>
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)
-</code></pre></div><p>在从客户端输入</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">change</span> master <span style="color:#66d9ef">to</span> master_host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;172.17.0.2&#39;</span>, master_user<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;slave&#39;</span>, master_password<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;slave&#39;</span>, master_port<span style="color:#f92672">=</span><span style="color:#ae81ff">3306</span>, master_log_file<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mysql-bin.000001&#39;</span>, master_log_pos<span style="color:#f92672">=</span><span style="color:#ae81ff">713</span>, master_connect_retry<span style="color:#f92672">=</span><span style="color:#ae81ff">30</span>;
-</code></pre></div><p>命令说明</p>
+<pre><code class="language-mysql">mysql&gt; show master status;
++------------------+----------+--------------+------------------+-------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |
++------------------+----------+--------------+------------------+-------------------+
+| mysql-bin.000001 |      713 |              |                  |                   |
++------------------+----------+--------------+------------------+-------------------+
+1 row in set (0.00 sec)
+</code></pre>
+<p>在从客户端输入</p>
+<pre><code class="language-mysql">mysql&gt; change master to master_host='172.17.0.2', master_user='slave', master_password='slave', master_port=3306, master_log_file='mysql-bin.000001', master_log_pos=713, master_connect_retry=30;
+</code></pre>
+<p>命令说明</p>
 <ul>
 <li>master_host ：Master的地址，指的是容器的独立ip,可以通过 <code>docker inspect --format='{{.NetworkSettings.IPAddress}}' 容器名称|容器id</code> 查询容器的ip</li>
 <li>master_port：Master的端口号，指的是容器的端口号</li>
@@ -117,19 +622,19 @@ relay_log = mysql-slave-relay-bin
 <li>master_log_pos：从哪个 Position 开始读，即上文中提到的 Position 字段的值</li>
 <li>master_connect_retry：如果连接失败，重试的时间间隔，单位是秒，默认是60秒</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"> <span style="color:#75715e"># 查看主从同步状态
-</span><span style="color:#75715e"></span> mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> slave status <span style="color:#960050;background-color:#1e0010">\</span>G;
- <span style="color:#f92672">***************************</span> <span style="color:#ae81ff">1</span>. row <span style="color:#f92672">***************************</span>
+<pre><code class="language-mysql"> # 查看主从同步状态
+ mysql&gt; show slave status \G;
+ *************************** 1. row ***************************
                Slave_IO_State: 
-                   Master_Host: <span style="color:#ae81ff">172</span>.<span style="color:#ae81ff">17</span>.<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">2</span>
+                   Master_Host: 172.17.0.2
                    Master_User: slave
-                   Master_Port: <span style="color:#ae81ff">3306</span>
-                 Connect_Retry: <span style="color:#ae81ff">30</span>
-               Master_Log_File: mysql<span style="color:#f92672">-</span>bin.<span style="color:#ae81ff">000001</span>
-           Read_Master_Log_Pos: <span style="color:#ae81ff">713</span>
-               Relay_Log_File: emysql<span style="color:#f92672">-</span>slave<span style="color:#f92672">-</span>relay<span style="color:#f92672">-</span>bin.<span style="color:#ae81ff">000001</span>
-                 Relay_Log_Pos: <span style="color:#ae81ff">4</span>
-         Relay_Master_Log_File: mysql<span style="color:#f92672">-</span>bin.<span style="color:#ae81ff">000001</span>
+                   Master_Port: 3306
+                 Connect_Retry: 30
+               Master_Log_File: mysql-bin.000001
+           Read_Master_Log_Pos: 713
+               Relay_Log_File: emysql-slave-relay-bin.000001
+                 Relay_Log_Pos: 4
+         Relay_Master_Log_File: mysql-bin.000001
              Slave_IO_Running: No
              Slave_SQL_Running: No
                Replicate_Do_DB: 
@@ -138,34 +643,34 @@ relay_log = mysql-slave-relay-bin
        Replicate_Ignore_Table: 
        Replicate_Wild_Do_Table: 
    Replicate_Wild_Ignore_Table: 
-                   Last_Errno: <span style="color:#ae81ff">0</span>
+                   Last_Errno: 0
                    Last_Error: 
-                 Skip_Counter: <span style="color:#ae81ff">0</span>
-           Exec_Master_Log_Pos: <span style="color:#ae81ff">713</span>
-               Relay_Log_Space: <span style="color:#ae81ff">156</span>
+                 Skip_Counter: 0
+           Exec_Master_Log_Pos: 713
+               Relay_Log_Space: 156
                Until_Condition: None
                Until_Log_File: 
-                 Until_Log_Pos: <span style="color:#ae81ff">0</span>
+                 Until_Log_Pos: 0
            Master_SSL_Allowed: No
            Master_SSL_CA_File: 
            Master_SSL_CA_Path: 
                Master_SSL_Cert: 
              Master_SSL_Cipher: 
                Master_SSL_Key: 
-         Seconds_Behind_Master: <span style="color:#66d9ef">NULL</span>
+         Seconds_Behind_Master: NULL
  Master_SSL_Verify_Server_Cert: No
-                 Last_IO_Errno: <span style="color:#ae81ff">0</span>
+                 Last_IO_Errno: 0
                  Last_IO_Error: 
-               Last_SQL_Errno: <span style="color:#ae81ff">0</span>
+               Last_SQL_Errno: 0
                Last_SQL_Error: 
    Replicate_Ignore_Server_Ids: 
-             Master_Server_Id: <span style="color:#ae81ff">0</span>
+             Master_Server_Id: 0
                    Master_UUID: 
              Master_Info_File: mysql.slave_master_info
-                     SQL_Delay: <span style="color:#ae81ff">0</span>
-           SQL_Remaining_Delay: <span style="color:#66d9ef">NULL</span>
+                     SQL_Delay: 0
+           SQL_Remaining_Delay: NULL
        Slave_SQL_Running_State: 
-           Master_Retry_Count: <span style="color:#ae81ff">86400</span>
+           Master_Retry_Count: 86400
                    Master_Bind: 
        Last_IO_Error_Timestamp: 
      Last_SQL_Error_Timestamp: 
@@ -173,32 +678,34 @@ relay_log = mysql-slave-relay-bin
            Master_SSL_Crlpath: 
            Retrieved_Gtid_Set: 
              Executed_Gtid_Set: 
-                 Auto_Position: <span style="color:#ae81ff">0</span>
+                 Auto_Position: 0
          Replicate_Rewrite_DB: 
                  Channel_Name: 
            Master_TLS_Version: 
        Master_public_key_path: 
-         Get_master_public_key: <span style="color:#ae81ff">0</span>
+         Get_master_public_key: 0
              Network_Namespace: 
- <span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span>, <span style="color:#ae81ff">1</span> <span style="color:#a6e22e">warning</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">01</span> sec)
+ 1 row in set, 1 warning (0.01 sec)
 
  ERROR: 
  No query specified
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#75715e"># 开启主从复制
-</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> start slave;
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#75715e"># 再次查看状态
-</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> slave status <span style="color:#960050;background-color:#1e0010">\</span>G;
-<span style="color:#f92672">***************************</span> <span style="color:#ae81ff">1</span>. row <span style="color:#f92672">***************************</span>
-              Slave_IO_State: Waiting <span style="color:#66d9ef">for</span> master <span style="color:#66d9ef">to</span> send event
-                  Master_Host: <span style="color:#ae81ff">172</span>.<span style="color:#ae81ff">17</span>.<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">2</span>
+</code></pre>
+<pre><code class="language-mysql"># 开启主从复制
+mysql&gt; start slave;
+</code></pre>
+<pre><code class="language-mysql"># 再次查看状态
+mysql&gt; show slave status \G;
+*************************** 1. row ***************************
+              Slave_IO_State: Waiting for master to send event
+                  Master_Host: 172.17.0.2
                   Master_User: slave
-                  Master_Port: <span style="color:#ae81ff">3306</span>
-                Connect_Retry: <span style="color:#ae81ff">30</span>
-              Master_Log_File: mysql<span style="color:#f92672">-</span>bin.<span style="color:#ae81ff">000001</span>
-          Read_Master_Log_Pos: <span style="color:#ae81ff">1581</span>
-              Relay_Log_File: emysql<span style="color:#f92672">-</span>slave<span style="color:#f92672">-</span>relay<span style="color:#f92672">-</span>bin.<span style="color:#ae81ff">000002</span>
-                Relay_Log_Pos: <span style="color:#ae81ff">1192</span>
-        Relay_Master_Log_File: mysql<span style="color:#f92672">-</span>bin.<span style="color:#ae81ff">000001</span>
+                  Master_Port: 3306
+                Connect_Retry: 30
+              Master_Log_File: mysql-bin.000001
+          Read_Master_Log_Pos: 1581
+              Relay_Log_File: emysql-slave-relay-bin.000002
+                Relay_Log_Pos: 1192
+        Relay_Master_Log_File: mysql-bin.000001
             Slave_IO_Running: Yes
             Slave_SQL_Running: Yes
               Replicate_Do_DB: 
@@ -207,34 +714,34 @@ relay_log = mysql-slave-relay-bin
       Replicate_Ignore_Table: 
       Replicate_Wild_Do_Table: 
   Replicate_Wild_Ignore_Table: 
-                  Last_Errno: <span style="color:#ae81ff">0</span>
+                  Last_Errno: 0
                   Last_Error: 
-                Skip_Counter: <span style="color:#ae81ff">0</span>
-          Exec_Master_Log_Pos: <span style="color:#ae81ff">1581</span>
-              Relay_Log_Space: <span style="color:#ae81ff">1408</span>
+                Skip_Counter: 0
+          Exec_Master_Log_Pos: 1581
+              Relay_Log_Space: 1408
               Until_Condition: None
               Until_Log_File: 
-                Until_Log_Pos: <span style="color:#ae81ff">0</span>
+                Until_Log_Pos: 0
           Master_SSL_Allowed: No
           Master_SSL_CA_File: 
           Master_SSL_CA_Path: 
               Master_SSL_Cert: 
             Master_SSL_Cipher: 
               Master_SSL_Key: 
-        Seconds_Behind_Master: <span style="color:#ae81ff">0</span>
+        Seconds_Behind_Master: 0
 Master_SSL_Verify_Server_Cert: No
-                Last_IO_Errno: <span style="color:#ae81ff">0</span>
+                Last_IO_Errno: 0
                 Last_IO_Error: 
-              Last_SQL_Errno: <span style="color:#ae81ff">0</span>
+              Last_SQL_Errno: 0
               Last_SQL_Error: 
   Replicate_Ignore_Server_Ids: 
-            Master_Server_Id: <span style="color:#ae81ff">1</span>
-                  Master_UUID: a9da6629<span style="color:#f92672">-</span><span style="color:#ae81ff">75</span>d6<span style="color:#f92672">-</span><span style="color:#ae81ff">11</span>eb<span style="color:#f92672">-</span><span style="color:#ae81ff">96</span>b3<span style="color:#f92672">-</span><span style="color:#ae81ff">0242</span>ac110002
+            Master_Server_Id: 1
+                  Master_UUID: a9da6629-75d6-11eb-96b3-0242ac110002
             Master_Info_File: mysql.slave_master_info
-                    SQL_Delay: <span style="color:#ae81ff">0</span>
-          SQL_Remaining_Delay: <span style="color:#66d9ef">NULL</span>
-      Slave_SQL_Running_State: Slave has <span style="color:#66d9ef">read</span> <span style="color:#66d9ef">all</span> relay log; waiting <span style="color:#66d9ef">for</span> more updates
-          Master_Retry_Count: <span style="color:#ae81ff">86400</span>
+                    SQL_Delay: 0
+          SQL_Remaining_Delay: NULL
+      Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates
+          Master_Retry_Count: 86400
                   Master_Bind: 
       Last_IO_Error_Timestamp: 
     Last_SQL_Error_Timestamp: 
@@ -242,144 +749,243 @@ Master_SSL_Verify_Server_Cert: No
           Master_SSL_Crlpath: 
           Retrieved_Gtid_Set: 
             Executed_Gtid_Set: 
-                Auto_Position: <span style="color:#ae81ff">0</span>
+                Auto_Position: 0
         Replicate_Rewrite_DB: 
                 Channel_Name: 
           Master_TLS_Version: 
       Master_public_key_path: 
-        Get_master_public_key: <span style="color:#ae81ff">0</span>
+        Get_master_public_key: 0
             Network_Namespace: 
-<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span>, <span style="color:#ae81ff">1</span> <span style="color:#a6e22e">warning</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">01</span> sec)
+1 row in set, 1 warning (0.01 sec)
 
 ERROR: 
 No query specified
-</code></pre></div><p>正常情况下，开启主从复制后 <code>Slave_IO_Running</code> 和 <code>Slave_SQL_Running</code> 都是 Yes。</p>
+</code></pre>
+<p>正常情况下，开启主从复制后 <code>Slave_IO_Running</code> 和 <code>Slave_SQL_Running</code> 都是 Yes。</p>
 </li>
 </ul>
 <p><strong>测试</strong></p>
 <p>在主库中</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#75715e"># 创建库
-</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">database</span> msr_test;
+<pre><code class="language-mysql"># 创建库
+mysql&gt; create database msr_test;
 
-<span style="color:#75715e"># 在 msr_test 库中创建表
-</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>sys_dict<span style="color:#f92672">`</span> (
-  <span style="color:#f92672">`</span>id<span style="color:#f92672">`</span> <span style="color:#66d9ef">bigint</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">AUTO_INCREMENT</span> COMMENT <span style="color:#e6db74">&#39;ID&#39;</span>,
-  <span style="color:#f92672">`</span>name<span style="color:#f92672">`</span> <span style="color:#66d9ef">varchar</span>(<span style="color:#ae81ff">255</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> COMMENT <span style="color:#e6db74">&#39;字典名称&#39;</span>,
-  <span style="color:#f92672">`</span>description<span style="color:#f92672">`</span> <span style="color:#66d9ef">varchar</span>(<span style="color:#ae81ff">255</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span> COMMENT <span style="color:#e6db74">&#39;描述&#39;</span>,
-  <span style="color:#f92672">`</span>create_by<span style="color:#f92672">`</span> <span style="color:#66d9ef">varchar</span>(<span style="color:#ae81ff">255</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span> COMMENT <span style="color:#e6db74">&#39;创建者&#39;</span>,
-  <span style="color:#f92672">`</span>update_by<span style="color:#f92672">`</span> <span style="color:#66d9ef">varchar</span>(<span style="color:#ae81ff">255</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span> COMMENT <span style="color:#e6db74">&#39;更新者&#39;</span>,
-  <span style="color:#f92672">`</span>create_time<span style="color:#f92672">`</span> <span style="color:#66d9ef">datetime</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span> COMMENT <span style="color:#e6db74">&#39;创建日期&#39;</span>,
-  <span style="color:#f92672">`</span>update_time<span style="color:#f92672">`</span> <span style="color:#66d9ef">datetime</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span> COMMENT <span style="color:#e6db74">&#39;更新时间&#39;</span>,
-  <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>) <span style="color:#66d9ef">USING</span> BTREE
-) <span style="color:#66d9ef">ENGINE</span><span style="color:#f92672">=</span>InnoDB <span style="color:#66d9ef">AUTO_INCREMENT</span><span style="color:#f92672">=</span><span style="color:#ae81ff">15</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">CHARSET</span><span style="color:#f92672">=</span>utf8 ROW_FORMAT<span style="color:#f92672">=</span>COMPACT COMMENT<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;数据字典&#39;</span>;
+# 在 msr_test 库中创建表
+mysql&gt; CREATE TABLE `sys_dict` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `name` varchar(255) NOT NULL COMMENT '字典名称',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建者',
+  `update_by` varchar(255) DEFAULT NULL COMMENT '更新者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='数据字典';
 
-<span style="color:#75715e"># 在表中插入数据
-</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">INSERT</span> <span style="color:#66d9ef">INTO</span> msr_test.<span style="color:#a6e22e">sys_dict</span> (name,description,create_by,update_by,create_time,update_time) <span style="color:#66d9ef">VALUES</span>
-	 (<span style="color:#e6db74">&#39;user_status&#39;</span>,<span style="color:#e6db74">&#39;用户状态&#39;</span>,<span style="color:#66d9ef">NULL</span>,<span style="color:#66d9ef">NULL</span>,<span style="color:#e6db74">&#39;2019-10-27 20:31:36.0&#39;</span>,<span style="color:#66d9ef">NULL</span>),
-	 (<span style="color:#e6db74">&#39;dept_status&#39;</span>,<span style="color:#e6db74">&#39;部门状态&#39;</span>,<span style="color:#66d9ef">NULL</span>,<span style="color:#66d9ef">NULL</span>,<span style="color:#e6db74">&#39;2019-10-27 20:31:36.0&#39;</span>,<span style="color:#66d9ef">NULL</span>),
-	 (<span style="color:#e6db74">&#39;job_status&#39;</span>,<span style="color:#e6db74">&#39;岗位状态&#39;</span>,<span style="color:#66d9ef">NULL</span>,<span style="color:#66d9ef">NULL</span>,<span style="color:#e6db74">&#39;2019-10-27 20:31:36.0&#39;</span>,<span style="color:#66d9ef">NULL</span>);
-</code></pre></div><p>在从库中</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#75715e"># 查看库
-</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">databases</span>;
-<span style="color:#f92672">+--------------------+</span>
-<span style="color:#f92672">|</span> <span style="color:#66d9ef">Database</span>           <span style="color:#f92672">|</span>
-<span style="color:#f92672">+--------------------+</span>
-<span style="color:#f92672">|</span> information_schema <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> msr_test           <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> mysql              <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> performance_schema <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> sys                <span style="color:#f92672">|</span>
-<span style="color:#f92672">+--------------------+</span>
+# 在表中插入数据
+mysql&gt; INSERT INTO msr_test.sys_dict (name,description,create_by,update_by,create_time,update_time) VALUES
+	 ('user_status','用户状态',NULL,NULL,'2019-10-27 20:31:36.0',NULL),
+	 ('dept_status','部门状态',NULL,NULL,'2019-10-27 20:31:36.0',NULL),
+	 ('job_status','岗位状态',NULL,NULL,'2019-10-27 20:31:36.0',NULL);
+</code></pre>
+<p>在从库中</p>
+<pre><code class="language-mysql"># 查看库
+mysql&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| msr_test           |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
 
-<span style="color:#75715e"># 查看表数据
-</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> msr_test.sys_dict;
-<span style="color:#f92672">+----+-------------+-------------+-----------+-----------+---------------------+-------------+</span>
-<span style="color:#f92672">|</span> id <span style="color:#f92672">|</span> name        <span style="color:#f92672">|</span> description <span style="color:#f92672">|</span> create_by <span style="color:#f92672">|</span> update_by <span style="color:#f92672">|</span> create_time         <span style="color:#f92672">|</span> update_time <span style="color:#f92672">|</span>
-<span style="color:#f92672">+----+-------------+-------------+-----------+-----------+---------------------+-------------+</span>
-<span style="color:#f92672">|</span> <span style="color:#ae81ff">15</span> <span style="color:#f92672">|</span> user_status <span style="color:#f92672">|</span>             <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">10</span><span style="color:#f92672">-</span><span style="color:#ae81ff">27</span> <span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">31</span>:<span style="color:#ae81ff">36</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>        <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> <span style="color:#ae81ff">16</span> <span style="color:#f92672">|</span> dept_status <span style="color:#f92672">|</span>             <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">10</span><span style="color:#f92672">-</span><span style="color:#ae81ff">27</span> <span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">31</span>:<span style="color:#ae81ff">36</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>        <span style="color:#f92672">|</span>
-<span style="color:#f92672">|</span> <span style="color:#ae81ff">17</span> <span style="color:#f92672">|</span> job_status  <span style="color:#f92672">|</span>             <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>      <span style="color:#f92672">|</span> <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">10</span><span style="color:#f92672">-</span><span style="color:#ae81ff">27</span> <span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">31</span>:<span style="color:#ae81ff">36</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>        <span style="color:#f92672">|</span>
-<span style="color:#f92672">+----+-------------+-------------+-----------+-----------+---------------------+-------------+</span>
-</code></pre></div><p>说明MySQL主从复制是部署成功了的。</p>
+# 查看表数据
+mysql&gt; select * from msr_test.sys_dict;
++----+-------------+-------------+-----------+-----------+---------------------+-------------+
+| id | name        | description | create_by | update_by | create_time         | update_time |
++----+-------------+-------------+-----------+-----------+---------------------+-------------+
+| 15 | user_status |             | NULL      | NULL      | 2019-10-27 20:31:36 | NULL        |
+| 16 | dept_status |             | NULL      | NULL      | 2019-10-27 20:31:36 | NULL        |
+| 17 | job_status  |             | NULL      | NULL      | 2019-10-27 20:31:36 | NULL        |
++----+-------------+-------------+-----------+-----------+---------------------+-------------+
+</code></pre>
+<p>说明MySQL主从复制是部署成功了的。</p>
 <p><strong>最后</strong></p>
 <p>因为容器每次启动的时候ip会变化，所以都会给个固定的ip</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 查看docker占用的网段</span>
+<pre><code class="language-shell"># 查看docker占用的网段
 $ ifconfig
-br-ab794da606af: flags<span style="color:#f92672">=</span>4099&lt;UP,BROADCAST,MULTICAST&gt;  mtu <span style="color:#ae81ff">1500</span>
+br-ab794da606af: flags=4099&lt;UP,BROADCAST,MULTICAST&gt;  mtu 1500
         inet 172.18.0.1  netmask 255.255.0.0  broadcast 172.18.255.255
-        ether 02:42:35:06:cc:a4  txqueuelen <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>Ethernet<span style="color:#f92672">)</span>
-        RX packets <span style="color:#ae81ff">0</span>  bytes <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>0.0 B<span style="color:#f92672">)</span>
-        RX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span>  overruns <span style="color:#ae81ff">0</span>  frame <span style="color:#ae81ff">0</span>
-        TX packets <span style="color:#ae81ff">0</span>  bytes <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>0.0 B<span style="color:#f92672">)</span>
-        TX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span> overruns <span style="color:#ae81ff">0</span>  carrier <span style="color:#ae81ff">0</span>  collisions <span style="color:#ae81ff">0</span>
+        ether 02:42:35:06:cc:a4  txqueuelen 0  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
-docker0: flags<span style="color:#f92672">=</span>4099&lt;UP,BROADCAST,MULTICAST&gt;  mtu <span style="color:#ae81ff">1500</span>
+docker0: flags=4099&lt;UP,BROADCAST,MULTICAST&gt;  mtu 1500
         inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
-        ether 02:42:b4:c0:2d:85  txqueuelen <span style="color:#ae81ff">0</span>  <span style="color:#f92672">(</span>Ethernet<span style="color:#f92672">)</span>
-        RX packets <span style="color:#ae81ff">0</span>  bytes <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>0.0 B<span style="color:#f92672">)</span>
-        RX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span>  overruns <span style="color:#ae81ff">0</span>  frame <span style="color:#ae81ff">0</span>
-        TX packets <span style="color:#ae81ff">0</span>  bytes <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>0.0 B<span style="color:#f92672">)</span>
-        TX errors <span style="color:#ae81ff">0</span>  dropped <span style="color:#ae81ff">0</span> overruns <span style="color:#ae81ff">0</span>  carrier <span style="color:#ae81ff">0</span>  collisions <span style="color:#ae81ff">0</span>
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 创建自定义网络</span>
+        ether 02:42:b4:c0:2d:85  txqueuelen 0  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+</code></pre>
+<pre><code class="language-shell"># 创建自定义网络
 $ docker network create --subnet 172.19.0.0/24 mysql-master-slave
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 创建容器时指定ip</span>
-$ docker run -d --name mysql-master-n --network mysql-master-slave --ip 172.19.0.2 -p 13306:3306 -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span>root mysql
+</code></pre>
+<pre><code class="language-shell"># 创建容器时指定ip
+$ docker run -d --name mysql-master-n --network mysql-master-slave --ip 172.19.0.2 -p 13306:3306 -e MYSQL_ROOT_PASSWORD=root mysql
 
-$ docker run -d --name mysql-slave-n --network mysql-master-slave --ip 172.19.0.3 -p 13307:3306 -e MYSQL_ROOT_PASSWORD<span style="color:#f92672">=</span>root mysql
-</code></pre></div><p>参考 <a href="https://juejin.cn/post/6907112721532059662">https://juejin.cn/post/6907112721532059662</a></p>
+$ docker run -d --name mysql-slave-n --network mysql-master-slave --ip 172.19.0.3 -p 13307:3306 -e MYSQL_ROOT_PASSWORD=root mysql
+</code></pre>
+<p>参考 <a href="https://juejin.cn/post/6907112721532059662">https://juejin.cn/post/6907112721532059662</a></p>
 
-    <h4><a href="https://littleguest.github.io/">Back to Home</a></h4>
-</div>
+    </div>
+    <div class="article-footer">
+
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://littleguest.github.io/posts/docker-mysql/" title="Docker搭建MySQL"><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            <li class="next">
+                <a href="https://littleguest.github.io/posts/t-2048/"
+                    title="一款可以在终端玩的2048小游戏"><span>上一篇&nbsp;&nbsp;</span><i
+                        class="icon icon-angle-right" aria-hidden="true"></i></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,qzone"></div>
+        </div>
+    </div>
+</nav>
 
 
-        </div><footer class="container">
-    <hr class="soften">
-    <p>
-
-&copy; 
-
-    gopher9527
-
-<span id="thisyear">2020</span>
-
-</p>
-    <p class="text-center">
-        
-        
-        
-        <a href="https://github.com/LittleGuest">GitHub</a> 
-        
-    </p>
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://github.com/LittleGuest" target="_blank" title="github" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-github"></i></a></li>
+    <li><a href="https://littleguest.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2020  -
+    2021
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
 </footer>
 
-</body><link rel="stylesheet" href="/css/bootstrap.css">
-<link rel="stylesheet" href="/css/bootstrap-responsive.css">
-<link rel="stylesheet" href="/css/style.css">
+<script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
 
-<script src="/js/jquery.js"></script>
-<script src="/js/bootstrap-386.js"></script>
-<script src="/js/bootstrap-transition.js"></script>
-<script src="/js/bootstrap-alert.js"></script>
-<script src="/js/bootstrap-modal.js"></script>
-<script src="/js/bootstrap-dropdown.js"></script>
-<script src="/js/bootstrap-scrollspy.js"></script>
-<script src="/js/bootstrap-tab.js"></script>
-<script src="/js/bootstrap-tooltip.js"></script>
-<script src="/js/bootstrap-popover.js"></script>
-<script src="/js/bootstrap-button.js"></script>
-<script src="/js/bootstrap-collapse.js"></script>
-<script src="/js/bootstrap-carousel.js"></script>
-<script src="/js/bootstrap-typeahead.js"></script>
-<script src="/js/bootstrap-affix.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
 <script>
-    _386 = { 
-        fastLoad: false ,
-        onePass: false , 
-        speedFactor: 1 
-    };
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/python.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/javascript.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/rust.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/java.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/go.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/c.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/cpp.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/shell.min.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.6.0/languages/sql.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://littleguest.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://littleguest.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
 
-    
-    function ThisYear() {
-        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
-    };
-</script></html>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/littleguest.github.io\/',
+            CONTENT_URL: 'https:\/\/littleguest.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://littleguest.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/tocbot/4.12.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        
+        
+        appId: 'gkzEGKSHEpVGvpy0znhhBDuM-gzGzoHsz',
+        appKey: 'd4ngyH9kAtx6G8UzVPjfhAGi',
+        placeholder: '快来发表评论吧~',
+        avatar: 'retro',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: true ,
+        requiredFields:["nick","mail"]
+});
+</script>
+
+  </body>
+</html>
