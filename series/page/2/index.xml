@@ -10,6 +10,15 @@
     
     
     <item>
+      <title>Java-记一次Stream去重操作</title>
+      <link>https://littleguest.github.io/posts/java-stream-distinct/</link>
+      <pubDate>Fri, 08 Jan 2021 23:48:47 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/java-stream-distinct/</guid>
+      <description>记一次Java Stream 去重操作 为了重现当时的错误，我会尽量保持一致，只是类名和类的属性不一样而已，现定义如下两个类 public class BaseEntity implements Serializable { private Long id; public BaseEntity() { } public Long getId()</description>
+    </item>
+    
+    <item>
       <title>Rust-杂记</title>
       <link>https://littleguest.github.io/posts/rust-notes/</link>
       <pubDate>Sun, 27 Dec 2020 18:07:18 +0000</pubDate>
@@ -28,12 +37,12 @@
     </item>
     
     <item>
-      <title>Raspberry Pi 初体验</title>
+      <title>树莓派 初体验</title>
       <link>https://littleguest.github.io/posts/raspberrypi-first-experience/</link>
       <pubDate>Tue, 01 Dec 2020 09:32:14 +0000</pubDate>
       
       <guid>https://littleguest.github.io/posts/raspberrypi-first-experience/</guid>
-      <description>Raspberry Pi 初体验 在 Linux 系统上如何连接没有屏幕的树莓派 准备或制作树莓派的镜像； 如何制作？ 首先到官网下载一个适合自己的镜像，我选择的是下面这个镜像； 使用</description>
+      <description>树莓派 初体验 在 Linux 系统上如何连接没有屏幕的树莓派 准备或制作树莓派的镜像； 如何制作？ 首先到官网下载一个适合自己的镜像，我选择的是下面这个镜像； 使</description>
     </item>
     
     <item>

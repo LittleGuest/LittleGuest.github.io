@@ -46,6 +46,15 @@
     </item>
     
     <item>
+      <title>Rust 控制 三色RGB LED灯</title>
+      <link>https://littleguest.github.io/posts/raspberrypi-rgbled-rust/</link>
+      <pubDate>Wed, 03 Mar 2021 09:34:44 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/raspberrypi-rgbled-rust/</guid>
+      <description>因为笔者本身没有学过任何有关硬件的知识，所以理解上可能会出现偏差。在实际的操作过程中也显得比较吃力。 准备相关物品 树莓派 4B ：（买来吃灰很久了的</description>
+    </item>
+    
+    <item>
       <title>AppImage打包二进制文件</title>
       <link>https://littleguest.github.io/posts/appimage/</link>
       <pubDate>Mon, 01 Mar 2021 22:12:52 +0800</pubDate>
@@ -178,15 +187,6 @@
       
       <guid>https://littleguest.github.io/posts/rust-tour-error-handle/</guid>
       <description>Rust中的错误处理 在 Java 中处理异常一般有以下几种方式： 使用 try-catch 捕获异常 通过 throw 的方式向上抛异常 在web中全局拦截异常 当然还有其他方式处理异常，这</description>
-    </item>
-    
-    <item>
-      <title>Java-记一次Stream去重操作</title>
-      <link>https://littleguest.github.io/posts/java-stream-distinct/</link>
-      <pubDate>Fri, 08 Jan 2021 23:48:47 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/java-stream-distinct/</guid>
-      <description>记一次Java Stream 去重操作 为了重现当时的错误，我会尽量保持一致，只是类名和类的属性不一样而已，现定义如下两个类 public class BaseEntity implements Serializable { private Long id; public BaseEntity() { } public Long getId()</description>
     </item>
     
   </channel>

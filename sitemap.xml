@@ -122,6 +122,41 @@
   </url>
   
   <url>
+    <loc>https://littleguest.github.io/posts/raspberrypi-rgbled-rust/</loc>
+    <lastmod>2021-03-03T09:34:44+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/tags/rust%E5%B5%8C%E5%85%A5%E5%BC%8F/</loc>
+    <lastmod>2021-03-03T09:34:44+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/</loc>
+    <lastmod>2021-03-03T09:34:44+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/</loc>
+    <lastmod>2021-03-03T09:34:44+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/tags/%E6%A0%91%E8%8E%93%E6%B4%BE-rgbled/</loc>
+    <lastmod>2021-03-03T09:34:44+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://littleguest.github.io/tags/appimage/</loc>
     <lastmod>2021-03-01T22:12:52+08:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -381,13 +416,6 @@
   </url>
   
   <url>
-    <loc>https://littleguest.github.io/tags/raspberry-pi/</loc>
-    <lastmod>2020-12-08T09:51:12+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://littleguest.github.io/posts/rust-cross-compiling-raspberrypi/</loc>
     <lastmod>2020-12-08T09:51:12+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -395,8 +423,8 @@
   </url>
   
   <url>
-    <loc>https://littleguest.github.io/categories/raspberry-pi/</loc>
-    <lastmod>2020-12-01T09:32:14+00:00</lastmod>
+    <loc>https://littleguest.github.io/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/</loc>
+    <lastmod>2020-12-08T09:51:12+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
