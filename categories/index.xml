@@ -5,10 +5,19 @@
     <link>https://littleguest.github.io/categories/</link>
     <description>Recent content in Categories on 蒲建全的博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 24 Mar 2021 10:30:53 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 14 Apr 2021 14:43:05 +0800</lastBuildDate>
     
         <atom:link href="https://littleguest.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>雪花算法（Snowflake）</title>
+      <link>https://littleguest.github.io/posts/snowflake/</link>
+      <pubDate>Wed, 14 Apr 2021 14:43:05 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/snowflake/</guid>
+      <description>简介 雪花算法（Snowflake）是一种生成分布式全局唯一ID的算法，生成的ID称为 Snowflake IDs 或 snowflakes。 这种算法由 Twitter 创建，并用于推文</description>
+    </item>
     
     <item>
       <title>Docker 搭建私有 Git 服务</title>
@@ -179,15 +188,6 @@
       
       <guid>https://littleguest.github.io/posts/rust-tour-generic-type/</guid>
       <description>Rust如何使用泛型 在函数定义中使用泛型 比如我们定义一个求slice中的最大值的函数，传入的参数是一个元素类型为 T 的slice，返回值也是 T</description>
-    </item>
-    
-    <item>
-      <title>Rust之旅-错误处理</title>
-      <link>https://littleguest.github.io/posts/rust-tour-error-handle/</link>
-      <pubDate>Tue, 12 Jan 2021 21:33:07 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/rust-tour-error-handle/</guid>
-      <description>Rust中的错误处理 在 Java 中处理异常一般有以下几种方式： 使用 try-catch 捕获异常 通过 throw 的方式向上抛异常 在web中全局拦截异常 当然还有其他方式处理异常，这</description>
     </item>
     
   </channel>

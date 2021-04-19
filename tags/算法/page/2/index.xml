@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>算法 on 蒲建全的博客</title>
+    <link>https://littleguest.github.io/tags/%E7%AE%97%E6%B3%95/</link>
+    <description>Recent content in 算法 on 蒲建全的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 14 Apr 2021 14:43:05 +0800</lastBuildDate>
+    
+        <atom:link href="https://littleguest.github.io/tags/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Rust之旅-错误处理</title>
+      <link>https://littleguest.github.io/posts/rust-tour-error-handle/</link>
+      <pubDate>Tue, 12 Jan 2021 21:33:07 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-error-handle/</guid>
+      <description>Rust中的错误处理 在 Java 中处理异常一般有以下几种方式： 使用 try-catch 捕获异常 通过 throw 的方式向上抛异常 在web中全局拦截异常 当然还有其他方式处理异常，这</description>
+    </item>
+    
+    <item>
+      <title>Java-记一次Stream去重操作</title>
+      <link>https://littleguest.github.io/posts/java-stream-distinct/</link>
+      <pubDate>Fri, 08 Jan 2021 23:48:47 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/java-stream-distinct/</guid>
+      <description>记一次Java Stream 去重操作 为了重现当时的错误，我会尽量保持一致，只是类名和类的属性不一样而已，现定义如下两个类 public class BaseEntity implements Serializable { private Long id; public BaseEntity() { } public Long getId()</description>
+    </item>
+    
+    <item>
+      <title>Rust-杂记</title>
+      <link>https://littleguest.github.io/posts/rust-notes/</link>
+      <pubDate>Sun, 27 Dec 2020 18:07:18 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-notes/</guid>
+      <description>&amp;amp; 表示是一个引用，它允许多出代码访问同一处数据，而无需在内存中多次拷贝； 关联函数是针对类型实现的； 语义化版本； 变量是默认不可改变的，但通过加</description>
+    </item>
+    
+    <item>
+      <title>Rust-交叉编译-树莓派</title>
+      <link>https://littleguest.github.io/posts/rust-cross-compiling-raspberrypi/</link>
+      <pubDate>Tue, 08 Dec 2020 09:51:12 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-cross-compiling-raspberrypi/</guid>
+      <description>Rust交叉编译问题 $ cargo build --release --target armv7-unknown-linux-musleabihf 下面是错误日志 error: failed to run custom build command for `openssl-sys v0.9.58` Caused by: process didn&#39;t exit successfully: `~/workspace/raspi_ip_email/target/release/build/openssl-sys-86e8fa49856e4dc9/build-script-main` (exit code: 101) --- stdout cargo:rustc-cfg=const_fn cargo:rerun-if-env-changed=ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_LIB_DIR ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_LIB_DIR unset cargo:rerun-if-env-changed=OPENSSL_LIB_DIR OPENSSL_LIB_DIR unset cargo:rerun-if-env-changed=ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_INCLUDE_DIR ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_INCLUDE_DIR unset cargo:rerun-if-env-changed=OPENSSL_INCLUDE_DIR OPENSSL_INCLUDE_DIR unset cargo:rerun-if-env-changed=ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_DIR ARMV7_UNKNOWN_LINUX_MUSLEABIHF_OPENSSL_DIR unset cargo:rerun-if-env-changed=OPENSSL_DIR OPENSSL_DIR unset cargo:rerun-if-env-changed=OPENSSL_NO_PKG_CONFIG cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_armv7-unknown-linux-musleabihf cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS_armv7_unknown_linux_musleabihf cargo:rerun-if-env-changed=TARGET_PKG_CONFIG_ALLOW_CROSS cargo:rerun-if-env-changed=PKG_CONFIG_ALLOW_CROSS cargo:rerun-if-env-changed=PKG_CONFIG_armv7-unknown-linux-musleabihf</description>
+    </item>
+    
+    <item>
+      <title>树莓派 初体验</title>
+      <link>https://littleguest.github.io/posts/raspberrypi-first-experience/</link>
+      <pubDate>Tue, 01 Dec 2020 09:32:14 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/raspberrypi-first-experience/</guid>
+      <description>树莓派 初体验 在 Linux 系统上如何连接没有屏幕的树莓派 准备或制作树莓派的镜像； 如何制作？ 首先到官网下载一个适合自己的镜像，我选择的是下面这个镜像； 使</description>
+    </item>
+    
+    <item>
+      <title>VSCode中调试Rust</title>
+      <link>https://littleguest.github.io/posts/vscode-debug-rust/</link>
+      <pubDate>Sat, 29 Aug 2020 10:48:41 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/vscode-debug-rust/</guid>
+      <description>如何在 VSCode 中调试 Rust 来源：如何在 VSCode 中调试 Rust 代码 安装 CodeLLDB 创建 launch.json 文件，添加配置如下 { &amp;quot;version&amp;quot;: &amp;quot;0.2.0&amp;quot;, &amp;quot;configurations&amp;quot;: [ { &amp;quot;name&amp;quot;: &amp;quot;(Linux) Launch&amp;quot;, &amp;quot;type&amp;quot;: &amp;quot;lldb&amp;quot;, &amp;quot;request&amp;quot;: &amp;quot;launch&amp;quot;, &amp;quot;program&amp;quot;: &amp;quot;${workspaceRoo</description>
+    </item>
+    
+    <item>
+      <title>Rust之旅-控制流程</title>
+      <link>https://littleguest.github.io/posts/rust-tour-control-flow/</link>
+      <pubDate>Sun, 23 Aug 2020 11:14:48 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-control-flow/</guid>
+      <description>if 表达式 fn main() { let number = 3; if number &amp;lt; 5 { println!(&amp;quot;condition was true&amp;quot;); } else { println!(&amp;quot;condition was false&amp;quot;); } } 使用 else if 处理多重条件 let number = 6; if number % 4 == 0 { println!(&amp;quot;number is divisible by 4&amp;quot;); } else if number % 3 == 0 { println!(&amp;quot;number is divisible by 3&amp;quot;); } else if</description>
+    </item>
+    
+    <item>
+      <title>Rust之旅-数据类型</title>
+      <link>https://littleguest.github.io/posts/rust-tour-data-types/</link>
+      <pubDate>Sun, 23 Aug 2020 10:37:10 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-data-types/</guid>
+      <description>整型 长度 有符号 无符号 8-bit i8 u8 16-bit i16 u16 32-bit i32 u32 64-bit i64 u64 128-bit i128 u128 arch isize usize 浮点型 f32，f64 布尔类型 bool 字符类型 使用单引号指定 元组类型 数组类型 元组长度固定，使</description>
+    </item>
+    
+    <item>
+      <title>Rust之旅-变量和可变性</title>
+      <link>https://littleguest.github.io/posts/rust-tour-variable/</link>
+      <pubDate>Sat, 22 Aug 2020 16:33:05 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-variable/</guid>
+      <description>变量 声明变量使用 let 关键字，变量是默认不可变的； 可变变量 在变量前加mut关键字，使其可变； 常量 声明常量使用const关键字，并且必须指定类型，</description>
+    </item>
+    
+    <item>
+      <title>Rust之旅-运算符与符号</title>
+      <link>https://littleguest.github.io/posts/rust-tour-operators-symbols/</link>
+      <pubDate>Sat, 22 Aug 2020 16:22:10 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-operators-symbols/</guid>
+      <description>运算符 运算符 示例 解释 是否可重载 ! ident!(...), ident!{...}, ident![...] 宏展开 ! !expr 按位非或逻辑非 Not != var != expr 不等比较 PartialEq % expr % expr 算术取模 Rem %= var %= expr 算术取模与赋值 RemAssign &amp;amp; &amp;amp;expr, &amp;amp;mut expr 借用 &amp;amp; &amp;amp;type,</description>
+    </item>
+    
+    <item>
+      <title>Rust之旅-关键字</title>
+      <link>https://littleguest.github.io/posts/rust-tour-keywords/</link>
+      <pubDate>Fri, 21 Aug 2020 20:07:49 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-keywords/</guid>
+      <description>Rust 关键字 正在使用的关键字 关键字 描述 as 强制类型转换，消除特定包含项的 trait 的歧义，或者对 use 和 extern crate 语句中的项重命名 async 返回一个 Future 而不是阻塞当前线程 await suspend</description>
+    </item>
+    
+    <item>
+      <title>Rust之旅-从放弃到放弃</title>
+      <link>https://littleguest.github.io/posts/rust-tour-give-up/</link>
+      <pubDate>Thu, 20 Aug 2020 09:51:18 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-give-up/</guid>
+      <description>Rust 之旅 今天开始 Rust 的旅程。^_^ 安装 Rust 我的系统是 deepin20，直接根据官网安装教程走就行了，使用 Rustup 安装 curl &amp;ndash;proto &amp;lsquo;=https&amp;rsquo; &amp;ndash;tlsv1.2 -sSf https://sh.rustup.rs | sh 查看 Rust 版本 rustc -V rustc 1.45.2 (d3fb005a3</description>
+    </item>
+    
+  </channel>
+</rss>

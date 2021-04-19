@@ -4,7 +4,49 @@
   
   <url>
     <loc>https://littleguest.github.io/categories/</loc>
-    <lastmod>2021-03-24T10:30:53+08:00</lastmod>
+    <lastmod>2021-04-14T14:43:05+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/posts/</loc>
+    <lastmod>2021-04-14T14:43:05+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/tags/</loc>
+    <lastmod>2021-04-14T14:43:05+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8F%8A%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2021-04-14T14:43:05+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/tags/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2021-04-14T14:43:05+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/</loc>
+    <lastmod>2021-04-14T14:43:05+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/posts/snowflake/</loc>
+    <lastmod>2021-04-14T14:43:05+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -32,27 +74,6 @@
   
   <url>
     <loc>https://littleguest.github.io/tags/git/</loc>
-    <lastmod>2021-03-24T10:30:53+08:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://littleguest.github.io/posts/</loc>
-    <lastmod>2021-03-24T10:30:53+08:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://littleguest.github.io/tags/</loc>
-    <lastmod>2021-03-24T10:30:53+08:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://littleguest.github.io/</loc>
     <lastmod>2021-03-24T10:30:53+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
