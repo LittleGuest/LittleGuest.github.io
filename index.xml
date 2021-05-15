@@ -5,10 +5,28 @@
     <link>https://littleguest.github.io/</link>
     <description>Recent content on 蒲建全的博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 14 Apr 2021 14:43:05 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 03 May 2021 21:03:32 +0800</lastBuildDate>
     
         <atom:link href="https://littleguest.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>配置文件格式转换</title>
+      <link>https://littleguest.github.io/posts/cffc/</link>
+      <pubDate>Mon, 03 May 2021 21:03:32 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/cffc/</guid>
+      <description>怎么来的 笔者使用 Hugo 搭建的博客，最近发现一款主题（pure），还蛮不错的。但是需要将主题里面的yaml格式转换为toml的格式（为什么要转换呢</description>
+    </item>
+    
+    <item>
+      <title>位运算</title>
+      <link>https://littleguest.github.io/posts/bit-operation/</link>
+      <pubDate>Sun, 18 Apr 2021 12:49:36 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/bit-operation/</guid>
+      <description>什么是二进制 二进制是计算机内部运算中采用的进制，在这样的进制系统下，只有0，1两个数字，计算机内部的所有运算（包括位运算）都是在二进制的基础</description>
+    </item>
     
     <item>
       <title>雪花算法（Snowflake）</title>
@@ -170,24 +188,6 @@
       
       <guid>https://littleguest.github.io/links/</guid>
       <description>SoulReader-前端大菜哔 让我们一起摇摆。。。 大佬的博客 纯洁的微笑 柒&amp;rsquo;s Blog 何先生-分享IT技术及网络资源的个人博客</description>
-    </item>
-    
-    <item>
-      <title>Rust之旅-生命周期</title>
-      <link>https://littleguest.github.io/posts/rust-tour-lifetime/</link>
-      <pubDate>Tue, 12 Jan 2021 21:41:40 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/rust-tour-lifetime/</guid>
-      <description>生命周期与引用有效性 Rust 中的每一个引用都有其 生命周期（lifetime），也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正</description>
-    </item>
-    
-    <item>
-      <title>Rust之旅-泛型</title>
-      <link>https://littleguest.github.io/posts/rust-tour-generic-type/</link>
-      <pubDate>Tue, 12 Jan 2021 21:41:32 +0000</pubDate>
-      
-      <guid>https://littleguest.github.io/posts/rust-tour-generic-type/</guid>
-      <description>Rust如何使用泛型 在函数定义中使用泛型 比如我们定义一个求slice中的最大值的函数，传入的参数是一个元素类型为 T 的slice，返回值也是 T</description>
     </item>
     
   </channel>

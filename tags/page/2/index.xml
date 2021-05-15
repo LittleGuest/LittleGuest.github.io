@@ -5,10 +5,28 @@
     <link>https://littleguest.github.io/tags/</link>
     <description>Recent content in Tags on 蒲建全的博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 14 Apr 2021 14:43:05 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 03 May 2021 21:03:32 +0800</lastBuildDate>
     
         <atom:link href="https://littleguest.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Rust之旅-生命周期</title>
+      <link>https://littleguest.github.io/posts/rust-tour-lifetime/</link>
+      <pubDate>Tue, 12 Jan 2021 21:41:40 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-lifetime/</guid>
+      <description>生命周期与引用有效性 Rust 中的每一个引用都有其 生命周期（lifetime），也就是引用保持有效的作用域。大部分时候生命周期是隐含并可以推断的，正</description>
+    </item>
+    
+    <item>
+      <title>Rust之旅-泛型</title>
+      <link>https://littleguest.github.io/posts/rust-tour-generic-type/</link>
+      <pubDate>Tue, 12 Jan 2021 21:41:32 +0000</pubDate>
+      
+      <guid>https://littleguest.github.io/posts/rust-tour-generic-type/</guid>
+      <description>Rust如何使用泛型 在函数定义中使用泛型 比如我们定义一个求slice中的最大值的函数，传入的参数是一个元素类型为 T 的slice，返回值也是 T</description>
+    </item>
     
     <item>
       <title>Rust之旅-错误处理</title>
