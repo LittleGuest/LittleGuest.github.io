@@ -10,6 +10,15 @@
     
     
     <item>
+      <title>友情链接</title>
+      <link>https://littleguest.github.io/links/</link>
+      <pubDate>Thu, 21 Jan 2021 17:33:52 +0800</pubDate>
+      
+      <guid>https://littleguest.github.io/links/</guid>
+      <description>SoulReader-前端大菜哔 让我们一起摇摆。。。 大佬的博客 纯洁的微笑 柒&amp;rsquo;s Blog 何先生-分享IT技术及网络资源的个人博客</description>
+    </item>
+    
+    <item>
       <title>Rust之旅-生命周期</title>
       <link>https://littleguest.github.io/posts/rust-tour-lifetime/</link>
       <pubDate>Tue, 12 Jan 2021 21:41:40 +0000</pubDate>

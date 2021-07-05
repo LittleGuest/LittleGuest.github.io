@@ -4,34 +4,62 @@
   
   <url>
     <loc>https://littleguest.github.io/categories/</loc>
-    <lastmod>2021-05-03T21:03:32+08:00</lastmod>
+    <lastmod>2021-07-05T22:21:18+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/tags/max7219/</loc>
+    <lastmod>2021-07-05T22:21:18+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://littleguest.github.io/posts/</loc>
-    <lastmod>2021-05-03T21:03:32+08:00</lastmod>
+    <lastmod>2021-07-05T22:21:18+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/categories/rust/</loc>
+    <lastmod>2021-07-05T22:21:18+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://littleguest.github.io/tags/</loc>
-    <lastmod>2021-05-03T21:03:32+08:00</lastmod>
+    <lastmod>2021-07-05T22:21:18+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://littleguest.github.io/categories/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/</loc>
-    <lastmod>2021-05-03T21:03:32+08:00</lastmod>
+    <loc>https://littleguest.github.io/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/</loc>
+    <lastmod>2021-07-05T22:21:18+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/posts/raspi_clock/</loc>
+    <lastmod>2021-07-05T22:21:18+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://littleguest.github.io/</loc>
+    <lastmod>2021-07-05T22:21:18+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://littleguest.github.io/categories/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/</loc>
     <lastmod>2021-05-03T21:03:32+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -150,13 +178,6 @@
   </url>
   
   <url>
-    <loc>https://littleguest.github.io/categories/rust/</loc>
-    <lastmod>2021-03-08T16:21:12+08:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://littleguest.github.io/posts/rust-cargo/</loc>
     <lastmod>2021-03-08T16:21:12+08:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -200,13 +221,6 @@
   
   <url>
     <loc>https://littleguest.github.io/categories/%E5%B5%8C%E5%85%A5%E5%BC%8F/</loc>
-    <lastmod>2021-03-03T09:34:44+08:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://littleguest.github.io/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/</loc>
     <lastmod>2021-03-03T09:34:44+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
